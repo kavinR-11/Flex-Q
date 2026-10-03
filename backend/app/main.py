@@ -18,6 +18,9 @@ from backend.app.api.shipments import router as shipments_router
 from backend.app.api.events import router as events_router
 from backend.app.api.recovery import router as recovery_router
 from backend.app.api.audit import router as audit_router
+from backend.app.api.quantum import router as quantum_router
+from backend.app.api.network import router as network_router
+from backend.app.api.assistant import router as assistant_router
 
 def seed_database_if_empty():
     db = SessionLocal()
@@ -165,6 +168,9 @@ app.include_router(shipments_router, prefix=settings.API_V1_STR)
 app.include_router(events_router, prefix=settings.API_V1_STR)
 app.include_router(recovery_router, prefix=settings.API_V1_STR)
 app.include_router(audit_router, prefix=settings.API_V1_STR)
+app.include_router(quantum_router, prefix=settings.API_V1_STR)
+app.include_router(network_router, prefix=settings.API_V1_STR)
+app.include_router(assistant_router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def root():

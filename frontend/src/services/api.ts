@@ -9,6 +9,10 @@ import {
   OptimizationResponse,
   AuditLogEntry,
   SystemHealth,
+  CorridorSummary,
+  NetworkOverview,
+  AssistantChatResponse,
+  QAOASimulationResult,
 } from '../types';
 
 const API_BASE = 'http://localhost:8000/api/v1';
@@ -132,5 +136,63 @@ export async function fetchAuditLogs(shipmentId?: string): Promise<AuditLogEntry
 export async function fetchBenchmark(): Promise<any> {
   const res = await fetch(`${API_BASE}/optimization/benchmark`);
   if (!res.ok) throw new Error('Failed to fetch benchmark');
+  return res.json();
+}
+
+export async function fetchNetworkOverview(): Promise<NetworkOverview> {
+  const res = await fetch(`${API_BASE}/network/overview`);
+  if (!res.ok) throw new Error('Failed to fetch network overview');
+  return res.json();
+}
+
+export async function fetchCorridors(params?: {
+  mode?: string;
+  overloaded_only?: boolean;
+}): Promise<CorridorSummary[]> {
+  const query = new URLSearchParams();
+  if (params?.mode && params.mode !== 'ALL') query.append('mode', params.mode);
+  if (params?.overloaded_only) query.append('overloaded_only', 'true');
+
+  const res = await fetch(`${API_BASE}/network/corridors?${query.toString()}`);
+  if (!res.ok) throw new Error('Failed to fetch network corridors');
+  return res.json();
+}
+
+export async function askFluxQChat(payload: {
+  message: string;
+  copilot_type?: string;
+  context_shipment_id?: string;
+  context_corridor_id?: string;
+  context_simulation_id?: string;
+}): Promise<AssistantChatResponse> {
+  const res = await fetch(`${API_BASE}/assistant/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error('Failed to communicate with Ask FluxQ assistant');
+  return res.json();
+}
+
+export async function fetchQuantumBenchmark(): Promise<any> {
+  const res = await fetch(`${API_BASE}/quantum/benchmark`);
+  if (!res.ok) throw new Error('Failed to fetch quantum benchmark');
+  return res.json();
+}
+
+export async function runQuantumSimulation(payload: {
+  num_shipments?: number;
+  num_slots?: number;
+  gamma?: number;
+  beta?: number;
+  circuit_depth_p?: number;
+  penalty_lambda?: number;
+}): Promise<QAOASimulationResult> {
+  const res = await fetch(`${API_BASE}/quantum/simulate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error('Failed to execute QAOA simulation');
   return res.json();
 }

@@ -129,3 +129,87 @@ export interface SystemHealth {
     quantum_module: string;
   };
 }
+
+export interface LinkedShipmentBrief {
+  shipment_id: string;
+  tag: string;
+  description: string;
+  predicted_delay_str: string;
+  risk_exposure_str: string;
+  risk_level: string;
+}
+
+export interface CorridorSummary {
+  corridor_id: string;
+  origin_hub: string;
+  linehaul_route: string;
+  destination: string;
+  mode: string;
+  carrier_name: string;
+  planned_vol_pkgs_hr: number;
+  avail_cap_pkgs_hr: number;
+  utilization_pct: number;
+  predicted_delay_str: string;
+  sla_penalty_lakhs: number;
+  p_sla_risk_pct: number;
+  bottleneck_name: string;
+  bottleneck_desc: string;
+  status: string;
+  is_overloaded: boolean;
+  affected_shipments: LinkedShipmentBrief[];
+}
+
+export interface NetworkOverview {
+  active_shipments: number;
+  active_shipments_delta_pct: string;
+  active_corridors_count: number;
+  active_hubs_count: number;
+  available_capacity_pkgs_hr: number;
+  avg_utilization_pct: number;
+  constrained_corridors_count: number;
+  shipments_at_risk: number;
+  critical_risk_count: number;
+  sla_penalty_exposure_lakhs: number;
+  active_disruptions: number;
+}
+
+export interface ActionSuggestion {
+  label: string;
+  target_tab: string;
+  action_payload?: Record<string, unknown>;
+}
+
+export interface AssistantChatResponse {
+  response_id: string;
+  timestamp: string;
+  copilot_type: string;
+  answer_markdown: string;
+  grounded_entities: string[];
+  suggested_followups: string[];
+  suggested_actions: ActionSuggestion[];
+}
+
+export interface QAOASimulationResult {
+  simulation_timestamp: string;
+  qubits_allocated: number;
+  grid_dimension: string;
+  circuit_depth_p: number;
+  gamma: number;
+  beta: number;
+  penalty_lambda: number;
+  classical_baseline_inr: number;
+  qaoa_result: {
+    optimal_cost_inr: number;
+    optimality_gap_pct: number;
+    ground_state_overlap_pct: number;
+    qaoa_runtime_ms: number;
+    classical_runtime_ms: number;
+    circuit_depth_p: number;
+    is_feasible: boolean;
+    gamma: number;
+    beta: number;
+    num_qubits: number;
+    measured_bitstring: string;
+  };
+  research_disclaimer: string;
+}

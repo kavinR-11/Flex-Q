@@ -1,0 +1,897 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-fixed":"#001b3c","inverse-on-surface":"#e9f1ff","on-secondary-container":"#003267","on-primary-fixed-variant":"#004689","secondary-fixed":"#d6e3ff","on-tertiary-container":"#d7bcff","tertiary-container":"#6737af","error":"#ba1a1a","surface-container-lowest":"#ffffff","surface":"#f8f9ff","on-surface-variant":"#424751","on-secondary-fixed-variant":"#00468a","surface-tint":"#1b5eab","tertiary-fixed-dim":"#d6baff","on-primary":"#ffffff","on-error":"#ffffff","on-surface":"#101c29","surface-container":"#e4efff","primary-container":"#00539f","surface-container-low":"#eef4ff","on-primary-container":"#a9c9ff","primary-fixed-dim":"#a7c8ff","surface-container-highest":"#d7e4f5","inverse-primary":"#a7c8ff","surface-bright":"#f8f9ff","outline-variant":"#c2c6d3","secondary-container":"#559cff","background":"#f8f9ff","on-tertiary-fixed":"#280057","outline":"#727782","on-secondary-fixed":"#001b3d","error-container":"#ffdad6","primary":"#003c76","on-tertiary":"#ffffff","on-background":"#101c29","inverse-surface":"#26313f","surface-dim":"#cfdbec","primary-fixed":"#d5e3ff","secondary-fixed-dim":"#a8c8ff","tertiary":"#4f1896","on-error-container":"#93000a","on-secondary":"#ffffff","surface-variant":"#d7e4f5","secondary":"#005eb5","surface-container-high":"#dde9fb","tertiary-fixed":"#ecdcff","on-tertiary-fixed-variant":"#5a27a1"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{gutter:"0.75rem","space-md":"0.75rem","space-lg":"1rem","space-sm":"0.5rem","space-xs":"0.25rem","gutter-desktop":"1rem",margin:"1rem","space-xl":"1.5rem","margin-desktop":"1.5rem"},fontFamily:{"headline-lg":["Roboto Flex"],"label-sm":["Roboto Flex"],"body-lg":["Roboto Flex"],"code-md":["Roboto Flex"],"headline-md":["Roboto Flex"],"headline-sm":["Roboto Flex"],"display-lg":["Roboto Flex"],"display-lg-mobile":["Roboto Flex"],"body-sm":["Roboto Flex"],"label-md":["Roboto Flex"],"label-xs":["Roboto Flex"],"body-md":["Roboto Flex"]},fontSize:{"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.03em",fontWeight:"600"}],"body-lg":["15px",{lineHeight:"22px",letterSpacing:"0",fontWeight:"400"}],"code-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"500"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-sm":["16px",{lineHeight:"24px",letterSpacing:"-0.005em",fontWeight:"600"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"600"}],"display-lg-mobile":["26px",{lineHeight:"34px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"400"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"label-xs":["10px",{lineHeight:"12px",letterSpacing:"0.04em",fontWeight:"700"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0",fontWeight:"400"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 flex flex-col"><div class="h-[46px] w-full bg-primary-container px-space-md flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center h-full"><div class="flex items-center gap-space-xs mr-space-lg"><div class="h-6 px-1.5 rounded-lg bg-surface-container-lowest flex items-center justify-center"><span class="font-label-xs text-primary font-bold tracking-wider">YOLO</span></div><span class="font-label-xs text-on-primary font-medium opacity-60">×</span><span class="font-headline-sm text-headline-sm text-on-primary tracking-tight font-semibold">FluxQ</span></div><div class="flex items-end h-full gap-1 pt-1"><div class="h-[38px] px-space-md rounded-t-lg bg-surface flex items-center gap-space-xs"><span class="font-label-sm text-label-sm text-primary font-semibold">Control Tower</span><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span></div><div class="h-[34px] px-space-md rounded-t-lg bg-primary/40 flex items-center gap-space-xs hover:bg-primary/60 transition-colors"><span class="font-label-sm text-label-sm text-on-primary-container">Shipment Risk [SH-2113]</span></div><div class="h-[34px] px-space-md rounded-t-lg bg-primary/40 flex items-center gap-space-xs hover:bg-primary/60 transition-colors"><span class="font-label-sm text-label-sm text-on-primary-container">Recovery Center</span></div></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-0.5 rounded-lg bg-primary/30"><span class="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span><span class="font-label-xs text-label-xs text-on-primary uppercase tracking-wider">Live Telemetry</span></div><button class="w-7 h-7 flex items-center justify-center rounded hover:bg-primary text-on-primary-container hover:text-on-primary" type="button"><span class="material-symbols-outlined text-[18px]">search</span></button><button class="relative w-7 h-7 flex items-center justify-center rounded hover:bg-primary text-on-primary-container hover:text-on-primary" type="button"><span class="material-symbols-outlined text-[18px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center gap-space-xs pl-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col text-left"><span class="font-label-xs text-label-xs text-on-primary leading-tight font-semibold">Vikram S.</span><span class="font-label-xs text-[9px] text-on-primary-container leading-none opacity-80">Lead Controller</span></div></div></div></div><div class="h-9 w-full bg-surface-container-lowest px-space-md flex items-center justify-between shadow-[0_1px_4px_rgba(0,0,0,0.03)]"><div class="flex items-center gap-space-xs overflow-x-auto"><span class="font-label-xs text-label-xs text-on-surface-variant font-bold uppercase tracking-wider mr-1">Scope:</span><div class="h-6 px-space-sm rounded bg-surface-container-high flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Scenario</span><span class="font-label-xs text-label-xs text-primary font-bold">Live Baseline</span></div><div class="h-6 px-space-sm rounded bg-surface-container flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Corridor</span><span class="font-label-xs text-label-xs text-on-surface font-semibold">Mumbai-BLR-MAA</span></div><div class="h-6 px-space-sm rounded bg-surface-container flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Carrier</span><span class="font-label-xs text-label-xs text-on-surface font-semibold">All (6)</span></div><div class="h-6 px-space-sm rounded bg-surface-container flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Mode</span><span class="font-label-xs text-label-xs text-on-surface font-semibold">Multimodal</span></div><div class="h-6 px-space-sm rounded bg-surface-container flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Window</span><span class="font-label-xs text-label-xs text-on-surface font-semibold">Next 72h</span></div></div><div class="flex items-center gap-space-xs"><div class="h-6 px-2 rounded bg-surface-container-low flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span class="font-label-xs text-label-xs text-on-surface-variant font-semibold">Connected Demo Data</span></div><button class="h-6 px-2 rounded hover:bg-surface-container flex items-center gap-1 text-on-surface-variant hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[14px]">sync</span><span class="font-label-xs text-label-xs">Refresh</span></button><button class="h-6 px-2 rounded hover:bg-surface-container flex items-center gap-1 text-on-surface-variant hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[14px]">view_timeline</span><span class="font-label-xs text-label-xs">Timeline</span></button><button class="h-6 px-2 rounded hover:bg-surface-container flex items-center gap-1 text-on-surface-variant hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[14px]">download</span><span class="font-label-xs text-label-xs">Export CSV</span></button></div></div></header><aside class="fixed left-0 top-[82px] bottom-0 w-[52px] bg-primary flex flex-col items-center py-space-sm z-40 shadow-[0_1px_8px_rgba(0,0,0,0.06)]"><nav class="flex-1 flex flex-col items-center gap-1.5 w-full px-1" data-active-classes="bg-secondary text-on-secondary font-bold"><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="control-tower" href="#" title="Control Tower"><span class="material-symbols-outlined text-[20px]">dashboard</span></a><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="shipment-risk" href="#" title="Shipment Risk"><span class="material-symbols-outlined text-[20px]">shield</span></a><a class="w-10 h-10 rounded flex items-center justify-center bg-secondary text-on-secondary font-bold shadow-sm transition-colors" data-path="route-network" href="#" title="Route Map / Network"><span class="material-symbols-outlined text-[20px]">hub</span></a><a class="relative w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="disruption-lab" href="#" title="Disruption Lab"><span class="material-symbols-outlined text-[20px]">science</span><span class="absolute top-1 right-0.5 px-0.5 rounded-[2px] bg-tertiary text-on-tertiary font-label-xs text-[8px] leading-tight font-bold">SIM</span></a><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="recovery-center" href="#" title="Recovery Center"><span class="material-symbols-outlined text-[20px]">alt_route</span></a><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="decision-audit" href="#" title="Decision Audit"><span class="material-symbols-outlined text-[20px]">history_edu</span></a><div class="w-7 my-1 border-t border-primary-container flex justify-center"><span class="font-label-xs text-[7px] text-primary-fixed-dim uppercase tracking-widest pt-0.5">EXP</span></div><a class="w-10 h-10 rounded flex items-center justify-center text-tertiary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="quantum-lab" href="#" title="Quantum Lab (Experimental)"><span class="material-symbols-outlined text-[20px]">token</span></a><div class="w-7 my-1 border-t border-primary-container"></div><a class="w-10 h-10 rounded flex items-center justify-center bg-tertiary text-on-tertiary hover:bg-tertiary-container transition-colors shadow-sm" data-path="ask-fluxq" href="#" title="Ask FluxQ AI Assistant"><span class="material-symbols-outlined text-[20px]">auto_awesome</span></a></nav><div class="flex flex-col items-center gap-1.5 w-full px-1 pb-1"><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="system-settings" href="#" title="Settings &amp; System Status"><span class="material-symbols-outlined text-[20px]">tune</span></a></div></aside><div class="pl-[52px]"><main class="relative pt-[82px] min-h-screen bg-surface w-full px-space-md"><div class="flex flex-col w-full pb-10"><!-- SUB-NAVIGATION / PAGE HEADER & MODULE TABS -->
+<div class="w-full bg-surface-container-lowest px-4 py-2.5 flex flex-wrap items-center justify-between shadow-sm mb-3 rounded-lg gap-2">
+  <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-[22px]">account_tree</span>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Network Planning &amp; Constraint Analysis</h1>
+          <span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-xs text-label-xs font-bold uppercase tracking-wider">SUPPLY CHAIN CAPACITY &amp; BOTTLENECK ENGINE</span>
+        </div>
+      </div>
+    </div>
+    <div class="h-5 w-px bg-outline-variant/40 mx-1 hidden md:block"></div>
+    <!-- Tab strip -->
+    <div class="flex items-center gap-1.5 overflow-x-auto">
+      <button class="h-8 px-3 rounded bg-primary text-on-primary flex items-center gap-1.5 shadow-sm font-label-md text-label-md" type="button">
+        <span class="material-symbols-outlined text-[16px]">table_chart</span>
+        <span class="">Network Planning Worksheet</span>
+        <span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+      </button>
+      <button class="h-8 px-3 rounded bg-surface hover:bg-surface-container text-on-surface-variant flex items-center gap-1.5 font-label-md text-label-md transition-colors" type="button">
+        <span class="material-symbols-outlined text-[16px]">calendar_view_week</span>
+        <span class="">Time-Phased Capacity &amp; Overload</span>
+      </button>
+      <button class="h-8 px-3 rounded bg-surface hover:bg-surface-container text-on-surface-variant flex items-center gap-1.5 font-label-md text-label-md transition-colors" type="button">
+        <span class="material-symbols-outlined text-[16px]">warning</span>
+        <span class="">Corridor Constraints &amp; Bottlenecks</span>
+        <span class="px-1.5 py-0.2 rounded bg-error-container text-error font-label-xs text-label-xs font-bold">3 Critical</span>
+      </button>
+      <button class="h-8 px-3 rounded bg-surface hover:bg-surface-container text-on-surface-variant flex items-center gap-1.5 font-label-md text-label-md transition-colors" type="button">
+        <span class="material-symbols-outlined text-[16px]">difference</span>
+        <span class="">Scenario Delta &amp; Feasibility</span>
+      </button>
+    </div>
+  </div>
+  <!-- Right Action Buttons -->
+  <div class="flex items-center gap-2">
+    <button class="h-7 px-2.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-1 shadow-sm transition-colors" type="button">
+      <span class="material-symbols-outlined text-[15px]">file_download</span>
+      <span class="">Export Planning Grid (CSV/XLSX)</span>
+    </button>
+    <button class="h-7 px-2.5 rounded bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm flex items-center gap-1 shadow-sm transition-colors" type="button">
+      <span class="material-symbols-outlined text-[15px]">balance</span>
+      <span class="">Re-balance Capacity</span>
+    </button>
+    <button class="h-7 px-2.5 rounded bg-tertiary hover:bg-tertiary-container text-on-tertiary font-label-sm text-label-sm flex items-center gap-1 shadow-sm transition-colors" type="button">
+      <span class="material-symbols-outlined text-[15px]">science</span>
+      <span class="">View Simulation Overlay</span>
+    </button>
+  </div>
+</div>
+
+<!-- 3. COMPACT KPI SUMMARY BAR -->
+<div class="grid grid-cols-2 md:grid-cols-6 gap-2.5 mb-3">
+  <div class="bg-surface-container-lowest p-2.5 rounded-lg shadow-sm flex flex-col justify-between">
+    <div class="flex items-center justify-between">
+      <span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Active Shipments</span>
+      <span class="material-symbols-outlined text-primary text-[16px]">inventory_2</span>
+    </div>
+    <div class="mt-1 flex items-baseline gap-1.5">
+      <span class="font-headline-md text-headline-md text-on-surface font-bold leading-tight">1,428</span>
+      <span class="font-label-xs text-label-xs text-secondary font-bold">+4.2%</span>
+    </div>
+    <span class="font-label-xs text-[10px] text-on-surface-variant">vs. Live baseline plan</span>
+  </div>
+
+  <div class="bg-surface-container-lowest p-2.5 rounded-lg shadow-sm flex flex-col justify-between">
+    <div class="flex items-center justify-between">
+      <span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Active Corridors</span>
+      <span class="material-symbols-outlined text-primary text-[16px]">hub</span>
+    </div>
+    <div class="mt-1 flex items-baseline gap-1.5">
+      <span class="font-headline-md text-headline-md text-primary font-bold leading-tight">12 Hubs</span>
+      <span class="font-label-xs text-label-xs text-on-surface-variant font-semibold">42 Spines</span>
+    </div>
+    <span class="font-label-xs text-[10px] text-on-surface-variant">Western-Southern sector</span>
+  </div>
+
+  <div class="bg-surface-container-lowest p-2.5 rounded-lg shadow-sm flex flex-col justify-between">
+    <div class="flex items-center justify-between">
+      <span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Available Cap</span>
+      <span class="material-symbols-outlined text-secondary text-[16px]">speed</span>
+    </div>
+    <div class="mt-1 flex items-baseline gap-1.5">
+      <span class="font-headline-md text-headline-md text-on-surface font-bold leading-tight">14,850</span>
+      <span class="font-label-xs text-label-xs text-on-surface-variant font-semibold">pkgs/hr</span>
+    </div>
+    <span class="font-label-xs text-[10px] text-secondary font-semibold">+1,200 MT rail open</span>
+  </div>
+
+  <div class="bg-surface-container-lowest p-2.5 rounded-lg shadow-sm flex flex-col justify-between">
+    <div class="flex items-center justify-between">
+      <span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Avg Utilization</span>
+      <span class="material-symbols-outlined text-primary text-[16px]">pie_chart</span>
+    </div>
+    <div class="mt-1 flex items-baseline gap-1.5">
+      <span class="font-headline-md text-headline-md text-on-surface font-bold leading-tight">84.6%</span>
+      <span class="font-label-xs text-label-xs text-on-surface-variant font-semibold">Target &lt;85%</span>
+    </div>
+    <div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden mt-0.5">
+      <div class="bg-secondary h-full rounded-full" style="width: 84.6%"></div>
+    </div>
+  </div>
+
+  <div class="bg-surface-container-lowest p-2.5 rounded-lg shadow-sm flex flex-col justify-between bg-error-container/20">
+    <div class="flex items-center justify-between">
+      <span class="font-label-xs text-label-xs text-error font-bold uppercase tracking-wider">Constrained Corridors</span>
+      <span class="material-symbols-outlined text-error text-[16px]">warning</span>
+    </div>
+    <div class="mt-1 flex items-baseline gap-1.5">
+      <span class="font-headline-md text-headline-md text-error font-bold leading-tight">3 Overloaded</span>
+    </div>
+    <span class="font-label-xs text-[10px] text-error font-semibold">NH-48, JNPT Berth, BLR Air</span>
+  </div>
+
+  <div class="bg-surface-container-lowest p-2.5 rounded-lg shadow-sm flex flex-col justify-between">
+    <div class="flex items-center justify-between">
+      <span class="font-label-xs text-label-xs text-tertiary font-bold uppercase tracking-wider">Shipments at Risk</span>
+      <span class="material-symbols-outlined text-tertiary text-[16px]">report_problem</span>
+    </div>
+    <div class="mt-1 flex items-baseline gap-1.5">
+      <span class="font-headline-md text-headline-md text-tertiary font-bold leading-tight">38</span>
+      <span class="font-label-xs text-label-xs text-error font-bold">9 Critical</span>
+    </div>
+    <span class="font-label-xs text-[10px] text-tertiary font-semibold">₹26.7L SLA penalty exposure</span>
+  </div>
+</div>
+
+<!-- 4. MAIN WORKSHEET 1: KINAXIS MAESTRO-STYLE NETWORK PLANNING & CORRIDOR WORKSHEET -->
+<div class="w-full bg-surface-container-lowest rounded-lg shadow-sm p-3.5 mb-3">
+  <!-- Worksheet Toolbar & Controls -->
+  <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-surface-container-high">
+    <div class="flex items-center gap-2 flex-wrap">
+      <div class="flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-primary text-[18px]">view_list</span>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Corridor Planning &amp; Operational Constraints Worksheet</h2>
+      </div>
+      <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-md text-code-md">5 Corridors Active</span>
+      <!-- Quick Filter Chips -->
+      <div class="flex items-center gap-1 ml-2">
+        <span class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-xs text-label-xs font-semibold cursor-pointer">All Modes</span>
+        <span class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-xs text-label-xs cursor-pointer">Road (2)</span>
+        <span class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-xs text-label-xs cursor-pointer">Rail (1)</span>
+        <span class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-xs text-label-xs cursor-pointer">Air (1)</span>
+        <span class="px-2 py-0.5 rounded bg-error-container text-error font-label-xs text-label-xs font-bold cursor-pointer">Overloaded Only (1)</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="relative flex items-center">
+        <span class="material-symbols-outlined text-outline absolute left-2 text-[15px]">search</span>
+        <input class="h-6 pl-6 pr-2 rounded bg-surface font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest w-44 shadow-sm" placeholder="Filter worksheet..." type="text">
+      </div>
+      <button class="h-6 px-2 rounded bg-surface hover:bg-surface-container text-on-surface-variant font-label-xs text-label-xs flex items-center gap-1 transition-colors" type="button">
+        <span class="material-symbols-outlined text-[14px]">tune</span>
+        <span class="">Columns</span>
+      </button>
+      <button class="h-6 px-2 rounded bg-surface hover:bg-surface-container text-on-surface-variant font-label-xs text-label-xs flex items-center gap-1 transition-colors" type="button">
+        <span class="material-symbols-outlined text-[14px]">density_small</span>
+        <span class="">Compact</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Dense Maestro Table -->
+  <div class="overflow-x-auto rounded border border-surface-container-high">
+    <table class="w-full text-left font-body-sm text-body-sm">
+      <!-- Grouped Header Tier -->
+      <thead>
+        <tr class="bg-surface-container-high text-on-surface-variant font-label-xs text-label-xs uppercase tracking-wider">
+          <th class="px-2.5 py-1 font-bold border-r border-surface-container text-center w-8">#</th>
+          <th class="px-3 py-1 font-bold border-r border-surface-container" colspan="5">Corridor &amp; Route Attributes</th>
+          <th class="px-3 py-1 font-bold border-r border-surface-container" colspan="3">Capacity &amp; Loading</th>
+          <th class="px-3 py-1 font-bold border-r border-surface-container" colspan="3">Risk &amp; Exposure</th>
+          <th class="px-3 py-1 font-bold" colspan="3">Operational Constraints &amp; Action</th>
+        </tr>
+        <!-- Column Header Tier -->
+        <tr class="bg-surface-container text-on-surface font-label-xs text-label-xs font-semibold uppercase border-t border-surface-container-high">
+          <th class="px-2.5 py-1.5 text-center">Exp</th>
+          <th class="px-2.5 py-1.5">Corridor ID</th>
+          <th class="px-2.5 py-1.5">Origin Hub</th>
+          <th class="px-2.5 py-1.5">Linehaul Route</th>
+          <th class="px-2.5 py-1.5">Destination</th>
+          <th class="px-2.5 py-1.5">Mode / Carrier</th>
+          <th class="px-2.5 py-1.5">Planned Vol</th>
+          <th class="px-2.5 py-1.5">Avail Cap</th>
+          <th class="px-2.5 py-1.5">Utilization %</th>
+          <th class="px-2.5 py-1.5">Predicted Delay</th>
+          <th class="px-2.5 py-1.5">SLA Penalty ₹</th>
+          <th class="px-2.5 py-1.5">P_SLA Risk</th>
+          <th class="px-2.5 py-1.5">Active Bottleneck &amp; Type</th>
+          <th class="px-2.5 py-1.5">Status</th>
+          <th class="px-2.5 py-1.5 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-on-surface divide-none">
+        <!-- Row 1: CRITICAL OVERLOAD ROW (Selected) -->
+        <tr class="bg-error-container/20 hover:bg-error-container/30 transition-colors border-b border-surface-container">
+          <td class="px-2.5 py-2 text-center">
+            <button class="w-5 h-5 rounded hover:bg-error-container text-error flex items-center justify-center font-bold" title="Collapse shipments">
+              <span class="material-symbols-outlined text-[16px]">expand_more</span>
+            </button>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-error font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
+            CORR-NH48-W
+          </td>
+          <td class="px-2.5 py-2 font-semibold text-on-surface">Mumbai JNPT Port</td>
+          <td class="px-2.5 py-2 text-error font-bold">NH-48 West Expressway</td>
+          <td class="px-2.5 py-2 font-medium">Pune / BLR ICD</td>
+          <td class="px-2.5 py-2">
+            <div class="flex items-center gap-1">
+              <span class="px-1.5 py-0.2 rounded bg-surface-container font-label-xs text-label-xs font-semibold">Road Express</span>
+              <span class="text-on-surface-variant font-label-xs text-label-xs">BlueDart</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-error font-bold">1,840 pkgs/h</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface-variant">1,200 cap</td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col gap-0.5">
+              <div class="flex items-center justify-between font-label-xs text-label-xs">
+                <span class="font-code-md text-code-md text-error font-bold">153.3%</span>
+                <span class="px-1 rounded bg-error text-on-error text-[9px] font-bold">OVERLOAD</span>
+              </div>
+              <div class="w-20 bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                <div class="bg-error h-full rounded-full" style="width: 100%"></div>
+              </div>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-error font-bold">+5.2 hrs (Late)</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-error font-bold">₹18.4 Lakhs</td>
+          <td class="px-2.5 py-2">
+            <span class="px-1.5 py-0.5 rounded bg-error-container text-error font-code-md text-code-md font-bold">87% Breach</span>
+          </td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col">
+              <span class="text-error font-bold text-label-xs">Khandala Ghat Landslide</span>
+              <span class="text-on-surface-variant text-[11px] font-medium">Infrastructure Physical Block (-85% flow)</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2">
+            <span class="px-2 py-0.5 rounded bg-error text-on-error font-label-xs text-label-xs font-bold uppercase tracking-wide">Critical Bottleneck</span>
+          </td>
+          <td class="px-2.5 py-2 text-right">
+            <div class="flex items-center justify-end gap-1.5">
+              <button class="h-6 px-2 rounded bg-tertiary hover:bg-tertiary-container text-on-tertiary font-label-xs text-label-xs font-bold shadow-sm transition-colors" type="button">
+                Mitigate in Recovery
+              </button>
+              <button class="h-6 px-1.5 rounded bg-surface-container hover:bg-surface-container-high text-primary font-label-xs text-label-xs font-semibold" type="button" title="View connected shipments">
+                View Shipments
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Expandable Detail Nested Row for Selected Corridor -->
+        <tr class="bg-surface-container-low border-b border-surface-container">
+          <td class="px-2.5 py-1 text-center bg-surface-container"></td>
+          <td class="px-3 py-2" colspan="14">
+            <div class="flex flex-col gap-1.5 p-2 bg-surface-container-lowest rounded border border-outline-variant/40">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-error text-[16px]">emergency</span>
+                  <span class="font-label-xs text-label-xs text-on-surface font-bold uppercase">High-Value Consignments at Direct Breach Risk on CORR-NH48-W (Khandala Gorge Queue):</span>
+                </div>
+                <span class="font-label-xs text-[11px] text-tertiary font-semibold">Recommended Action: Shift 40% volume (640 pkgs/hr) to WDFC Dedicated Rail Spine</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1">
+                <div class="bg-surface p-2 rounded flex items-center justify-between border border-surface-container">
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-code-md text-code-md text-primary font-bold">SH-2113</span>
+                      <span class="px-1 rounded bg-error-container text-error text-[9px] font-bold">CRITICAL PHARMA</span>
+                    </div>
+                    <span class="font-body-sm text-body-sm text-on-surface block">Serum Institute Vaccines (Temp Sensitive 2-8°C)</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="font-code-md text-code-md text-error font-bold block">+4.8h Delay</span>
+                    <span class="text-[10px] text-error font-semibold">₹8.2L Risk</span>
+                  </div>
+                </div>
+                <div class="bg-surface p-2 rounded flex items-center justify-between border border-surface-container">
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-code-md text-code-md text-primary font-bold">SH-1994</span>
+                      <span class="px-1 rounded bg-error-container text-error text-[9px] font-bold">HIGH VALUE JIT</span>
+                    </div>
+                    <span class="font-body-sm text-body-sm text-on-surface block">Foxconn Precision Electronics (Sriperumbudur)</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="font-code-md text-code-md text-error font-bold block">+5.5h Delay</span>
+                    <span class="text-[10px] text-error font-semibold">₹6.4L Risk</span>
+                  </div>
+                </div>
+                <div class="bg-surface p-2 rounded flex items-center justify-between border border-surface-container">
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-code-md text-code-md text-primary font-bold">SH-2041</span>
+                      <span class="px-1 rounded bg-surface-container text-on-surface text-[9px] font-bold">RETAIL PRIME</span>
+                    </div>
+                    <span class="font-body-sm text-body-sm text-on-surface block">Amazon INBL Fulfillment Restock (BLR4)</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="font-code-md text-code-md text-on-surface-variant font-bold block">+3.9h Delay</span>
+                    <span class="text-[10px] text-error font-semibold">₹3.8L Risk</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 2: WDFC RAIL SPARKLE / BYPASS ROW -->
+        <tr class="hover:bg-surface-container-low transition-colors border-b border-surface-container">
+          <td class="px-2.5 py-2 text-center text-on-surface-variant">
+            <button class="w-5 h-5 rounded hover:bg-surface-container text-on-surface-variant flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </button>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-tertiary font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+            CORR-WDFC-RAIL
+          </td>
+          <td class="px-2.5 py-2 font-medium">JNPT / Panvel Yard</td>
+          <td class="px-2.5 py-2 text-tertiary font-semibold">WDFC Dedicated Freight Spine</td>
+          <td class="px-2.5 py-2 font-medium">BLR / Chennai Dry Port</td>
+          <td class="px-2.5 py-2">
+            <div class="flex items-center gap-1">
+              <span class="px-1.5 py-0.2 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-semibold">Electrified Rail</span>
+              <span class="text-on-surface-variant font-label-xs text-label-xs">CONCOR / IR</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md font-bold text-on-surface">540 pkgs/h</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-secondary font-bold">1,200 cap (660 slack)</td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col gap-0.5">
+              <div class="flex items-center justify-between font-label-xs text-label-xs">
+                <span class="font-code-md text-code-md text-secondary font-bold">45.0%</span>
+                <span class="text-[9px] text-secondary font-semibold">OPEN</span>
+              </div>
+              <div class="w-20 bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full rounded-full" style="width: 45%"></div>
+              </div>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-secondary font-bold">On-Time (-1.5h buffer)</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface-variant font-medium">₹0.0 Lakhs</td>
+          <td class="px-2.5 py-2">
+            <span class="px-1.5 py-0.5 rounded bg-surface-container-low text-secondary font-code-md text-code-md font-bold">12% Low</span>
+          </td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col">
+              <span class="text-secondary font-semibold text-label-xs">Clean Corridor / Open Rakes</span>
+              <span class="text-on-surface-variant text-[11px]">24 Rakes departing every 45 min</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2">
+            <span class="px-2 py-0.5 rounded bg-surface-container-low text-secondary font-label-xs text-label-xs font-bold uppercase">Optimal Bypass</span>
+          </td>
+          <td class="px-2.5 py-2 text-right">
+            <button class="h-6 px-2.5 rounded bg-secondary hover:bg-primary text-on-secondary font-label-xs text-label-xs font-bold shadow-sm transition-colors" type="button">
+              Shift Volume
+            </button>
+          </td>
+        </tr>
+
+        <!-- Row 3: AIR CORRIDOR ROW -->
+        <tr class="hover:bg-surface-container-low transition-colors border-b border-surface-container">
+          <td class="px-2.5 py-2 text-center text-on-surface-variant">
+            <button class="w-5 h-5 rounded hover:bg-surface-container text-on-surface-variant flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </button>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-primary font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+            CORR-AIR-IND
+          </td>
+          <td class="px-2.5 py-2 font-medium">Mumbai BOM / Pune PNQ</td>
+          <td class="px-2.5 py-2 font-medium">Domestic Air Freight Spine</td>
+          <td class="px-2.5 py-2 font-medium">Kempegowda BLR (KIAL)</td>
+          <td class="px-2.5 py-2">
+            <div class="flex items-center gap-1">
+              <span class="px-1.5 py-0.2 rounded bg-surface-container font-label-xs text-label-xs font-semibold">Air Cargo</span>
+              <span class="text-on-surface-variant font-label-xs text-label-xs">IndiGo Cargo / SpiceX</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md font-bold text-on-surface">420 pkgs/h</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface-variant">500 cap</td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col gap-0.5">
+              <div class="flex items-center justify-between font-label-xs text-label-xs">
+                <span class="font-code-md text-code-md text-on-surface font-bold">84.0%</span>
+                <span class="text-[9px] text-on-surface-variant">STEADY</span>
+              </div>
+              <div class="w-20 bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full rounded-full" style="width: 84%"></div>
+              </div>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-primary font-bold">Delay +0.4 hrs</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface-variant">₹2.8 Lakhs</td>
+          <td class="px-2.5 py-2">
+            <span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-code-md text-code-md font-semibold">34% Med</span>
+          </td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col">
+              <span class="text-on-surface font-medium text-label-xs">PNQ Cargo Gate Slot Cleared</span>
+              <span class="text-on-surface-variant text-[11px]">Night freighter departure allocated</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2">
+            <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-xs text-label-xs font-bold uppercase">Moderate</span>
+          </td>
+          <td class="px-2.5 py-2 text-right">
+            <button class="h-6 px-2.5 rounded bg-surface-container hover:bg-surface-container-high text-primary font-label-xs text-label-xs font-bold shadow-sm transition-colors" type="button">
+              Reserve Bays
+            </button>
+          </td>
+        </tr>
+
+        <!-- Row 4: SOLAPUR BYPASS ROW -->
+        <tr class="hover:bg-surface-container-low transition-colors border-b border-surface-container">
+          <td class="px-2.5 py-2 text-center text-on-surface-variant">
+            <button class="w-5 h-5 rounded hover:bg-surface-container text-on-surface-variant flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </button>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-primary font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+            CORR-NH65-SOL
+          </td>
+          <td class="px-2.5 py-2 font-medium">Pune Chakan Hub</td>
+          <td class="px-2.5 py-2 font-medium">NH-65 Solapur Greenfield Bypass</td>
+          <td class="px-2.5 py-2 font-medium">Hyderabad / Vijayawada</td>
+          <td class="px-2.5 py-2">
+            <div class="flex items-center gap-1">
+              <span class="px-1.5 py-0.2 rounded bg-surface-container font-label-xs text-label-xs font-semibold">Road Linehaul</span>
+              <span class="text-on-surface-variant font-label-xs text-label-xs">Delhivery / Gati</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md font-bold text-on-surface">680 pkgs/h</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface-variant">850 cap</td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col gap-0.5">
+              <div class="flex items-center justify-between font-label-xs text-label-xs">
+                <span class="font-code-md text-code-md text-on-surface font-bold">80.0%</span>
+                <span class="text-[9px] text-on-surface-variant">NORMAL</span>
+              </div>
+              <div class="w-20 bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full rounded-full" style="width: 80%"></div>
+              </div>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface font-medium">Delay +1.2 hrs</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface-variant">₹1.4 Lakhs</td>
+          <td class="px-2.5 py-2">
+            <span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-code-md text-code-md font-medium">28% Low</span>
+          </td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col">
+              <span class="text-on-surface font-medium text-label-xs">Driver Shift Limit Watch</span>
+              <span class="text-on-surface-variant text-[11px]">Relay point active at Solapur Toll</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2">
+            <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-xs text-label-xs font-bold uppercase">Normal</span>
+          </td>
+          <td class="px-2.5 py-2 text-right">
+            <button class="h-6 px-2.5 rounded bg-surface-container hover:bg-surface-container-high text-primary font-label-xs text-label-xs font-bold shadow-sm transition-colors" type="button">
+              Route Freight
+            </button>
+          </td>
+        </tr>
+
+        <!-- Row 5: CHENNAI HARBOR TO BLR ROW -->
+        <tr class="hover:bg-surface-container-low transition-colors">
+          <td class="px-2.5 py-2 text-center text-on-surface-variant">
+            <button class="w-5 h-5 rounded hover:bg-surface-container text-on-surface-variant flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </button>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-primary font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+            CORR-MAA-BLR
+          </td>
+          <td class="px-2.5 py-2 font-medium">Chennai Harbor (CHPT)</td>
+          <td class="px-2.5 py-2 font-medium">NH-48 South / BLR-MAA Expressway</td>
+          <td class="px-2.5 py-2 font-medium">BLR Hosur Hub</td>
+          <td class="px-2.5 py-2">
+            <div class="flex items-center gap-1">
+              <span class="px-1.5 py-0.2 rounded bg-surface-container font-label-xs text-label-xs font-semibold">Multimodal Road/Rail</span>
+              <span class="text-on-surface-variant font-label-xs text-label-xs">VRL Logistics</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md font-bold text-on-surface">920 pkgs/h</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface-variant">950 cap</td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col gap-0.5">
+              <div class="flex items-center justify-between font-label-xs text-label-xs">
+                <span class="font-code-md text-code-md text-error font-bold">96.8%</span>
+                <span class="text-[9px] text-error font-bold">NEAR CAP</span>
+              </div>
+              <div class="w-20 bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                <div class="bg-error h-full rounded-full" style="width: 96.8%"></div>
+              </div>
+            </div>
+          </td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-primary font-bold">Delay +0.8 hrs</td>
+          <td class="px-2.5 py-2 font-code-md text-code-md text-on-surface-variant">₹4.1 Lakhs</td>
+          <td class="px-2.5 py-2">
+            <span class="px-1.5 py-0.5 rounded bg-surface-container text-primary font-code-md text-code-md font-bold">42% Med</span>
+          </td>
+          <td class="px-2.5 py-2">
+            <div class="flex flex-col">
+              <span class="text-primary font-semibold text-label-xs">Customs Clearance Dwell</span>
+              <span class="text-on-surface-variant text-[11px]">Container yard gate staging slow</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-2">
+            <span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-xs text-label-xs font-bold uppercase">Elevated</span>
+          </td>
+          <td class="px-2.5 py-2 text-right">
+            <button class="h-6 px-2.5 rounded bg-surface-container hover:bg-surface-container-high text-primary font-label-xs text-label-xs font-bold shadow-sm transition-colors" type="button">
+              Inspect
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 5. MAIN WORKSHEET 2: TIME-PHASED CONSTRAINT ANALYSIS GRID (Bucketed Horizon Table) -->
+<div class="w-full bg-surface-container-lowest rounded-lg shadow-sm p-3.5 mb-3">
+  <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-surface-container-high">
+    <div class="flex items-center gap-2 flex-wrap">
+      <div class="flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-secondary text-[18px]">hourglass_top</span>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Time-Phased Capacity &amp; Overload Horizon (72-Hour Window)</h2>
+      </div>
+      <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-xs text-label-xs uppercase">Kinaxis Maestro Dynamic Solver</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <!-- Horizon toggle -->
+      <div class="flex items-center bg-surface-container p-0.5 rounded">
+        <button class="h-6 px-2 rounded bg-primary text-on-primary font-label-xs text-label-xs font-semibold shadow-sm" type="button">Day (72h)</button>
+        <button class="h-6 px-2 rounded text-on-surface-variant hover:text-on-surface font-label-xs text-label-xs" type="button">Week (4 Wks)</button>
+        <button class="h-6 px-2 rounded text-on-surface-variant hover:text-on-surface font-label-xs text-label-xs" type="button">Month (Quarterly)</button>
+      </div>
+      <!-- Scenario toggle -->
+      <div class="flex items-center gap-1.5 bg-surface-container-high px-2 py-1 rounded">
+        <span class="font-label-xs text-label-xs text-on-surface-variant font-bold uppercase">Scenario:</span>
+        <span class="font-label-xs text-label-xs text-primary font-bold">Baseline</span>
+        <span class="text-on-surface-variant text-[10px]">vs</span>
+        <span class="font-label-xs text-label-xs text-tertiary font-bold">Monsoon Sim #4091</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Time-phased matrix table -->
+  <div class="overflow-x-auto rounded border border-surface-container-high">
+    <table class="w-full text-left font-body-sm text-body-sm">
+      <thead>
+        <tr class="bg-surface-container text-on-surface font-label-xs text-label-xs uppercase font-bold tracking-wider">
+          <th class="px-3 py-1.5 min-w-[200px]">Corridor / Constraint Node</th>
+          <th class="px-2.5 py-1.5 min-w-[130px]">Metric Type</th>
+          <th class="px-2.5 py-1.5 text-center font-code-md text-code-md">T+12h</th>
+          <th class="px-2.5 py-1.5 text-center font-code-md text-code-md">T+24h</th>
+          <th class="px-2.5 py-1.5 text-center font-code-md text-code-md">T+36h</th>
+          <th class="px-2.5 py-1.5 text-center font-code-md text-code-md">T+48h</th>
+          <th class="px-2.5 py-1.5 text-center font-code-md text-code-md">T+60h</th>
+          <th class="px-2.5 py-1.5 text-center font-code-md text-code-md">T+72h</th>
+          <th class="px-3 py-1.5 text-right font-code-md text-code-md">Cumulative Overload</th>
+        </tr>
+      </thead>
+      <tbody class="text-on-surface divide-none">
+        <!-- Node 1: NH-48 Khandala Spine Rows -->
+        <tr class="border-b border-surface-container-high bg-surface-container-lowest">
+          <td class="px-3 py-1.5 font-bold text-primary" rowspan="3">
+            <div class="flex flex-col">
+              <span class="flex items-center gap-1.5 text-error font-bold">
+                <span class="w-2 h-2 rounded-full bg-error"></span>
+                NH-48 Khandala Spine
+              </span>
+              <span class="text-[11px] text-on-surface-variant font-normal">Bottleneck: Landslide + Ghat jam</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-1.5 text-on-surface-variant font-medium">Planned Load (pkgs/h)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">1,840</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">1,920</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">1,750</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">1,620</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">1,480</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">1,320</td>
+          <td class="px-3 py-1.5 text-right font-code-md text-code-md font-bold text-on-surface">10,930 total</td>
+        </tr>
+        <tr class="border-b border-surface-container-high bg-surface-container-lowest">
+          <td class="px-2.5 py-1.5 text-on-surface-variant font-medium">Effective Capacity (pkgs/h)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md text-error font-bold bg-error-container/20">180 (-85%)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md text-error font-bold bg-error-container/20">180 (-85%)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md text-error font-bold bg-error-container/20">300 (-75%)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md text-on-surface font-semibold">650 (-45%)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md text-on-surface font-semibold">950 (-20%)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md text-secondary font-bold">1,200 (100%)</td>
+          <td class="px-3 py-1.5 text-right font-code-md text-code-md text-on-surface-variant">3,460 total</td>
+        </tr>
+        <tr class="border-b-2 border-surface-container bg-error-container/10">
+          <td class="px-2.5 py-1.5 text-error font-bold">Capacity Overload (Delta)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-error bg-error-container/40">+1,660 ⚠️</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-error bg-error-container/40">+1,740 ⚠️</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-error bg-error-container/40">+1,450 ⚠️</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-error bg-error-container/30">+970 ⚠️</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-error bg-error-container/20">+530 ⚠️</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-secondary">+120 (OK)</td>
+          <td class="px-3 py-1.5 text-right font-code-md text-code-md font-bold text-error">+7,470 pkgs Overload</td>
+        </tr>
+
+        <!-- Node 2: WDFC Rail Spine Rows -->
+        <tr class="border-b border-surface-container-high bg-surface-container-lowest">
+          <td class="px-3 py-1.5 font-bold text-primary" rowspan="2">
+            <div class="flex flex-col">
+              <span class="flex items-center gap-1.5 text-tertiary font-bold">
+                <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                WDFC Dedicated Rail Spine
+              </span>
+              <span class="text-[11px] text-on-surface-variant font-normal">Bypass Potential: CONCOR Electric Rakes</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-1.5 text-on-surface-variant font-medium">Available Slack (Buffer)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-secondary bg-surface-container-low">+660 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-secondary bg-surface-container-low">+660 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-secondary bg-surface-container-low">+720 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-secondary bg-surface-container-low">+600 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-secondary bg-surface-container-low">+580 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-secondary bg-surface-container-low">+540 pkgs/h</td>
+          <td class="px-3 py-1.5 text-right font-code-md text-code-md font-bold text-secondary">+3,760 Absorptive Cap</td>
+        </tr>
+        <tr class="border-b-2 border-surface-container bg-surface-container-lowest">
+          <td class="px-2.5 py-1.5 text-tertiary font-bold">Recommended Diversion</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-tertiary">+600 pkgs/h</td>
+          <td class="px-2.5 py-2 text-center font-code-md text-code-md font-bold text-tertiary">+640 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-tertiary">+680 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-tertiary">+550 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-tertiary">+400 pkgs/h</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-bold text-tertiary">+200 pkgs/h</td>
+          <td class="px-3 py-1.5 text-right font-code-md text-code-md font-bold text-tertiary">3,070 Diverted</td>
+        </tr>
+
+        <!-- Node 3: Pune Transshipment Hub -->
+        <tr class="border-b border-surface-container-high bg-surface-container-lowest">
+          <td class="px-3 py-1.5 font-bold text-on-surface">
+            <div class="flex flex-col">
+              <span class="font-bold">Pune Chakan Hub</span>
+              <span class="text-[11px] text-on-surface-variant font-normal">Cross-dock &amp; Dwell Capacity</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-1.5 text-on-surface-variant font-medium">Sort Dwell Index</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">32 min</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold text-error font-bold">48 min ⚠️</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold text-error font-bold">52 min ⚠️</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">38 min</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">34 min</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">30 min</td>
+          <td class="px-3 py-1.5 text-right font-code-md text-code-md font-semibold text-on-surface">Nominal (35m)</td>
+        </tr>
+
+        <!-- Node 4: Kempegowda Air Hub -->
+        <tr class="bg-surface-container-lowest">
+          <td class="px-3 py-1.5 font-bold text-on-surface">
+            <div class="flex flex-col">
+              <span class="font-bold">BLR Kempegowda Air Hub</span>
+              <span class="text-[11px] text-on-surface-variant font-normal">Flight Cargo Hold Allocation</span>
+            </div>
+          </td>
+          <td class="px-2.5 py-1.5 text-on-surface-variant font-medium">Belly Hold Cap (MT)</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">42 MT</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">48 MT</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">40 MT</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">45 MT</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">50 MT</td>
+          <td class="px-2.5 py-1.5 text-center font-code-md text-code-md font-semibold">52 MT</td>
+          <td class="px-3 py-1.5 text-right font-code-md text-code-md font-bold text-primary">277 MT Total</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 6. COMPACT LINKED NETWORK OVERVIEW VISUALIZATION (Bottom 2-Column Split Panel) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-2">
+  <!-- Left Card (60% / 7 cols): Compact Network Topology & Corridor Flow Diagram -->
+  <div class="lg:col-span-7 bg-surface-container-lowest rounded-lg shadow-sm p-3.5 flex flex-col justify-between">
+    <div>
+      <div class="flex items-center justify-between pb-2 bg-surface-container-low px-3 py-1.5 rounded mb-2.5">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[18px]">hub</span>
+          <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">Western-Southern Corridor Topology &amp; Diversion Flow</h3>
+        </div>
+        <div class="flex items-center gap-3 text-on-surface-variant font-label-xs text-label-xs uppercase">
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error"></span> NH-48 Blocked</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary"></span> WDFC Rail Diversion</span>
+        </div>
+      </div>
+
+      <!-- Interactive Topology Canvas Diagram -->
+      <div class="relative w-full h-[220px] bg-surface rounded border border-surface-container-high p-2 overflow-hidden">
+        <!-- Vector connecting paths overlay -->
+        <svg class="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="marker-red" markerHeight="5" markerWidth="5" refX="4" refY="2.5" viewBox="0 0 5 5">
+              <polygon fill="#ba1a1a" points="0 0, 5 2.5, 0 5"></polygon>
+            </marker>
+            <marker id="marker-purple" markerHeight="5" markerWidth="5" refX="4" refY="2.5" viewBox="0 0 5 5">
+              <polygon fill="#4f1896" points="0 0, 5 2.5, 0 5"></polygon>
+            </marker>
+            <marker id="marker-blue" markerHeight="5" markerWidth="5" refX="4" refY="2.5" viewBox="0 0 5 5">
+              <polygon fill="#005eb5" points="0 0, 5 2.5, 0 5"></polygon>
+            </marker>
+          </defs>
+          <!-- Mumbai JNPT to Khandala Ghat (Red Bottleneck) -->
+          <line stroke="#ba1a1a" stroke-width="3" x1="115" x2="265" y1="65" y2="65"></line>
+          <!-- Khandala Ghat to Pune Hub (Degraded Road) -->
+          <line marker-end="url(#marker-red)" stroke="#ba1a1a" stroke-dasharray="4,3" stroke-width="2.5" x1="305" x2="440" y1="65" y2="65"></line>
+          <!-- WDFC Rail Bypass Path: JNPT Panvel -> WDFC Spine -> BLR/MAA Dry Port -->
+          <path d="M 115 85 C 180 145, 310 145, 440 145" fill="none" marker-end="url(#marker-purple)" stroke="#4f1896" stroke-dasharray="6,3" stroke-width="2.5"></path>
+          <!-- Pune Hub to Bengaluru Kempegowda Hub -->
+          <line marker-end="url(#marker-blue)" stroke="#005eb5" stroke-width="2" x1="480" x2="630" y1="65" y2="65"></line>
+          <!-- WDFC Rail to BLR Dry Port Link -->
+          <line marker-end="url(#marker-purple)" stroke="#4f1896" stroke-dasharray="4,2" stroke-width="2" x1="480" x2="630" y1="145" y2="145"></line>
+          <!-- Air Corridor Bypass: BOM -> BLR Cargo Hub -->
+          <path d="M 115 50 C 260 10, 480 10, 630 50" fill="none" marker-end="url(#marker-blue)" stroke="#005eb5" stroke-width="1.5"></path>
+        </svg>
+
+        <!-- Node 1: Mumbai JNPT (Origin) -->
+        <div class="absolute left-4 top-10 bg-surface-container-lowest p-2 rounded shadow-sm border border-outline-variant/40 z-20 w-24">
+          <span class="font-code-md text-code-md text-primary font-bold block">BOM-JNPT</span>
+          <span class="font-label-xs text-[10px] text-on-surface-variant">Sea / Port</span>
+          <span class="px-1 rounded bg-surface-container text-primary text-[9px] font-bold mt-1 block">540 pkgs/h</span>
+        </div>
+
+        <!-- Node 2: Khandala Ghat Bottleneck Point (Highlighted Incident) -->
+        <div class="absolute left-[240px] top-6 bg-error-container p-2 rounded shadow-md border-2 border-error z-20 w-32">
+          <div class="flex items-center gap-1 text-error font-bold font-label-xs text-label-xs">
+            <span class="material-symbols-outlined text-[14px]">warning</span>
+            <span class="">Khandala Ghat</span>
+          </div>
+          <span class="font-label-xs text-[10px] text-on-error-container block font-semibold">-85% Flow Cut</span>
+          <span class="px-1 rounded bg-error text-on-error text-[8px] font-bold block mt-0.5 uppercase">Landslide Alert</span>
+        </div>
+
+        <!-- Node 3: Pune Hub -->
+        <div class="absolute left-[420px] top-10 bg-surface-container-lowest p-2 rounded shadow-sm border border-outline-variant/40 z-20 w-24">
+          <span class="font-code-md text-code-md text-primary font-bold block">PNQ-HUB</span>
+          <span class="font-label-xs text-[10px] text-on-surface-variant">Cross-Dock</span>
+          <span class="px-1 rounded bg-surface-container text-on-surface text-[9px] font-bold mt-1 block">38 Bays Act</span>
+        </div>
+
+        <!-- Node 4: WDFC Rail Bypass Node -->
+        <div class="absolute left-[420px] top-[125px] bg-tertiary-fixed p-2 rounded shadow-sm border border-tertiary z-20 w-28">
+          <span class="font-code-md text-code-md text-tertiary font-bold block">WDFC Rake</span>
+          <span class="font-label-xs text-[10px] text-tertiary font-semibold">Electric Freight</span>
+          <span class="px-1 rounded bg-tertiary text-on-tertiary text-[9px] font-bold mt-1 block">+660 Cap Slack</span>
+        </div>
+
+        <!-- Node 5: BLR Kempegowda (Destination Hub) -->
+        <div class="absolute right-4 top-10 bg-surface-container-lowest p-2 rounded shadow-sm border border-outline-variant/40 z-20 w-28">
+          <span class="font-code-md text-code-md text-secondary font-bold block">BLR-KIAL-04</span>
+          <span class="font-label-xs text-[10px] text-on-surface-variant">Kempegowda Hub</span>
+          <span class="px-1 rounded bg-surface-container-low text-primary text-[9px] font-bold mt-1 block">1,240 TEU Recv</span>
+        </div>
+
+        <!-- Legend in corner -->
+        <div class="absolute bottom-2 left-2 bg-surface-container-lowest/90 px-2 py-1 rounded text-[10px] text-on-surface-variant font-label-xs border border-surface-container flex items-center gap-2 z-20">
+          <span class="text-primary font-bold">Topology Sync:</span>
+          <span class="">Clicking corridor in worksheet synchronizes highlighted vector pathway</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Topology Legend Status -->
+    <div class="mt-2 pt-2 border-t border-surface-container-high flex items-center justify-between text-on-surface-variant font-label-xs text-label-xs">
+      <span class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-secondary"></span>
+        Network health index: <strong class="text-primary">78.2 / 100</strong> (Degraded by Khandala physical disruption)
+      </span>
+      <span class="font-code-md text-code-md text-primary font-semibold">184 Freight Units Monitored</span>
+    </div>
+  </div>
+
+  <!-- Right Card (40% / 5 cols): Corridor Performance & Capacity vs Load Mini-Charts -->
+  <div class="lg:col-span-5 bg-surface-container-lowest rounded-lg shadow-sm p-3.5 flex flex-col justify-between">
+    <div>
+      <div class="flex items-center justify-between pb-2 bg-surface-container-low px-3 py-1.5 rounded mb-2.5">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[18px]">monitoring</span>
+          <h3 class="font-headline-sm text-headline-sm text-primary font-semibold">Capacity vs Load &amp; Penalty Exposure</h3>
+        </div>
+        <span class="font-code-md text-code-md text-on-surface-variant">Live Telemetry</span>
+      </div>
+
+      <!-- Chart 1: Capacity vs Planned Load across Corridors (horizontal split bar) -->
+      <div class="mb-3">
+        <span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider block mb-1.5">Capacity vs Planned Load (pkgs/hr)</span>
+        <div class="space-y-1.5">
+          <!-- Bar 1: NH-48 -->
+          <div>
+            <div class="flex items-center justify-between font-label-xs text-label-xs mb-0.5">
+              <span class="font-bold text-error">NH-48 West Expressway</span>
+              <span class="font-code-md text-code-md text-error font-bold">1,840 / 1,200 cap (153%)</span>
+            </div>
+            <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden flex">
+              <div class="bg-error h-full rounded-full" style="width: 100%"></div>
+            </div>
+          </div>
+          <!-- Bar 2: WDFC Rail -->
+          <div>
+            <div class="flex items-center justify-between font-label-xs text-label-xs mb-0.5">
+              <span class="font-bold text-on-surface">WDFC Rail Spine</span>
+              <span class="font-code-md text-code-md text-secondary font-bold">540 / 1,200 cap (45%)</span>
+            </div>
+            <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden flex">
+              <div class="bg-secondary h-full rounded-full" style="width: 45%"></div>
+            </div>
+          </div>
+          <!-- Bar 3: Air Freight -->
+          <div>
+            <div class="flex items-center justify-between font-label-xs text-label-xs mb-0.5">
+              <span class="font-bold text-on-surface">Domestic Air Freight</span>
+              <span class="font-code-md text-code-md text-primary font-bold">420 / 500 cap (84%)</span>
+            </div>
+            <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden flex">
+              <div class="bg-primary h-full rounded-full" style="width: 84%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 2: SLA Exposure & Delay Heatmap Mini-Grid -->
+      <div>
+        <span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider block mb-1.5">SLA Penalty Exposure Matrix</span>
+        <div class="grid grid-cols-3 gap-2 bg-surface-container-low p-2 rounded border border-surface-container">
+          <div class="p-1.5 rounded bg-error-container/40 flex flex-col items-center justify-center text-center">
+            <span class="font-code-md text-code-md text-error font-bold">₹18.4L</span>
+            <span class="font-label-xs text-[10px] text-error font-semibold">NH-48 West</span>
+          </div>
+          <div class="p-1.5 rounded bg-surface-container flex flex-col items-center justify-center text-center">
+            <span class="font-code-md text-code-md text-primary font-bold">₹4.1L</span>
+            <span class="font-label-xs text-[10px] text-on-surface-variant font-semibold">MAA-BLR</span>
+          </div>
+          <div class="p-1.5 rounded bg-surface-container flex flex-col items-center justify-center text-center">
+            <span class="font-code-md text-code-md text-secondary font-bold">₹2.8L</span>
+            <span class="font-label-xs text-[10px] text-on-surface-variant font-semibold">Air Cargo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Dispatch CTAs -->
+    <div class="mt-3 pt-2.5 border-t border-surface-container-high flex flex-col sm:flex-row items-center justify-between gap-2">
+      <button class="w-full sm:w-auto h-7 px-3 rounded bg-tertiary hover:bg-tertiary-container text-on-tertiary font-label-sm text-label-sm font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-colors" type="button">
+        <span class="material-symbols-outlined text-[15px]">alt_route</span>
+        <span class="">Transfer Selected Overload to Recovery Center</span>
+      </button>
+      <button class="w-full sm:w-auto h-7 px-3 rounded bg-surface-container hover:bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold flex items-center justify-center gap-1 transition-colors" type="button">
+        <span class="material-symbols-outlined text-[15px]">science</span>
+        <span class="">Simulate Deflection in Disruption Lab</span>
+      </button>
+    </div>
+  </div>
+</div></div>
+<script>
+  // Simple micro-interaction for view toggle (Topology vs GIS)
+  const topBtn = document.getElementById('view-topology-btn');
+  const gisBtn = document.getElementById('view-gis-btn');
+  const gisPanel = document.getElementById('gis-map-panel');
+
+  if (topBtn && gisBtn && gisPanel) {
+    gisBtn.addEventListener('click', () => {
+      gisBtn.classList.remove('text-on-surface-variant', 'hover:text-on-surface');
+      gisBtn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+      topBtn.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+      topBtn.classList.add('text-on-surface-variant');
+      gisPanel.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    topBtn.addEventListener('click', () => {
+      topBtn.classList.remove('text-on-surface-variant');
+      topBtn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+      gisBtn.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+      gisBtn.classList.add('text-on-surface-variant', 'hover:text-on-surface');
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    });
+  }
+</script></main></div><aside class="fixed right-0 top-[82px] bottom-0 z-30 flex items-center pointer-events-none"><button class="pointer-events-auto h-24 w-5 rounded-l-md bg-tertiary text-on-tertiary flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.15)] hover:bg-tertiary-container transition-colors" title="Toggle Ask FluxQ Co-Pilot Drawer" type="button"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button></aside>
+
+</body></html>

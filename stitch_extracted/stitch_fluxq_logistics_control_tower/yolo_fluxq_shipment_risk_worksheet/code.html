@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-fixed":"#001b3c","inverse-on-surface":"#e9f1ff","on-secondary-container":"#003267","on-primary-fixed-variant":"#004689","secondary-fixed":"#d6e3ff","on-tertiary-container":"#d7bcff","tertiary-container":"#6737af","error":"#ba1a1a","surface-container-lowest":"#ffffff","surface":"#f8f9ff","on-surface-variant":"#424751","on-secondary-fixed-variant":"#00468a","surface-tint":"#1b5eab","tertiary-fixed-dim":"#d6baff","on-primary":"#ffffff","on-error":"#ffffff","on-surface":"#101c29","surface-container":"#e4efff","primary-container":"#00539f","surface-container-low":"#eef4ff","on-primary-container":"#a9c9ff","primary-fixed-dim":"#a7c8ff","surface-container-highest":"#d7e4f5","inverse-primary":"#a7c8ff","surface-bright":"#f8f9ff","outline-variant":"#c2c6d3","secondary-container":"#559cff","background":"#f8f9ff","on-tertiary-fixed":"#280057","outline":"#727782","on-secondary-fixed":"#001b3d","error-container":"#ffdad6","primary":"#003c76","on-tertiary":"#ffffff","on-background":"#101c29","inverse-surface":"#26313f","surface-dim":"#cfdbec","primary-fixed":"#d5e3ff","secondary-fixed-dim":"#a8c8ff","tertiary":"#4f1896","on-error-container":"#93000a","on-secondary":"#ffffff","surface-variant":"#d7e4f5","secondary":"#005eb5","surface-container-high":"#dde9fb","tertiary-fixed":"#ecdcff","on-tertiary-fixed-variant":"#5a27a1"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{gutter:"0.75rem","space-md":"0.75rem","space-lg":"1rem","space-sm":"0.5rem","space-xs":"0.25rem","gutter-desktop":"1rem",margin:"1rem","space-xl":"1.5rem","margin-desktop":"1.5rem"},fontFamily:{"headline-lg":["Roboto Flex"],"label-sm":["Roboto Flex"],"body-lg":["Roboto Flex"],"code-md":["Roboto Flex"],"headline-md":["Roboto Flex"],"headline-sm":["Roboto Flex"],"display-lg":["Roboto Flex"],"display-lg-mobile":["Roboto Flex"],"body-sm":["Roboto Flex"],"label-md":["Roboto Flex"],"label-xs":["Roboto Flex"],"body-md":["Roboto Flex"]},fontSize:{"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.03em",fontWeight:"600"}],"body-lg":["15px",{lineHeight:"22px",letterSpacing:"0",fontWeight:"400"}],"code-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"500"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-sm":["16px",{lineHeight:"24px",letterSpacing:"-0.005em",fontWeight:"600"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"600"}],"display-lg-mobile":["26px",{lineHeight:"34px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"400"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"label-xs":["10px",{lineHeight:"12px",letterSpacing:"0.04em",fontWeight:"700"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0",fontWeight:"400"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 flex flex-col"><div class="h-[46px] w-full bg-primary-container px-space-md flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center h-full"><div class="flex items-center gap-space-xs mr-space-lg"><div class="h-6 px-1.5 rounded-lg bg-surface-container-lowest flex items-center justify-center"><span class="font-label-xs text-primary font-bold tracking-wider">YOLO</span></div><span class="font-label-xs text-on-primary font-medium opacity-60">×</span><span class="font-headline-sm text-headline-sm text-on-primary tracking-tight font-semibold">FluxQ</span></div><div class="flex items-end h-full gap-1 pt-1"><div class="h-[38px] px-space-md rounded-t-lg bg-surface flex items-center gap-space-xs"><span class="font-label-sm text-label-sm text-primary font-semibold">Control Tower</span><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span></div><div class="h-[34px] px-space-md rounded-t-lg bg-primary/40 flex items-center gap-space-xs hover:bg-primary/60 transition-colors"><span class="font-label-sm text-label-sm text-on-primary-container">Shipment Risk [SH-2113]</span></div><div class="h-[34px] px-space-md rounded-t-lg bg-primary/40 flex items-center gap-space-xs hover:bg-primary/60 transition-colors"><span class="font-label-sm text-label-sm text-on-primary-container">Recovery Center</span></div></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-0.5 rounded-lg bg-primary/30"><span class="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span><span class="font-label-xs text-label-xs text-on-primary uppercase tracking-wider">Live Telemetry</span></div><button class="w-7 h-7 flex items-center justify-center rounded hover:bg-primary text-on-primary-container hover:text-on-primary" type="button"><span class="material-symbols-outlined text-[18px]">search</span></button><button class="relative w-7 h-7 flex items-center justify-center rounded hover:bg-primary text-on-primary-container hover:text-on-primary" type="button"><span class="material-symbols-outlined text-[18px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center gap-space-xs pl-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col text-left"><span class="font-label-xs text-label-xs text-on-primary leading-tight font-semibold">Vikram S.</span><span class="font-label-xs text-[9px] text-on-primary-container leading-none opacity-80">Lead Controller</span></div></div></div></div><div class="h-9 w-full bg-surface-container-lowest px-space-md flex items-center justify-between shadow-[0_1px_4px_rgba(0,0,0,0.03)]"><div class="flex items-center gap-space-xs overflow-x-auto"><span class="font-label-xs text-label-xs text-on-surface-variant font-bold uppercase tracking-wider mr-1">Scope:</span><div class="h-6 px-space-sm rounded bg-surface-container-high flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Scenario</span><span class="font-label-xs text-label-xs text-primary font-bold">Live Baseline</span></div><div class="h-6 px-space-sm rounded bg-surface-container flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Corridor</span><span class="font-label-xs text-label-xs text-on-surface font-semibold">Mumbai-BLR-MAA</span></div><div class="h-6 px-space-sm rounded bg-surface-container flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Carrier</span><span class="font-label-xs text-label-xs text-on-surface font-semibold">All (6)</span></div><div class="h-6 px-space-sm rounded bg-surface-container flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Mode</span><span class="font-label-xs text-label-xs text-on-surface font-semibold">Multimodal</span></div><div class="h-6 px-space-sm rounded bg-surface-container flex items-center gap-1"><span class="font-label-xs text-[10px] text-on-surface-variant uppercase">Window</span><span class="font-label-xs text-label-xs text-on-surface font-semibold">Next 72h</span></div></div><div class="flex items-center gap-space-xs"><div class="h-6 px-2 rounded bg-surface-container-low flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span class="font-label-xs text-label-xs text-on-surface-variant font-semibold">Connected Demo Data</span></div><button class="h-6 px-2 rounded hover:bg-surface-container flex items-center gap-1 text-on-surface-variant hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[14px]">sync</span><span class="font-label-xs text-label-xs">Refresh</span></button><button class="h-6 px-2 rounded hover:bg-surface-container flex items-center gap-1 text-on-surface-variant hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[14px]">view_timeline</span><span class="font-label-xs text-label-xs">Timeline</span></button><button class="h-6 px-2 rounded hover:bg-surface-container flex items-center gap-1 text-on-surface-variant hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[14px]">download</span><span class="font-label-xs text-label-xs">Export CSV</span></button></div></div></header><aside class="fixed left-0 top-[82px] bottom-0 w-[52px] bg-primary flex flex-col items-center py-space-sm z-40 shadow-[0_1px_8px_rgba(0,0,0,0.06)]"><nav class="flex-1 flex flex-col items-center gap-1.5 w-full px-1" data-active-classes="bg-secondary text-on-secondary font-bold"><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="control-tower" href="#" title="Control Tower"><span class="material-symbols-outlined text-[20px]">dashboard</span></a><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="shipment-risk" href="#" title="Shipment Risk"><span class="material-symbols-outlined text-[20px]">shield</span></a><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="route-network" href="#" title="Route Map / Network"><span class="material-symbols-outlined text-[20px]">hub</span></a><a class="relative w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="disruption-lab" href="#" title="Disruption Lab"><span class="material-symbols-outlined text-[20px]">science</span><span class="absolute top-1 right-0.5 px-0.5 rounded-[2px] bg-tertiary text-on-tertiary font-label-xs text-[8px] leading-tight font-bold">SIM</span></a><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="recovery-center" href="#" title="Recovery Center"><span class="material-symbols-outlined text-[20px]">alt_route</span></a><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="decision-audit" href="#" title="Decision Audit"><span class="material-symbols-outlined text-[20px]">history_edu</span></a><div class="w-7 my-1 border-t border-primary-container flex justify-center"><span class="font-label-xs text-[7px] text-primary-fixed-dim uppercase tracking-widest pt-0.5">EXP</span></div><a class="w-10 h-10 rounded flex items-center justify-center text-tertiary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="quantum-lab" href="#" title="Quantum Lab (Experimental)"><span class="material-symbols-outlined text-[20px]">token</span></a><div class="w-7 my-1 border-t border-primary-container"></div><a class="w-10 h-10 rounded flex items-center justify-center bg-tertiary text-on-tertiary hover:bg-tertiary-container transition-colors shadow-sm" data-path="ask-fluxq" href="#" title="Ask FluxQ AI Assistant"><span class="material-symbols-outlined text-[20px]">auto_awesome</span></a></nav><div class="flex flex-col items-center gap-1.5 w-full px-1 pb-1"><a class="w-10 h-10 rounded flex items-center justify-center text-primary-fixed-dim hover:bg-primary-container hover:text-on-primary transition-colors" data-path="system-settings" href="#" title="Settings &amp; System Status"><span class="material-symbols-outlined text-[20px]">tune</span></a></div></aside><div class="pl-[52px]"><main class="relative pt-[82px] min-h-screen bg-surface w-full px-space-md"><div class="flex flex-col w-full pb-space-xl">
+<!-- Top Sub-Navigation Tabs & Quick Presets -->
+<div class="flex items-center justify-between bg-surface-container-lowest px-space-md py-space-xs rounded-xl shadow-sm mb-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-1.5 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm flex items-center gap-1.5 shadow-sm transition-all">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">table_chart</span>
+<span>Shipment Worksheet</span>
+<span class="px-1.5 py-0.2 rounded-full bg-secondary text-on-secondary font-label-xs text-[10px]">1,428</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label-sm text-label-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[15px]">psychology</span>
+<span>SHAP Risk Drivers &amp; Attribution</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label-sm text-label-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[15px]">query_stats</span>
+<span>Breach Predictions</span>
+<span class="px-1 py-0.2 rounded bg-error-container text-on-error-container font-label-xs text-[9px] font-bold">38 High</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label-sm text-label-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[15px]">local_shipping</span>
+<span>Carrier Allocation</span>
+</button>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 bg-surface-container-high px-2.5 py-1 rounded-lg">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-ping"></span>
+<span class="font-label-xs text-label-xs text-primary font-bold tracking-wider">SYNC ENGINE: LIVE TELEMETRY</span>
+</div>
+<div class="flex items-center bg-surface-container rounded-lg p-0.5">
+<button class="px-2 py-0.5 rounded text-on-surface font-label-xs text-[11px] bg-surface-container-lowest shadow-xs font-semibold" id="densityCompact">Compact</button>
+<button class="px-2 py-0.5 rounded text-on-surface-variant hover:text-on-surface font-label-xs text-[11px]" id="densityRelaxed">Comfort</button>
+</div>
+</div>
+</div>
+<!-- Summary Risk Metrics Bar -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-md mb-space-md">
+<!-- Total Tracked -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Total Active Shipments</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">inventory_2</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">1,428</span>
+<span class="font-label-xs text-label-xs text-primary bg-primary-fixed px-2 py-0.5 rounded font-semibold">+142 vs baseline</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden mt-2">
+<div class="bg-primary h-full w-[94%] rounded-full"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-label-xs text-on-surface-variant mt-1.5">
+<span>Transshipment: 382</span>
+<span>Linehaul: 1,046</span>
+</div>
+</div>
+<!-- At Risk (>60% P_sla) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-error"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">At Risk (&gt;60% P<sub class="text-[9px]">SLA</sub>)</span>
+<span class="material-symbols-outlined text-error text-[16px]">warning</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-label-xs text-[10px] font-bold">2.6% Fleet</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<div class="flex items-baseline gap-1.5">
+<span class="font-display-lg text-display-lg text-error tracking-tight">38</span>
+<span class="font-label-sm text-label-sm text-error font-semibold">consignments</span>
+</div>
+<span class="font-label-xs text-label-xs text-error font-bold">+11 last 4h</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden mt-2 flex">
+<div class="bg-error h-full w-[65%]" title="Critical Breach Probability"></div>
+<div class="bg-secondary-container h-full w-[35%]" title="Warning Probability"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-label-xs text-on-surface-variant mt-1.5">
+<span class="text-error font-semibold">19 High Risk (&gt;80%)</span>
+<span>19 Moderate (60-80%)</span>
+</div>
+</div>
+<!-- Average Projected Delay -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Avg Projected Delay</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">schedule</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<div class="flex items-baseline gap-1">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">+3.2</span>
+<span class="font-headline-sm text-headline-sm text-on-surface-variant">hours</span>
+</div>
+<span class="font-label-xs text-label-xs text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">Corridor-4 worst (+6.1h)</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden mt-2">
+<div class="bg-secondary h-full w-[48%] rounded-full"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-label-xs text-on-surface-variant mt-1.5">
+<span>Cold Chain impact: 14 consignments</span>
+</div>
+</div>
+<!-- Total Value At Stake -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Value at Severe Stake</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">currency_rupee</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<span class="font-display-lg text-display-lg text-tertiary tracking-tight">₹1.42 Cr</span>
+<span class="font-label-xs text-label-xs text-tertiary-container bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded font-bold">Cold-Chain High</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden mt-2">
+<div class="bg-tertiary h-full w-[72%] rounded-full"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-label-xs text-on-surface-variant mt-1.5">
+<span>SLA Liquidation Penalty: ₹18.4 Lakh</span>
+</div>
+</div>
+</div>
+<!-- Kinaxis-Style Operational Table Controls Strip -->
+<div class="bg-surface-container-lowest rounded-t-xl p-space-md shadow-sm flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex flex-wrap items-center gap-space-sm flex-1 min-w-[320px]">
+<!-- Table Search Field -->
+<div class="relative flex-1 max-w-[280px]">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px]">search</span>
+<input class="w-full h-8 pl-8 pr-3 text-body-md font-body-md rounded bg-surface-container-low text-on-surface focus:outline-none focus:bg-surface-container-lowest transition-all" placeholder="Search Shipment ID, Consignee, Driver..." type="text" value="SH-2113"/>
+</div>
+<!-- Risk Filter Group -->
+<div class="flex items-center bg-surface-container p-0.5 rounded">
+<button class="px-2 py-1 rounded font-label-xs text-label-xs text-on-surface-variant hover:text-on-surface">All</button>
+<button class="px-2.5 py-1 rounded font-label-xs text-label-xs bg-error-container text-on-error-container font-bold shadow-xs">Critical &gt;80%</button>
+<button class="px-2 py-1 rounded font-label-xs text-label-xs text-on-surface-variant hover:text-on-surface">Warning 50-80%</button>
+<button class="px-2 py-1 rounded font-label-xs text-label-xs text-on-surface-variant hover:text-on-surface">Healthy &lt;50%</button>
+</div>
+<!-- Carrier Dropdown Selector -->
+<div class="relative">
+<select class="h-8 pl-2 pr-7 rounded bg-surface-container text-on-surface font-label-sm text-label-sm appearance-none focus:outline-none cursor-pointer">
+<option>Carrier: All (6 Selected)</option>
+<option selected="">BlueDart Express</option>
+<option>Delhivery Linehaul</option>
+<option>Gati KWE</option>
+<option>VRL Logistics</option>
+<option>TCI Freight</option>
+</select>
+<span class="material-symbols-outlined absolute right-1.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[16px] pointer-events-none">expand_more</span>
+</div>
+<!-- Mode Selector -->
+<div class="relative">
+<select class="h-8 pl-2 pr-7 rounded bg-surface-container text-on-surface font-label-sm text-label-sm appearance-none focus:outline-none cursor-pointer">
+<option>Mode: Multimodal</option>
+<option>Air Express Priority</option>
+<option>Dedicated Road Linehaul</option>
+<option>Rail Intermodal</option>
+</select>
+<span class="material-symbols-outlined absolute right-1.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[16px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Action Tools -->
+<div class="flex items-center gap-space-xs">
+<span class="font-label-xs text-[11px] text-on-surface-variant mr-1">Showing <b>6</b> of 38 flagged</span>
+<button class="h-8 px-2.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px]">filter_alt</span>
+<span>Filter Columns</span>
+</button>
+<button class="h-8 px-2.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px]">file_download</span>
+<span>Export CSV</span>
+</button>
+<button class="h-8 w-8 rounded bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container transition-colors" title="Reload Worksheet">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+</button>
+</div>
+</div>
+<!-- Dense Kinaxis-Inspired Shipment Worksheet Data Table -->
+<div class="bg-surface-container-lowest overflow-x-auto shadow-sm">
+<table class="w-full border-collapse text-left select-none text-body-md font-body-md" id="shipmentWorksheetTable">
+<thead>
+<tr class="bg-surface-container-high text-on-surface-variant font-label-xs text-label-xs uppercase tracking-wider h-8">
+<th class="w-8 px-2 text-center">
+<input checked="" class="rounded border-none accent-primary cursor-pointer w-3.5 h-3.5" type="checkbox"/>
+</th>
+<th class="px-2 py-1">Shipment ID</th>
+<th class="px-2 py-1">Consignee &amp; Segment</th>
+<th class="px-2 py-1">Carrier / Mode</th>
+<th class="px-2 py-1">Origin → Destination</th>
+<th class="px-2 py-1">Corridor Node</th>
+<th class="px-2 py-1">Promised SLA</th>
+<th class="px-2 py-1">Dynamic ETA &amp; Delay</th>
+<th class="px-2 py-1">SLA Buffer</th>
+<th class="px-2 py-1 w-32">Breach Prob.</th>
+<th class="px-2 py-1">Risk Score</th>
+<th class="px-2 py-1">Consignment Status</th>
+<th class="px-2 py-1 text-right pr-3">Operational Interventions</th>
+</tr>
+</thead>
+<tbody class="divide-none text-[12px]">
+<!-- ROW 1 (SELECTED: SH-2113) -->
+<tr class="bg-surface-container hover:bg-surface-container transition-colors cursor-pointer group" onclick="selectRow('SH-2113')">
+<td class="px-2 py-2 text-center bg-primary/10">
+<input checked="" class="rounded border-none accent-primary cursor-pointer w-3.5 h-3.5" type="checkbox"/>
+</td>
+<td class="px-2 py-2 font-code-md text-code-md font-bold text-primary flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
+<span class="underline decoration-primary/40 underline-offset-2">SH-2113</span>
+<span class="material-symbols-outlined text-tertiary text-[14px]" title="Cold Chain Telemetry Attached">ac_unit</span>
+</td>
+<td class="px-2 py-2">
+<div class="font-label-sm text-label-sm font-bold text-on-surface">Bio-Pharma Labs India</div>
+<div class="text-[10px] text-on-surface-variant uppercase font-semibold">Active Cold-Chain • 4°C-8°C</div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">BlueDart Express</div>
+<div class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[11px]">flight_takeoff</span> Multimodal Priority
+            </div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">Mumbai JNPT → BLR Hub</div>
+<div class="text-[10px] text-on-surface-variant">Distance: 984 km • Leg 2/3</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-code-md text-[10px] font-bold">NH-48 Khandala Ghat</span>
+</td>
+<td class="px-2 py-2 text-on-surface-variant font-medium">
+            Oct 24, 18:00 IST
+          </td>
+<td class="px-2 py-2">
+<div class="text-error font-bold font-code-md text-[11px] leading-tight">Oct 24, 22:12 IST</div>
+<div class="text-error text-[10px] font-bold">+4h 12m Delay</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-code-md font-bold text-[10px]">-4.2h Deficit</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1.5">
+<span class="font-code-md font-bold text-error text-[11px] w-7">87%</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 87%"></div>
+</div>
+</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-2 py-0.5 rounded bg-error text-on-error font-label-xs text-[10px] font-bold tracking-wider">9/10 CRITICAL</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1 text-error font-semibold">
+<span class="material-symbols-outlined text-[14px]">landslide</span>
+<span>In Transit - Bottlenecked</span>
+</div>
+</td>
+<td class="px-2 py-2 text-right pr-3">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-tertiary text-on-tertiary hover:bg-tertiary-container font-label-xs text-label-xs font-semibold flex items-center gap-1 transition-all shadow-xs" onclick="event.stopPropagation(); scrollAndOpenAction();">
+<span class="material-symbols-outlined text-[12px]">alt_route</span>
+<span>Open Recovery</span>
+</button>
+<button class="px-2 py-1 rounded bg-surface-container-highest text-on-surface hover:bg-surface-dim font-label-xs text-label-xs transition-colors" onclick="event.stopPropagation(); inspectShapDrivers('SH-2113');">
+<span>View SHAP</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 2: SH-1994 -->
+<tr class="hover:bg-surface-container/60 transition-colors cursor-pointer" onclick="selectRow('SH-1994')">
+<td class="px-2 py-2 text-center">
+<input class="rounded border-none accent-primary cursor-pointer w-3.5 h-3.5" type="checkbox"/>
+</td>
+<td class="px-2 py-2 font-code-md text-code-md font-bold text-primary flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="hover:underline">SH-1994</span>
+</td>
+<td class="px-2 py-2">
+<div class="font-label-sm text-label-sm font-semibold text-on-surface">Foxconn Electronics Chennai</div>
+<div class="text-[10px] text-on-surface-variant uppercase font-semibold">Semiconductor SMT Sub-assemblies</div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">Delhivery Linehaul</div>
+<div class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[11px]">local_shipping</span> Road Express 32FT
+            </div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">Chennai Port → Delhi NCR</div>
+<div class="text-[10px] text-on-surface-variant">Distance: 2,180 km • Leg 1/2</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-code-md text-[10px]">Corridor-2 Vijayawada</span>
+</td>
+<td class="px-2 py-2 text-on-surface-variant font-medium">
+            Oct 25, 06:00 IST
+          </td>
+<td class="px-2 py-2">
+<div class="text-error font-bold font-code-md text-[11px] leading-tight">Oct 25, 11:45 IST</div>
+<div class="text-error text-[10px] font-bold">+5h 45m Delay</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-code-md font-bold text-[10px]">-3.5h Deficit</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1.5">
+<span class="font-code-md font-bold text-error text-[11px] w-7">82%</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 82%"></div>
+</div>
+</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-xs text-[10px] font-bold">8/10 CRITICAL</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[14px]">timer_off</span>
+<span>Dwell at Checkpost</span>
+</div>
+</td>
+<td class="px-2 py-2 text-right pr-3">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-xs text-label-xs font-semibold">
+                Open Recovery
+              </button>
+<button class="px-2 py-1 rounded bg-surface-container text-on-surface font-label-xs text-label-xs">
+                SHAP
+              </button>
+</div>
+</td>
+</tr>
+<!-- ROW 3: SH-3042 -->
+<tr class="hover:bg-surface-container/60 transition-colors cursor-pointer" onclick="selectRow('SH-3042')">
+<td class="px-2 py-2 text-center">
+<input class="rounded border-none accent-primary cursor-pointer w-3.5 h-3.5" type="checkbox"/>
+</td>
+<td class="px-2 py-2 font-code-md text-code-md font-bold text-primary flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span class="hover:underline">SH-3042</span>
+</td>
+<td class="px-2 py-2">
+<div class="font-label-sm text-label-sm font-semibold text-on-surface">Maruti Suzuki Auto Component</div>
+<div class="text-[10px] text-on-surface-variant uppercase font-semibold">Tier-1 Transmission Gears</div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">Gati KWE Express</div>
+<div class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[11px]">train</span> Intermodal Rail Freight
+            </div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">Pune Chakan → Manesar Plant</div>
+<div class="text-[10px] text-on-surface-variant">Distance: 1,410 km • Leg 1/1</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-code-md text-[10px]">Western DFC Corridor</span>
+</td>
+<td class="px-2 py-2 text-on-surface-variant font-medium">
+            Oct 25, 12:00 IST
+          </td>
+<td class="px-2 py-2">
+<div class="text-on-surface font-bold font-code-md text-[11px] leading-tight">Oct 25, 13:50 IST</div>
+<div class="text-on-surface-variant text-[10px] font-semibold">+1h 50m Delay</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-code-md text-[10px]">+0.8h Buffer</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1.5">
+<span class="font-code-md font-bold text-on-surface text-[11px] w-7">68%</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full rounded-full" style="width: 68%"></div>
+</div>
+</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-xs text-[10px] font-bold">6/10 WARNING</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[14px]">swap_horiz</span>
+<span>Rake Transfer Pending</span>
+</div>
+</td>
+<td class="px-2 py-2 text-right pr-3">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-xs text-label-xs">
+                Open Recovery
+              </button>
+<button class="px-2 py-1 rounded bg-surface-container text-on-surface font-label-xs text-label-xs">
+                SHAP
+              </button>
+</div>
+</td>
+</tr>
+<!-- ROW 4: SH-0881 -->
+<tr class="hover:bg-surface-container/60 transition-colors cursor-pointer" onclick="selectRow('SH-0881')">
+<td class="px-2 py-2 text-center">
+<input class="rounded border-none accent-primary cursor-pointer w-3.5 h-3.5" type="checkbox"/>
+</td>
+<td class="px-2 py-2 font-code-md text-code-md font-bold text-primary flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="hover:underline">SH-0881</span>
+</td>
+<td class="px-2 py-2">
+<div class="font-label-sm text-label-sm font-semibold text-on-surface">Reliance Retail Mega-DC</div>
+<div class="text-[10px] text-on-surface-variant uppercase font-semibold">Festive Fast Fashion SKU 42</div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">VRL Logistics</div>
+<div class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[11px]">local_shipping</span> Surface 40FT Container
+            </div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">Surat Textile Hub → BLR DC</div>
+<div class="text-[10px] text-on-surface-variant">Distance: 1,280 km • Leg 2/2</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-code-md text-[10px]">NH-48 Kolhapur Node</span>
+</td>
+<td class="px-2 py-2 text-on-surface-variant font-medium">
+            Oct 24, 21:00 IST
+          </td>
+<td class="px-2 py-2">
+<div class="text-error font-bold font-code-md text-[11px] leading-tight">Oct 25, 03:10 IST</div>
+<div class="text-error text-[10px] font-bold">+6h 10m Delay</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-code-md font-bold text-[10px]">-6.1h Deficit</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1.5">
+<span class="font-code-md font-bold text-error text-[11px] w-7">91%</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 91%"></div>
+</div>
+</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-2 py-0.5 rounded bg-error text-on-error font-label-xs text-[10px] font-bold tracking-wider">9/10 CRITICAL</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1 text-error font-medium">
+<span class="material-symbols-outlined text-[14px]">traffic</span>
+<span>Toll Gate Congestion 18km</span>
+</div>
+</td>
+<td class="px-2 py-2 text-right pr-3">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-xs text-label-xs font-semibold">
+                Open Recovery
+              </button>
+<button class="px-2 py-1 rounded bg-surface-container text-on-surface font-label-xs text-label-xs">
+                SHAP
+              </button>
+</div>
+</td>
+</tr>
+<!-- ROW 5: SH-4109 -->
+<tr class="hover:bg-surface-container/60 transition-colors cursor-pointer" onclick="selectRow('SH-4109')">
+<td class="px-2 py-2 text-center">
+<input class="rounded border-none accent-primary cursor-pointer w-3.5 h-3.5" type="checkbox"/>
+</td>
+<td class="px-2 py-2 font-code-md text-code-md font-bold text-primary flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="hover:underline">SH-4109</span>
+</td>
+<td class="px-2 py-2">
+<div class="font-label-sm text-label-sm font-semibold text-on-surface">Tata Motors EV Division</div>
+<div class="text-[10px] text-on-surface-variant uppercase font-semibold">Battery Management Pack Unit</div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">TCI Freight Express</div>
+<div class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[11px]">local_shipping</span> Road Express 24FT
+            </div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">Sanand Plant → Pune Auto</div>
+<div class="text-[10px] text-on-surface-variant">Distance: 640 km • Leg 1/1</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-code-md text-[10px]">NE-1 Expressway</span>
+</td>
+<td class="px-2 py-2 text-on-surface-variant font-medium">
+            Oct 24, 23:30 IST
+          </td>
+<td class="px-2 py-2">
+<div class="text-on-surface font-bold font-code-md text-[11px] leading-tight">Oct 24, 23:55 IST</div>
+<div class="text-on-surface-variant text-[10px] font-semibold">+0h 25m Delta</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-code-md text-[10px]">+1.2h Buffer</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1.5">
+<span class="font-code-md font-bold text-on-surface text-[11px] w-7">34%</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 34%"></div>
+</div>
+</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-xs text-[10px] font-bold">3/10 NORMAL</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Smooth Cruise 68 km/h</span>
+</div>
+</td>
+<td class="px-2 py-2 text-right pr-3">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-xs text-label-xs">
+                Inspect
+              </button>
+<button class="px-2 py-1 rounded bg-surface-container text-on-surface font-label-xs text-label-xs">
+                SHAP
+              </button>
+</div>
+</td>
+</tr>
+<!-- ROW 6: SH-5120 -->
+<tr class="hover:bg-surface-container/60 transition-colors cursor-pointer" onclick="selectRow('SH-5120')">
+<td class="px-2 py-2 text-center">
+<input class="rounded border-none accent-primary cursor-pointer w-3.5 h-3.5" type="checkbox"/>
+</td>
+<td class="px-2 py-2 font-code-md text-code-md font-bold text-primary flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="hover:underline">SH-5120</span>
+</td>
+<td class="px-2 py-2">
+<div class="font-label-sm text-label-sm font-semibold text-on-surface">Sun Pharma R&amp;D Special</div>
+<div class="text-[10px] text-on-surface-variant uppercase font-semibold">Clinical Trial Samples (Cryo)</div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">BlueDart Aviation</div>
+<div class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[11px]">airplanemode_active</span> B737-800 Cargo Air
+            </div>
+</td>
+<td class="px-2 py-2">
+<div class="font-medium text-on-surface">Hyderabad RGIA → DEL T3</div>
+<div class="text-[10px] text-on-surface-variant">Distance: 1,260 km • Leg 1/2</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-code-md text-[10px]">Air Corridor North-7</span>
+</td>
+<td class="px-2 py-2 text-on-surface-variant font-medium">
+            Oct 24, 16:30 IST
+          </td>
+<td class="px-2 py-2">
+<div class="text-error font-bold font-code-md text-[11px] leading-tight">Oct 24, 19:40 IST</div>
+<div class="text-error text-[10px] font-bold">+3h 10m Delay</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-code-md font-bold text-[10px]">-3.2h Deficit</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1.5">
+<span class="font-code-md font-bold text-error text-[11px] w-7">79%</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 79%"></div>
+</div>
+</div>
+</td>
+<td class="px-2 py-2">
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-xs text-[10px] font-bold">8/10 CRITICAL</span>
+</td>
+<td class="px-2 py-2">
+<div class="flex items-center gap-1 text-error font-medium">
+<span class="material-symbols-outlined text-[14px]">cloud_sync</span>
+<span>Ground Hold DEL Squall</span>
+</div>
+</td>
+<td class="px-2 py-2 text-right pr-3">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-xs text-label-xs font-semibold">
+                Open Recovery
+              </button>
+<button class="px-2 py-1 rounded bg-surface-container text-on-surface font-label-xs text-label-xs">
+                SHAP
+              </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Bottom Deep Dive & SHAP Split Panel for SH-2113 -->
+<div class="mt-space-md bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-md relative overflow-hidden" id="deepDiveSection">
+<!-- Top Bar of Detail Drawer -->
+<div class="flex flex-wrap items-center justify-between pb-space-sm gap-2">
+<div class="flex items-center gap-space-sm">
+<span class="px-2 py-1 rounded bg-primary text-on-primary font-code-md text-code-md font-bold tracking-wider">SELECTED CONSIGNMENT: SH-2113</span>
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-xs text-label-xs font-bold uppercase">SLA Breach Prob: 87% • Severe Impact</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary">verified</span> ML Ensemble V4.8 (XGBoost + LSTM Telematics)
+        </span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-xs text-[10px] text-on-surface-variant font-code-md">LAST INFERENCE: 43s ago</span>
+<button class="w-6 h-6 rounded bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface" title="Dock or minimize inspector">
+<span class="material-symbols-outlined text-[16px]">fullscreen</span>
+</button>
+</div>
+</div>
+<!-- 3-Column Split Inspector -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Left (4 Cols): Full Consignment Specs & Telemetry Readout -->
+<div class="lg:col-span-4 bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-xs text-label-xs uppercase font-bold text-primary tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">inventory</span>
+              Entity Spec &amp; Telematics
+            </span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-label-xs text-[10px] font-bold">Cold Chain Tier-1</span>
+</div>
+<div class="space-y-2.5">
+<div class="flex items-center justify-between bg-surface-container-lowest p-2 rounded-lg">
+<span class="font-label-xs text-label-xs text-on-surface-variant">Consignee</span>
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Bio-Pharma Labs India</span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container-lowest p-2 rounded-lg">
+<span class="font-label-xs text-[10px] text-on-surface-variant block uppercase">Cargo Value</span>
+<span class="font-headline-sm text-headline-sm font-bold text-tertiary">₹42,00,000</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded-lg">
+<span class="font-label-xs text-[10px] text-on-surface-variant block uppercase">Target Temp</span>
+<span class="font-headline-sm text-headline-sm font-bold text-secondary flex items-center gap-1">
+                  4.8°C <span class="text-[10px] text-on-surface-variant font-normal">(4°–8°)</span>
+</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded-lg space-y-1">
+<div class="flex justify-between font-label-xs text-label-xs">
+<span class="text-on-surface-variant">Active Carrier &amp; Asset:</span>
+<span class="font-bold text-on-surface">BlueDart • MH-04-AZ-8812</span>
+</div>
+<div class="flex justify-between font-label-xs text-label-xs">
+<span class="text-on-surface-variant">Driver Contact:</span>
+<span class="font-semibold text-primary font-code-md">+91 98201 44921 (Ramesh P.)</span>
+</div>
+<div class="flex justify-between font-label-xs text-label-xs">
+<span class="text-on-surface-variant">Current Location:</span>
+<span class="font-semibold text-on-surface">NH-48 MP 94.2 (Ghat Incline)</span>
+</div>
+</div>
+<!-- Mini Live Node Tracker visual -->
+<div class="bg-surface-container-lowest p-2 rounded-lg flex items-center justify-between text-[11px] font-label-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="font-bold text-on-surface">GPS Pings: 100% Reliable</span>
+</div>
+<span class="text-on-surface-variant">Last ping: 22s ago</span>
+</div>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs text-[11px] font-body-sm text-on-surface-variant flex items-center justify-between">
+<span>Destination SLA: <b>Oct 24, 18:00</b></span>
+<span class="text-error font-bold font-code-md">-4.2h Deficit</span>
+</div>
+</div>
+<!-- Middle (5 Cols): Explainable Risk / SHAP Horizontal Signed Contributions -->
+<div class="lg:col-span-5 bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-xs text-label-xs uppercase font-bold text-tertiary tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">bar_chart</span>
+              SHAP Attribution: Delay Drivers (+/-)
+            </span>
+<span class="font-label-xs text-[10px] text-on-surface-variant font-code-md">Baseline P: 18% → Live: 87%</span>
+</div>
+<!-- SHAP Bar 1: Khandala Bottleneck -->
+<div class="space-y-1 mb-2.5">
+<div class="flex items-center justify-between font-label-xs text-label-xs">
+<span class="font-semibold text-on-surface flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                Landslide NH-48 Khandala bottleneck
+              </span>
+<span class="font-code-md font-bold text-error">+34% impact</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden flex">
+<div class="bg-error h-full rounded-full" style="width: 78%"></div>
+</div>
+</div>
+<!-- SHAP Bar 2: JNPT Berth Congestion -->
+<div class="space-y-1 mb-2.5">
+<div class="flex items-center justify-between font-label-xs text-label-xs">
+<span class="font-semibold text-on-surface flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                Mumbai JNPT Berth congestion dwell
+              </span>
+<span class="font-code-md font-bold text-error">+28% impact</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden flex">
+<div class="bg-error h-full rounded-full" style="width: 64%"></div>
+</div>
+</div>
+<!-- SHAP Bar 3: Monsoon Squall Rain -->
+<div class="space-y-1 mb-2.5">
+<div class="flex items-center justify-between font-label-xs text-label-xs">
+<span class="font-semibold text-on-surface flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                Monsoon squall rain severity index
+              </span>
+<span class="font-code-md font-bold text-error">+16% impact</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden flex">
+<div class="bg-error h-full rounded-full" style="width: 36%"></div>
+</div>
+</div>
+<!-- SHAP Bar 4: High Priority Linehaul (Mitigation) -->
+<div class="space-y-1 mb-2.5">
+<div class="flex items-center justify-between font-label-xs text-label-xs">
+<span class="font-semibold text-on-surface flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+                High priority linehaul allocation
+              </span>
+<span class="font-code-md font-bold text-secondary">-8% mitigation</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden flex justify-end">
+<div class="bg-secondary-container h-full rounded-full" style="width: 22%"></div>
+</div>
+</div>
+</div>
+<!-- Explanatory Governance Disclaimer Note -->
+<div class="mt-2 bg-surface-container-lowest p-2 rounded-lg">
+<p class="font-body-sm text-[11px] text-on-surface-variant leading-snug">
+<span class="font-bold text-on-surface">Note:</span> Model attribution indicates which features contributed to the prediction. It does not prove causation.
+          </p>
+</div>
+</div>
+<!-- Right (3 Cols): Quick Recovery Optimizer Action CTA -->
+<div class="lg:col-span-3 bg-surface-container p-space-md rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-2">
+<span class="material-symbols-outlined text-primary text-[18px]">bolt</span>
+<span class="font-label-sm text-label-sm font-bold text-primary uppercase tracking-wider">Prescribed Recovery</span>
+</div>
+<div class="bg-surface-container-lowest p-2.5 rounded-lg mb-3 shadow-xs">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-xs text-label-xs font-bold text-secondary uppercase">Scenario Alpha: Air Reroute</span>
+<span class="font-label-xs text-[10px] text-primary font-bold">94% Feasible</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface leading-tight mb-2">
+              Divert at Pune bypass node directly to Pune Airport (PNQ) → BLR Dedicated Air Express.
+            </p>
+<div class="flex justify-between items-center text-[10px] font-code-md bg-surface-container-high px-2 py-1 rounded">
+<span class="text-on-surface-variant">Cost: +₹14,200</span>
+<span class="text-primary font-bold">Recover: +3.8 hrs SLA</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<!-- Primary CTA -->
+<button class="w-full h-9 rounded bg-secondary hover:bg-primary text-on-secondary font-label-md text-label-md font-semibold flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.98]" onclick="triggerRecoveryOptimizer('SH-2113')">
+<span class="material-symbols-outlined text-[16px]">alt_route</span>
+<span>Launch Recovery Optimizer</span>
+</button>
+<button class="w-full h-8 rounded bg-surface-container-lowest hover:bg-surface-container-high text-on-surface font-label-xs text-label-xs flex items-center justify-center gap-1 transition-colors" onclick="alert('Simulation cloned to Disruption Lab sandbox.');">
+<span class="material-symbols-outlined text-[14px]">science</span>
+<span>Simulate Alternate Routes in Lab</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function selectRow(shipmentId) {
+    const table = document.getElementById('shipmentWorksheetTable');
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      row.classList.remove('bg-surface-container');
+    });
+    
+    // Highlight clicked row
+    const targetRow = window.event.currentTarget;
+    if (targetRow) {
+      targetRow.classList.add('bg-surface-container');
+    }
+
+    // Update Deep Dive Drawer Info
+    const deepDive = document.getElementById('deepDiveSection');
+    if (deepDive) {
+      deepDive.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  function triggerRecoveryOptimizer(shipmentId) {
+    const btn = window.event.currentTarget;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[16px]">sync</span><span>Handing off to Recovery Center...</span>';
+    setTimeout(() => {
+      alert('Routing shipment [' + shipmentId + '] to Recovery Center with Air-Divert preset applied.');
+      btn.innerHTML = originalText;
+    }, 600);
+  }
+
+  function scrollAndOpenAction() {
+    const deepDive = document.getElementById('deepDiveSection');
+    if (deepDive) {
+      deepDive.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function inspectShapDrivers(shipmentId) {
+    const deepDive = document.getElementById('deepDiveSection');
+    if (deepDive) {
+      deepDive.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // Density Toggle
+  document.getElementById('densityCompact')?.addEventListener('click', function() {
+    this.classList.add('bg-surface-container-lowest', 'shadow-xs', 'font-semibold');
+    this.classList.remove('text-on-surface-variant');
+    const rel = document.getElementById('densityRelaxed');
+    rel.classList.remove('bg-surface-container-lowest', 'shadow-xs', 'font-semibold');
+    rel.classList.add('text-on-surface-variant');
+
+    const cells = document.querySelectorAll('#shipmentWorksheetTable td, #shipmentWorksheetTable th');
+    cells.forEach(c => {
+      c.style.paddingTop = '4px';
+      c.style.paddingBottom = '4px';
+    });
+  });
+
+  document.getElementById('densityRelaxed')?.addEventListener('click', function() {
+    this.classList.add('bg-surface-container-lowest', 'shadow-xs', 'font-semibold');
+    this.classList.remove('text-on-surface-variant');
+    const comp = document.getElementById('densityCompact');
+    comp.classList.remove('bg-surface-container-lowest', 'shadow-xs', 'font-semibold');
+    comp.classList.add('text-on-surface-variant');
+
+    const cells = document.querySelectorAll('#shipmentWorksheetTable td, #shipmentWorksheetTable th');
+    cells.forEach(c => {
+      c.style.paddingTop = '8px';
+      c.style.paddingBottom = '8px';
+    });
+  });
+</script></main></div><aside class="fixed right-0 top-[82px] bottom-0 z-30 flex items-center pointer-events-none"><button class="pointer-events-auto h-24 w-5 rounded-l-md bg-tertiary text-on-tertiary flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.15)] hover:bg-tertiary-container transition-colors" title="Toggle Ask FluxQ Co-Pilot Drawer" type="button"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button></aside></body></html>
