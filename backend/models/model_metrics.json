@@ -1,0 +1,50 @@
+{
+  "evaluation_dataset": "data/training/test.csv",
+  "total_test_samples": 375,
+  "classification_performance": {
+    "roc_auc": 0.9885,
+    "pr_auc": 0.9769,
+    "brier_score": 0.0108,
+    "accuracy": 0.9893,
+    "f1_score": 0.9615,
+    "precision": 1.0,
+    "recall": 0.9259,
+    "confusion_matrix": {
+      "true_negative": 321,
+      "false_positive": 0,
+      "false_negative": 4,
+      "true_positive": 50
+    }
+  },
+  "regression_performance": {
+    "mean_absolute_error_minutes": 20.21,
+    "root_mean_squared_error_minutes": 33.15,
+    "median_absolute_error_minutes": 12.2
+  },
+  "inference_latency_ms": {
+    "p50": 16.8,
+    "p95": 17.47,
+    "p99": 17.69,
+    "mean": 14.62
+  },
+  "subgroup_analysis_by_mode": {
+    "AIR": {
+      "sample_count": 87,
+      "breach_prevalence": 0.103,
+      "roc_auc": 0.9922,
+      "regression_mae_minutes": 17.67
+    },
+    "MARITIME": {
+      "sample_count": 107,
+      "breach_prevalence": 0.131,
+      "roc_auc": 1.0,
+      "regression_mae_minutes": 21.86
+    },
+    "ROAD": {
+      "sample_count": 181,
+      "breach_prevalence": 0.171,
+      "roc_auc": 0.9822,
+      "regression_mae_minutes": 20.46
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-10-03T16:24:01.404851",
+  "training_duration_seconds": 1.98,
+  "selected_classifier": "LightGBM Classifier",
+  "selected_regressor": "Random Forest Regressor",
+  "classifier_validation_benchmarks": {
+    "Dummy (Most Frequent)": {
+      "val_roc_auc": 0.5,
+      "val_brier_score": 0.1307,
+      "val_f1": 0.0,
+      "val_recall": 0.0,
+      "val_precision": 0.0
+    },
+    "Logistic Regression": {
+      "val_roc_auc": 0.9952,
+      "val_brier_score": 0.026,
+      "val_f1": 0.8704,
+      "val_recall": 0.9592,
+      "val_precision": 0.7966
+    },
+    "Random Forest Classifier": {
+      "val_roc_auc": 0.9859,
+      "val_brier_score": 0.0261,
+      "val_f1": 0.92,
+      "val_recall": 0.9388,
+      "val_precision": 0.902
+    },
+    "LightGBM Classifier": {
+      "val_roc_auc": 0.996,
+      "val_brier_score": 0.0169,
+      "val_f1": 0.9184,
+      "val_recall": 0.9184,
+      "val_precision": 0.9184
+    }
+  },
+  "regressor_validation_benchmarks": {
+    "Dummy (Mean)": {
+      "val_mae": 44.49,
+      "val_rmse": 60.25
+    },
+    "Ridge Regression": {
+      "val_mae": 35.03,
+      "val_rmse": 46.35
+    },
+    "Random Forest Regressor": {
+      "val_mae": 20.93,
+      "val_rmse": 32.97
+    },
+    "Gradient Boosting Regressor": {
+      "val_mae": 21.94,
+      "val_rmse": 33.14
+    }
+  },
+  "test_evaluation": {
+    "classification": {
+      "test_roc_auc": 0.9893,
+      "test_brier_score": 0.0109,
+      "test_f1": 0.9615,
+      "test_recall": 0.9259,
+      "test_precision": 1.0
+    },
+    "regression": {
+      "test_mae_minutes": 20.21,
+      "test_rmse_minutes": 33.15
+    }
+  },
+  "artifacts": {
+    "preprocessor": "backend/models\\preprocessor.joblib",
+    "calibrated_classifier": "backend/models\\sla_classifier_calibrated.joblib",
+    "eta_regressor": "backend/models\\eta_regressor.joblib",
+    "raw_tree_classifier": "backend/models\\raw_best_tree_clf.joblib"
+  }
+}

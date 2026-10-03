@@ -1,0 +1,63 @@
+[
+  {
+    "event_id": "EVT-SEIS-001",
+    "event_type": "HAZARD_EARTHQUAKE",
+    "severity": 6.8,
+    "location_name": "Bay of Bengal Off-Coast Tremor",
+    "latitude": 13.8,
+    "longitude": 81.5,
+    "impact_radius_km": 120.0,
+    "affected_mode": "MARITIME",
+    "estimated_delay_minutes": 240,
+    "start_time": "2026-10-02T04:15:00Z",
+    "expected_end": "2026-10-02T16:00:00Z",
+    "magnitude": 5.2,
+    "source": "USGS ANSS ComCat",
+    "is_simulated": false
+  },
+  {
+    "event_id": "EVT-WX-002",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 8.2,
+    "location_name": "Monsoon Inundation Sriperumbudur Corridor",
+    "latitude": 12.9675,
+    "longitude": 79.9431,
+    "impact_radius_km": 45.0,
+    "affected_mode": "ROAD",
+    "estimated_delay_minutes": 180,
+    "start_time": "2026-10-03T07:00:00Z",
+    "expected_end": "2026-10-03T16:00:00Z",
+    "source": "NOAA NCEI / IMD Radar Feed",
+    "is_simulated": true
+  },
+  {
+    "event_id": "EVT-TRF-003",
+    "event_type": "ROAD_CLOSURE",
+    "severity": 9.5,
+    "location_name": "NH48 Walajapet Bridge Structural Maintenance Closure",
+    "latitude": 12.925,
+    "longitude": 79.38,
+    "impact_radius_km": 25.0,
+    "affected_mode": "ROAD",
+    "estimated_delay_minutes": 210,
+    "start_time": "2026-10-03T11:30:00Z",
+    "expected_end": "2026-10-03T18:30:00Z",
+    "source": "NHAI Highway Operations Dispatch",
+    "is_simulated": true
+  },
+  {
+    "event_id": "EVT-PRT-004",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.4,
+    "location_name": "Chennai Port Container Gate Surge",
+    "latitude": 13.085,
+    "longitude": 80.298,
+    "impact_radius_km": 15.0,
+    "affected_mode": "MARITIME",
+    "estimated_delay_minutes": 300,
+    "start_time": "2026-10-03T06:00:00Z",
+    "expected_end": "2026-10-03T22:00:00Z",
+    "source": "IPA Port Gate Telematics",
+    "is_simulated": true
+  }
+]

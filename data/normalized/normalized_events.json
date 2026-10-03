@@ -1,0 +1,2214 @@
+[
+  {
+    "event_id": "EVT-WX-00001",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.8,
+    "location": {
+      "name": "Chennai Weather Node",
+      "latitude": 13.0827,
+      "longitude": 80.2707,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T06:00:00+00:00",
+      "expected_end": "2026-09-28T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 68,
+      "capacity_reduction_pct": 24.6,
+      "speed_reduction_pct": 26.5
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00004",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.5,
+    "location": {
+      "name": "Chennai Weather Node",
+      "latitude": 13.0827,
+      "longitude": 80.2707,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T06:00:00+00:00",
+      "expected_end": "2026-10-01T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 63,
+      "capacity_reduction_pct": 22.9,
+      "speed_reduction_pct": 24.7
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00007",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 7.3,
+    "location": {
+      "name": "Sriperumbudur_NH48 Weather Node",
+      "latitude": 12.9675,
+      "longitude": 79.9431,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T06:00:00+00:00",
+      "expected_end": "2026-09-28T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 130,
+      "capacity_reduction_pct": 47.2,
+      "speed_reduction_pct": 50.8
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00008",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 7.0,
+    "location": {
+      "name": "Sriperumbudur_NH48 Weather Node",
+      "latitude": 12.9675,
+      "longitude": 79.9431,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T12:00:00+00:00",
+      "expected_end": "2026-09-29T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 126,
+      "capacity_reduction_pct": 45.8,
+      "speed_reduction_pct": 49.4
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00009",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Sriperumbudur_NH48 Weather Node",
+      "latitude": 12.9675,
+      "longitude": 79.9431,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T18:00:00+00:00",
+      "expected_end": "2026-09-30T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00011",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.1,
+    "location": {
+      "name": "Sriperumbudur_NH48 Weather Node",
+      "latitude": 12.9675,
+      "longitude": 79.9431,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T12:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 56,
+      "capacity_reduction_pct": 20.5,
+      "speed_reduction_pct": 22.1
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00013",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Vellore_NH48 Weather Node",
+      "latitude": 12.9165,
+      "longitude": 79.1325,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T06:00:00+00:00",
+      "expected_end": "2026-09-28T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00015",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Vellore_NH48 Weather Node",
+      "latitude": 12.9165,
+      "longitude": 79.1325,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T18:00:00+00:00",
+      "expected_end": "2026-09-30T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00017",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 4.2,
+    "location": {
+      "name": "Vellore_NH48 Weather Node",
+      "latitude": 12.9165,
+      "longitude": 79.1325,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T12:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 75,
+      "capacity_reduction_pct": 27.4,
+      "speed_reduction_pct": 29.5
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00018",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 6.0,
+    "location": {
+      "name": "Vellore_NH48 Weather Node",
+      "latitude": 12.9165,
+      "longitude": 79.1325,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T08:00:00+00:00",
+      "expected_end": "2026-10-03T14:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 108,
+      "capacity_reduction_pct": 39.2,
+      "speed_reduction_pct": 42.2
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00019",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 5.7,
+    "location": {
+      "name": "Krishnagiri_NH48 Weather Node",
+      "latitude": 12.5186,
+      "longitude": 78.2137,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T06:00:00+00:00",
+      "expected_end": "2026-09-28T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 102,
+      "capacity_reduction_pct": 37.1,
+      "speed_reduction_pct": 39.9
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00021",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Krishnagiri_NH48 Weather Node",
+      "latitude": 12.5186,
+      "longitude": 78.2137,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T18:00:00+00:00",
+      "expected_end": "2026-09-30T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00022",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.7,
+    "location": {
+      "name": "Krishnagiri_NH48 Weather Node",
+      "latitude": 12.5186,
+      "longitude": 78.2137,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T06:00:00+00:00",
+      "expected_end": "2026-10-01T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 67,
+      "capacity_reduction_pct": 24.3,
+      "speed_reduction_pct": 26.2
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00023",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 4.0,
+    "location": {
+      "name": "Krishnagiri_NH48 Weather Node",
+      "latitude": 12.5186,
+      "longitude": 78.2137,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T12:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 71,
+      "capacity_reduction_pct": 25.7,
+      "speed_reduction_pct": 27.7
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00025",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 6.4,
+    "location": {
+      "name": "Hosur_NH48 Weather Node",
+      "latitude": 12.7409,
+      "longitude": 77.8253,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T06:00:00+00:00",
+      "expected_end": "2026-09-28T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 115,
+      "capacity_reduction_pct": 41.8,
+      "speed_reduction_pct": 45.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00026",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.2,
+    "location": {
+      "name": "Hosur_NH48 Weather Node",
+      "latitude": 12.7409,
+      "longitude": 77.8253,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T12:00:00+00:00",
+      "expected_end": "2026-09-29T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 57,
+      "capacity_reduction_pct": 20.6,
+      "speed_reduction_pct": 22.2
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00027",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.7,
+    "location": {
+      "name": "Hosur_NH48 Weather Node",
+      "latitude": 12.7409,
+      "longitude": 77.8253,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T18:00:00+00:00",
+      "expected_end": "2026-09-30T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 66,
+      "capacity_reduction_pct": 24.0,
+      "speed_reduction_pct": 25.8
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00028",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.2,
+    "location": {
+      "name": "Hosur_NH48 Weather Node",
+      "latitude": 12.7409,
+      "longitude": 77.8253,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T06:00:00+00:00",
+      "expected_end": "2026-10-01T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 57,
+      "capacity_reduction_pct": 20.9,
+      "speed_reduction_pct": 22.5
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00029",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 4.3,
+    "location": {
+      "name": "Hosur_NH48 Weather Node",
+      "latitude": 12.7409,
+      "longitude": 77.8253,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T12:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 76,
+      "capacity_reduction_pct": 27.8,
+      "speed_reduction_pct": 29.9
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00030",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.2,
+    "location": {
+      "name": "Hosur_NH48 Weather Node",
+      "latitude": 12.7409,
+      "longitude": 77.8253,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T08:00:00+00:00",
+      "expected_end": "2026-10-03T14:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 56,
+      "capacity_reduction_pct": 20.5,
+      "speed_reduction_pct": 22.1
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00032",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Bengaluru Weather Node",
+      "latitude": 12.9716,
+      "longitude": 77.5946,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T12:00:00+00:00",
+      "expected_end": "2026-09-29T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00034",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Bengaluru Weather Node",
+      "latitude": 12.9716,
+      "longitude": 77.5946,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T06:00:00+00:00",
+      "expected_end": "2026-10-01T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00036",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.9,
+    "location": {
+      "name": "Bengaluru Weather Node",
+      "latitude": 12.9716,
+      "longitude": 77.5946,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T08:00:00+00:00",
+      "expected_end": "2026-10-03T14:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 69,
+      "capacity_reduction_pct": 25.2,
+      "speed_reduction_pct": 27.1
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00038",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.9,
+    "location": {
+      "name": "Mumbai Weather Node",
+      "latitude": 19.076,
+      "longitude": 72.8777,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T12:00:00+00:00",
+      "expected_end": "2026-09-29T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 69,
+      "capacity_reduction_pct": 25.1,
+      "speed_reduction_pct": 27.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00039",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 6.8,
+    "location": {
+      "name": "Mumbai Weather Node",
+      "latitude": 19.076,
+      "longitude": 72.8777,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T18:00:00+00:00",
+      "expected_end": "2026-09-30T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 121,
+      "capacity_reduction_pct": 43.9,
+      "speed_reduction_pct": 47.3
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00041",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Mumbai Weather Node",
+      "latitude": 19.076,
+      "longitude": 72.8777,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T12:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00042",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.1,
+    "location": {
+      "name": "Mumbai Weather Node",
+      "latitude": 19.076,
+      "longitude": 72.8777,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T08:00:00+00:00",
+      "expected_end": "2026-10-03T14:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 56,
+      "capacity_reduction_pct": 20.3,
+      "speed_reduction_pct": 21.8
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00043",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 7.1,
+    "location": {
+      "name": "Pune_NH48 Weather Node",
+      "latitude": 18.5204,
+      "longitude": 73.8567,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T06:00:00+00:00",
+      "expected_end": "2026-09-28T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 127,
+      "capacity_reduction_pct": 46.2,
+      "speed_reduction_pct": 49.8
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00044",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Pune_NH48 Weather Node",
+      "latitude": 18.5204,
+      "longitude": 73.8567,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T12:00:00+00:00",
+      "expected_end": "2026-09-29T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00047",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Pune_NH48 Weather Node",
+      "latitude": 18.5204,
+      "longitude": 73.8567,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T12:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00048",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.2,
+    "location": {
+      "name": "Pune_NH48 Weather Node",
+      "latitude": 18.5204,
+      "longitude": 73.8567,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T08:00:00+00:00",
+      "expected_end": "2026-10-03T14:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 57,
+      "capacity_reduction_pct": 20.7,
+      "speed_reduction_pct": 22.3
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00051",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.3,
+    "location": {
+      "name": "Hyderabad Weather Node",
+      "latitude": 17.385,
+      "longitude": 78.4867,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T18:00:00+00:00",
+      "expected_end": "2026-09-30T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 59,
+      "capacity_reduction_pct": 21.4,
+      "speed_reduction_pct": 23.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00052",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 4.0,
+    "location": {
+      "name": "Hyderabad Weather Node",
+      "latitude": 17.385,
+      "longitude": 78.4867,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T06:00:00+00:00",
+      "expected_end": "2026-10-01T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 71,
+      "capacity_reduction_pct": 25.9,
+      "speed_reduction_pct": 27.9
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00053",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.0,
+    "location": {
+      "name": "Hyderabad Weather Node",
+      "latitude": 17.385,
+      "longitude": 78.4867,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T12:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 54,
+      "capacity_reduction_pct": 19.8,
+      "speed_reduction_pct": 21.3
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00054",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 10.0,
+    "location": {
+      "name": "Hyderabad Weather Node",
+      "latitude": 17.385,
+      "longitude": 78.4867,
+      "country": "IND",
+      "impact_radius_km": 60.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T08:00:00+00:00",
+      "expected_end": "2026-10-03T14:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 65.0,
+      "speed_reduction_pct": 70.0
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00055",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.7,
+    "location": {
+      "name": "Delhi Weather Node",
+      "latitude": 28.7041,
+      "longitude": 77.1025,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T06:00:00+00:00",
+      "expected_end": "2026-09-28T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 67,
+      "capacity_reduction_pct": 24.2,
+      "speed_reduction_pct": 26.1
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00057",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.4,
+    "location": {
+      "name": "Delhi Weather Node",
+      "latitude": 28.7041,
+      "longitude": 77.1025,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T18:00:00+00:00",
+      "expected_end": "2026-09-30T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 61,
+      "capacity_reduction_pct": 22.0,
+      "speed_reduction_pct": 23.7
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-WX-00059",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 3.4,
+    "location": {
+      "name": "Delhi Weather Node",
+      "latitude": 28.7041,
+      "longitude": 77.1025,
+      "country": "IND",
+      "impact_radius_km": 35.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T12:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 60,
+      "capacity_reduction_pct": 22.0,
+      "speed_reduction_pct": 23.7
+    },
+    "provenance": {
+      "source": "Open-Meteo ERA5 Logistics Reanalysis",
+      "confidence": 0.92,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-02-2026-10-02T08",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 5.0,
+    "location": {
+      "name": "Sriperumbudur to Walajapet Corridor",
+      "latitude": 13.0213,
+      "longitude": 79.9969,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T08:00:00+00:00",
+      "expected_end": "2026-10-02T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 53,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 49.7
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-03-2026-10-02T20",
+    "event_type": "ROAD_CLOSURE",
+    "severity": 7.2,
+    "location": {
+      "name": "Walajapet to Vellore Bypass Corridor",
+      "latitude": 13.0457,
+      "longitude": 80.0213,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T20:00:00+00:00",
+      "expected_end": "2026-10-02T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 78,
+      "capacity_reduction_pct": 50.0,
+      "speed_reduction_pct": 72.3
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-04-2026-10-02T08",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 7.0,
+    "location": {
+      "name": "Vellore to Vaniyambadi Corridor",
+      "latitude": 13.0582,
+      "longitude": 80.0338,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T08:00:00+00:00",
+      "expected_end": "2026-10-02T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 90,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 70.3
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-04-2026-10-02T14",
+    "event_type": "ROAD_CLOSURE",
+    "severity": 7.3,
+    "location": {
+      "name": "Vellore to Vaniyambadi Corridor",
+      "latitude": 13.0724,
+      "longitude": 80.048,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T14:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 104,
+      "capacity_reduction_pct": 50.0,
+      "speed_reduction_pct": 73.2
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-06-2026-10-01T08",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 7.2,
+    "location": {
+      "name": "Krishnagiri to Hosur Border Corridor",
+      "latitude": 13.0754,
+      "longitude": 80.051,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T08:00:00+00:00",
+      "expected_end": "2026-10-01T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 107,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 71.6
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-06-2026-10-01T20",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 5.6,
+    "location": {
+      "name": "Krishnagiri to Hosur Border Corridor",
+      "latitude": 13.0227,
+      "longitude": 79.9983,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T20:00:00+00:00",
+      "expected_end": "2026-10-01T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 55,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 56.3
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-06-2026-10-03T13",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 6.3,
+    "location": {
+      "name": "Krishnagiri to Hosur Border Corridor",
+      "latitude": 13.04,
+      "longitude": 80.0156,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T13:00:00+00:00",
+      "expected_end": "2026-10-03T17:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 72,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 62.9
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-07-2026-10-01T08",
+    "event_type": "ROAD_CLOSURE",
+    "severity": 6.2,
+    "location": {
+      "name": "Hosur to Electronic City Bengaluru Corridor",
+      "latitude": 13.0392,
+      "longitude": 80.0148,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T08:00:00+00:00",
+      "expected_end": "2026-10-01T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 71,
+      "capacity_reduction_pct": 50.0,
+      "speed_reduction_pct": 62.4
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-SEG-07-2026-10-02T14",
+    "event_type": "ROAD_CLOSURE",
+    "severity": 7.2,
+    "location": {
+      "name": "Hosur to Electronic City Bengaluru Corridor",
+      "latitude": 13.0786,
+      "longitude": 80.0542,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T14:00:00+00:00",
+      "expected_end": "2026-10-02T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 111,
+      "capacity_reduction_pct": 50.0,
+      "speed_reduction_pct": 72.0
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH44-SEG-01-2026-10-01T14",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 6.4,
+    "location": {
+      "name": "Bengaluru to Anantapur Corridor Corridor",
+      "latitude": 13.243,
+      "longitude": 80.2186,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T14:00:00+00:00",
+      "expected_end": "2026-10-01T18:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 275,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 63.6
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH44-SEG-02-2026-10-02T20",
+    "event_type": "ROAD_CLOSURE",
+    "severity": 4.7,
+    "location": {
+      "name": "Anantapur to Hyderabad Outer Ring Corridor",
+      "latitude": 13.1913,
+      "longitude": 80.1669,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T20:00:00+00:00",
+      "expected_end": "2026-10-02T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 223,
+      "capacity_reduction_pct": 50.0,
+      "speed_reduction_pct": 46.8
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH44-SEG-02-2026-10-03T08",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 6.5,
+    "location": {
+      "name": "Anantapur to Hyderabad Outer Ring Corridor",
+      "latitude": 13.4431,
+      "longitude": 80.4187,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T08:00:00+00:00",
+      "expected_end": "2026-10-03T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 475,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 65.2
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-W-01-2026-10-01T08",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 6.5,
+    "location": {
+      "name": "Mumbai JNPT to Navi Mumbai Gateway Corridor",
+      "latitude": 13.068,
+      "longitude": 80.0436,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T08:00:00+00:00",
+      "expected_end": "2026-10-01T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 100,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 65.3
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-W-01-2026-10-03T08",
+    "event_type": "TRAFFIC_CONGESTION",
+    "severity": 7.0,
+    "location": {
+      "name": "Mumbai JNPT to Navi Mumbai Gateway Corridor",
+      "latitude": 13.0946,
+      "longitude": 80.0702,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T08:00:00+00:00",
+      "expected_end": "2026-10-03T12:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 127,
+      "capacity_reduction_pct": 25.0,
+      "speed_reduction_pct": 70.4
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-NH48-W-02-2026-10-01T20",
+    "event_type": "ROAD_CLOSURE",
+    "severity": 6.7,
+    "location": {
+      "name": "Navi Mumbai to Pune Expressway Corridor",
+      "latitude": 13.1048,
+      "longitude": 80.0804,
+      "country": "IND",
+      "impact_radius_km": 20.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T20:00:00+00:00",
+      "expected_end": "2026-10-01T00:00:00+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 137,
+      "capacity_reduction_pct": 50.0,
+      "speed_reduction_pct": 67.4
+    },
+    "provenance": {
+      "source": "NHAI Highway Corridor Telematics",
+      "confidence": 0.95,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INMAA1-2026-09-28",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.4,
+    "location": {
+      "name": "Chennai Port Container Terminal (CCTL)",
+      "latitude": 13.085,
+      "longitude": 80.298,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T00:00:00+00:00",
+      "expected_end": "2026-09-28T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1584,
+      "capacity_reduction_pct": 30.0,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INMAA1-2026-09-29",
+    "event_type": "PORT_CONGESTION",
+    "severity": 6.5,
+    "location": {
+      "name": "Chennai Port Container Terminal (CCTL)",
+      "latitude": 13.085,
+      "longitude": 80.298,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T00:00:00+00:00",
+      "expected_end": "2026-09-29T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1266,
+      "capacity_reduction_pct": 29.6,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INMAA1-2026-09-30",
+    "event_type": "PORT_CONGESTION",
+    "severity": 5.5,
+    "location": {
+      "name": "Chennai Port Container Terminal (CCTL)",
+      "latitude": 13.085,
+      "longitude": 80.298,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T00:00:00+00:00",
+      "expected_end": "2026-09-30T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 936,
+      "capacity_reduction_pct": 28.4,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INMAA1-2026-10-01",
+    "event_type": "PORT_CONGESTION",
+    "severity": 6.9,
+    "location": {
+      "name": "Chennai Port Container Terminal (CCTL)",
+      "latitude": 13.085,
+      "longitude": 80.298,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T00:00:00+00:00",
+      "expected_end": "2026-10-01T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1332,
+      "capacity_reduction_pct": 32.4,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INMAA1-2026-10-02",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.4,
+    "location": {
+      "name": "Chennai Port Container Terminal (CCTL)",
+      "latitude": 13.085,
+      "longitude": 80.298,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T00:00:00+00:00",
+      "expected_end": "2026-10-02T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1650,
+      "capacity_reduction_pct": 28.0,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INMAA1-2026-10-03",
+    "event_type": "PORT_CONGESTION",
+    "severity": 6.5,
+    "location": {
+      "name": "Chennai Port Container Terminal (CCTL)",
+      "latitude": 13.085,
+      "longitude": 80.298,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T00:00:00+00:00",
+      "expected_end": "2026-10-03T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1368,
+      "capacity_reduction_pct": 27.6,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INENR1-2026-09-28",
+    "event_type": "PORT_CONGESTION",
+    "severity": 4.4,
+    "location": {
+      "name": "Kamarajar Port Ennore",
+      "latitude": 13.2611,
+      "longitude": 80.334,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T00:00:00+00:00",
+      "expected_end": "2026-09-28T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 624,
+      "capacity_reduction_pct": 26.4,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INENR1-2026-09-29",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.2,
+    "location": {
+      "name": "Kamarajar Port Ennore",
+      "latitude": 13.2611,
+      "longitude": 80.334,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T00:00:00+00:00",
+      "expected_end": "2026-09-29T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1494,
+      "capacity_reduction_pct": 30.4,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INENR1-2026-09-30",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.0,
+    "location": {
+      "name": "Kamarajar Port Ennore",
+      "latitude": 13.2611,
+      "longitude": 80.334,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T00:00:00+00:00",
+      "expected_end": "2026-09-30T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1500,
+      "capacity_reduction_pct": 28.0,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INENR1-2026-10-01",
+    "event_type": "PORT_CONGESTION",
+    "severity": 5.1,
+    "location": {
+      "name": "Kamarajar Port Ennore",
+      "latitude": 13.2611,
+      "longitude": 80.334,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T00:00:00+00:00",
+      "expected_end": "2026-10-01T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 594,
+      "capacity_reduction_pct": 34.4,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INBOM1-2026-09-28",
+    "event_type": "PORT_CONGESTION",
+    "severity": 9.1,
+    "location": {
+      "name": "Jawaharlal Nehru Port Trust (JNPT) Navi Mumbai",
+      "latitude": 18.95,
+      "longitude": 72.95,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T00:00:00+00:00",
+      "expected_end": "2026-09-28T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 2070,
+      "capacity_reduction_pct": 33.6,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INBOM1-2026-09-29",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.7,
+    "location": {
+      "name": "Jawaharlal Nehru Port Trust (JNPT) Navi Mumbai",
+      "latitude": 18.95,
+      "longitude": 72.95,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T00:00:00+00:00",
+      "expected_end": "2026-09-29T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1632,
+      "capacity_reduction_pct": 31.2,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INBOM1-2026-09-30",
+    "event_type": "PORT_CONGESTION",
+    "severity": 6.9,
+    "location": {
+      "name": "Jawaharlal Nehru Port Trust (JNPT) Navi Mumbai",
+      "latitude": 18.95,
+      "longitude": 72.95,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T00:00:00+00:00",
+      "expected_end": "2026-09-30T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1458,
+      "capacity_reduction_pct": 28.4,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INBOM1-2026-10-01",
+    "event_type": "PORT_CONGESTION",
+    "severity": 5.7,
+    "location": {
+      "name": "Jawaharlal Nehru Port Trust (JNPT) Navi Mumbai",
+      "latitude": 18.95,
+      "longitude": 72.95,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T00:00:00+00:00",
+      "expected_end": "2026-10-01T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1038,
+      "capacity_reduction_pct": 28.0,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INBOM1-2026-10-02",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.7,
+    "location": {
+      "name": "Jawaharlal Nehru Port Trust (JNPT) Navi Mumbai",
+      "latitude": 18.95,
+      "longitude": 72.95,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T00:00:00+00:00",
+      "expected_end": "2026-10-02T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1674,
+      "capacity_reduction_pct": 30.8,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INBOM1-2026-10-03",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.0,
+    "location": {
+      "name": "Jawaharlal Nehru Port Trust (JNPT) Navi Mumbai",
+      "latitude": 18.95,
+      "longitude": 72.95,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T00:00:00+00:00",
+      "expected_end": "2026-10-03T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1302,
+      "capacity_reduction_pct": 34.0,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INTUT1-2026-09-28",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.7,
+    "location": {
+      "name": "V.O. Chidambaranar Port Tuticorin",
+      "latitude": 8.754,
+      "longitude": 78.188,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-28T00:00:00+00:00",
+      "expected_end": "2026-09-28T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1452,
+      "capacity_reduction_pct": 36.0,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INTUT1-2026-09-29",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.5,
+    "location": {
+      "name": "V.O. Chidambaranar Port Tuticorin",
+      "latitude": 8.754,
+      "longitude": 78.188,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-29T00:00:00+00:00",
+      "expected_end": "2026-09-29T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1482,
+      "capacity_reduction_pct": 34.0,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INTUT1-2026-09-30",
+    "event_type": "PORT_CONGESTION",
+    "severity": 6.5,
+    "location": {
+      "name": "V.O. Chidambaranar Port Tuticorin",
+      "latitude": 8.754,
+      "longitude": 78.188,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-09-30T00:00:00+00:00",
+      "expected_end": "2026-09-30T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1284,
+      "capacity_reduction_pct": 29.2,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INTUT1-2026-10-01",
+    "event_type": "PORT_CONGESTION",
+    "severity": 8.1,
+    "location": {
+      "name": "V.O. Chidambaranar Port Tuticorin",
+      "latitude": 8.754,
+      "longitude": 78.188,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-01T00:00:00+00:00",
+      "expected_end": "2026-10-01T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 1680,
+      "capacity_reduction_pct": 34.8,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INTUT1-2026-10-02",
+    "event_type": "PORT_CONGESTION",
+    "severity": 5.9,
+    "location": {
+      "name": "V.O. Chidambaranar Port Tuticorin",
+      "latitude": 8.754,
+      "longitude": 78.188,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T00:00:00+00:00",
+      "expected_end": "2026-10-02T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 798,
+      "capacity_reduction_pct": 36.4,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PORT-INTUT1-2026-10-03",
+    "event_type": "PORT_CONGESTION",
+    "severity": 4.0,
+    "location": {
+      "name": "V.O. Chidambaranar Port Tuticorin",
+      "latitude": 8.754,
+      "longitude": 78.188,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T00:00:00+00:00",
+      "expected_end": "2026-10-03T23:59:59+00:00",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 510,
+      "capacity_reduction_pct": 26.0,
+      "speed_reduction_pct": 0.0
+    },
+    "provenance": {
+      "source": "IPA / UNCTAD Maritime Telematics",
+      "confidence": 0.9,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-SEIS-001",
+    "event_type": "HAZARD_EARTHQUAKE",
+    "severity": 6.8,
+    "location": {
+      "name": "Bay of Bengal Off-Coast Tremor",
+      "latitude": 13.8,
+      "longitude": 81.5,
+      "country": "IND",
+      "impact_radius_km": 120.0
+    },
+    "temporal": {
+      "start_time": "2026-10-02T04:15:00Z",
+      "expected_end": "2026-10-02T16:00:00Z",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 240,
+      "capacity_reduction_pct": 60.0,
+      "speed_reduction_pct": 40.0
+    },
+    "provenance": {
+      "source": "USGS ANSS ComCat",
+      "confidence": 0.98,
+      "is_simulated": false
+    }
+  },
+  {
+    "event_id": "EVT-WX-002",
+    "event_type": "SEVERE_WEATHER",
+    "severity": 8.2,
+    "location": {
+      "name": "Monsoon Inundation Sriperumbudur Corridor",
+      "latitude": 12.9675,
+      "longitude": 79.9431,
+      "country": "IND",
+      "impact_radius_km": 45.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T07:00:00Z",
+      "expected_end": "2026-10-03T16:00:00Z",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 180,
+      "capacity_reduction_pct": 60.0,
+      "speed_reduction_pct": 40.0
+    },
+    "provenance": {
+      "source": "NOAA NCEI / IMD Radar Feed",
+      "confidence": 0.98,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-TRF-003",
+    "event_type": "ROAD_CLOSURE",
+    "severity": 9.5,
+    "location": {
+      "name": "NH48 Walajapet Bridge Structural Maintenance Closure",
+      "latitude": 12.925,
+      "longitude": 79.38,
+      "country": "IND",
+      "impact_radius_km": 25.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T11:30:00Z",
+      "expected_end": "2026-10-03T18:30:00Z",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "ROAD",
+      "estimated_delay_minutes": 210,
+      "capacity_reduction_pct": 60.0,
+      "speed_reduction_pct": 40.0
+    },
+    "provenance": {
+      "source": "NHAI Highway Operations Dispatch",
+      "confidence": 0.98,
+      "is_simulated": true
+    }
+  },
+  {
+    "event_id": "EVT-PRT-004",
+    "event_type": "PORT_CONGESTION",
+    "severity": 7.4,
+    "location": {
+      "name": "Chennai Port Container Gate Surge",
+      "latitude": 13.085,
+      "longitude": 80.298,
+      "country": "IND",
+      "impact_radius_km": 15.0
+    },
+    "temporal": {
+      "start_time": "2026-10-03T06:00:00Z",
+      "expected_end": "2026-10-03T22:00:00Z",
+      "actual_end": null
+    },
+    "impact_attributes": {
+      "affected_mode": "MARITIME",
+      "estimated_delay_minutes": 300,
+      "capacity_reduction_pct": 60.0,
+      "speed_reduction_pct": 40.0
+    },
+    "provenance": {
+      "source": "IPA Port Gate Telematics",
+      "confidence": 0.98,
+      "is_simulated": true
+    }
+  }
+]

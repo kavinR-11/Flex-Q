@@ -1,0 +1,78 @@
+{
+  "benchmark_timestamp": "2026-10-03T11:16:01.739935+00:00",
+  "solver": "Google OR-Tools SCIP MIP",
+  "instances": [
+    {
+      "fleet_size": 10,
+      "variables_count": 40,
+      "constraints_count": 12,
+      "runtime_ms": 6.53,
+      "solver_status": "OPTIMAL",
+      "objective_value": 4192.8,
+      "feasibility_rate_pct": 100.0,
+      "sla_preservation_pct": 100.0,
+      "total_recovery_cost_inr": 12000.0,
+      "mean_cost_per_shipment_inr": 1200.0,
+      "action_breakdown": {
+        "MAINTAIN_ROUTE": 0,
+        "ALTERNATE_ROUTE": 10,
+        "CARRIER_SWITCH": 0,
+        "EXPEDITE": 0
+      }
+    },
+    {
+      "fleet_size": 25,
+      "variables_count": 100,
+      "constraints_count": 27,
+      "runtime_ms": 5.44,
+      "solver_status": "OPTIMAL",
+      "objective_value": 10352.39,
+      "feasibility_rate_pct": 100.0,
+      "sla_preservation_pct": 100.0,
+      "total_recovery_cost_inr": 30000.0,
+      "mean_cost_per_shipment_inr": 1200.0,
+      "action_breakdown": {
+        "MAINTAIN_ROUTE": 0,
+        "ALTERNATE_ROUTE": 25,
+        "CARRIER_SWITCH": 0,
+        "EXPEDITE": 0
+      }
+    },
+    {
+      "fleet_size": 50,
+      "variables_count": 200,
+      "constraints_count": 52,
+      "runtime_ms": 5.66,
+      "solver_status": "OPTIMAL",
+      "objective_value": 20307.95,
+      "feasibility_rate_pct": 100.0,
+      "sla_preservation_pct": 98.0,
+      "total_recovery_cost_inr": 58800.0,
+      "mean_cost_per_shipment_inr": 1176.0,
+      "action_breakdown": {
+        "MAINTAIN_ROUTE": 1,
+        "ALTERNATE_ROUTE": 49,
+        "CARRIER_SWITCH": 0,
+        "EXPEDITE": 0
+      }
+    },
+    {
+      "fleet_size": 100,
+      "variables_count": 400,
+      "constraints_count": 102,
+      "runtime_ms": 6.88,
+      "solver_status": "OPTIMAL",
+      "objective_value": 40195.2,
+      "feasibility_rate_pct": 100.0,
+      "sla_preservation_pct": 96.0,
+      "total_recovery_cost_inr": 115200.0,
+      "mean_cost_per_shipment_inr": 1152.0,
+      "action_breakdown": {
+        "MAINTAIN_ROUTE": 4,
+        "ALTERNATE_ROUTE": 96,
+        "CARRIER_SWITCH": 0,
+        "EXPEDITE": 0
+      }
+    }
+  ]
+}

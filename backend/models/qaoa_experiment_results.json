@@ -1,0 +1,49 @@
+{
+  "experiment_timestamp": "2026-10-03T11:23:41.486111+00:00",
+  "simulation_backend": "Qiskit Statevector Simulator",
+  "instances": [
+    {
+      "instance_name": "Residual Slot Allocation 2x2 (4 Qubits)",
+      "qubits": 4,
+      "grid_dimensions": "2 shipments x 2 slots",
+      "exact_classical_objective": 2600.0,
+      "exact_classical_runtime_ms": 0.118,
+      "qaoa_objective": 2600.0,
+      "qaoa_runtime_ms": 0.89,
+      "optimality_gap_pct": 0.0,
+      "qaoa_feasible": false,
+      "quantum_contribution_ratio_pct": 0.0,
+      "circuit_depth_p": 1,
+      "backend": "Qiskit Statevector Simulator (p=1)"
+    },
+    {
+      "instance_name": "Residual Slot Allocation 2x3 (6 Qubits)",
+      "qubits": 6,
+      "grid_dimensions": "2 shipments x 3 slots",
+      "exact_classical_objective": 2650.0,
+      "exact_classical_runtime_ms": 0.218,
+      "qaoa_objective": 2650.0,
+      "qaoa_runtime_ms": 1.0,
+      "optimality_gap_pct": 0.0,
+      "qaoa_feasible": false,
+      "quantum_contribution_ratio_pct": 0.0,
+      "circuit_depth_p": 1,
+      "backend": "Qiskit Statevector Simulator (p=1)"
+    },
+    {
+      "instance_name": "Residual Slot Allocation 2x4 (8 Qubits)",
+      "qubits": 8,
+      "grid_dimensions": "2 shipments x 4 slots",
+      "exact_classical_objective": 2400.0,
+      "exact_classical_runtime_ms": 0.791,
+      "qaoa_objective": 2400.0,
+      "qaoa_runtime_ms": 2.06,
+      "optimality_gap_pct": 0.0,
+      "qaoa_feasible": false,
+      "quantum_contribution_ratio_pct": 0.0,
+      "circuit_depth_p": 1,
+      "backend": "Qiskit Statevector Simulator (p=1)"
+    }
+  ],
+  "disclaimer": "QAOA experiments conducted via statevector simulation on classical CPU. No physical quantum advantage or quantum supremacy is claimed. All candidate allocations are strictly validated via independent classical feasibility checks."
+}
