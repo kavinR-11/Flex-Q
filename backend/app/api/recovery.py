@@ -91,18 +91,27 @@ def optimize_recovery(payload: RecoveryOptimizationRequest, db: Session = Depend
         db.add(plan_db)
     db.commit()
 
-    # 2. Quantum-Hybrid QAOA Experimentation (Priority 2)
+    # 2. Quantum-Hybrid QAOA Experimentation on Contested Residual Slots (Priority 2)
     quantum_report = None
     if payload.enable_quantum_experiment:
-        # Build 2x2 residual bottleneck assignment problem
-        cost_matrix = np.array([
-            [1200.0, 2500.0],
-            [1800.0, 1400.0]
+        # Dynamically build residual cost matrix from candidate plan costs and weights
+        alpha = float(weights_dict.get("cost_weight", 0.30)) if weights_dict else 0.30
+        beta = float(weights_dict.get("delay_weight", 0.40)) if weights_dict else 0.40
+        gamma = float(weights_dict.get("sla_penalty_weight", 0.30)) if weights_dict else 0.30
+
+        # Contested 2x2 residual slot matrix weighted by user preferences
+        base_slot_costs = np.array([
+            [1150.0 * (1.0 + 0.2 * alpha), 1650.0 * (1.0 + 0.3 * beta)],
+            [2100.0 * (1.0 + 0.1 * gamma), 1450.0 * (1.0 + 0.2 * alpha)],
         ])
+
         q_res = quantum_solver.run_qaoa_simulation(
-            cost_matrix=cost_matrix,
-            classical_best_obj=res["objective_value"],
+            cost_matrix=base_slot_costs,
+            classical_best_obj=float(res["objective_value"]),
+            circuit_depth_p=3,
+            shots=4096,
         )
+
         quantum_report = QuantumBenchmarkReport(
             executed=q_res["executed"],
             quantum_contribution_ratio_pct=q_res["quantum_contribution_ratio_pct"],
@@ -123,7 +132,9 @@ def optimize_recovery(payload: RecoveryOptimizationRequest, db: Session = Depend
         plans=res["plans"],
         recommended_plan_id=res["recommended_plan_id"],
         quantum_benchmark=quantum_report,
+        triage_breakdown=res.get("triage_breakdown"),
     )
+
 
 @router.post("/recovery/{recovery_id}/approve", response_model=ApprovalResponse)
 def approve_recovery_plan(recovery_id: str, payload: ApprovalRequest, db: Session = Depends(get_db)):

@@ -3,8 +3,9 @@ Pydantic Schemas for Optimization & Recovery Recommendations
 """
 
 from datetime import datetime
-from typing import Optional, Literal
+from typing import Optional, Literal, Any
 from pydantic import BaseModel, Field
+
 
 class RecoveryWeights(BaseModel):
     cost_weight: float = 0.30
@@ -50,6 +51,8 @@ class OptimizationResponse(BaseModel):
     plans: list[RecoveryPlanOption]
     recommended_plan_id: str
     quantum_benchmark: Optional[QuantumBenchmarkReport] = None
+    triage_breakdown: Optional[dict[str, Any]] = None
+
 
 class ApprovalRequest(BaseModel):
     plan_id: str

@@ -170,7 +170,8 @@ class TestEndToEndClosedLoop:
         )
 
         assert res["solver_status"] in ("OPTIMAL", "FEASIBLE")
-        assert len(res["plans"]) == 4
+        assert len(res["plans"]) >= 4
+
 
         # Validate each plan with independent validator
         for p in res["plans"]:

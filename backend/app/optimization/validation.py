@@ -33,8 +33,9 @@ def validate_plan_feasibility(
         violations.append(f"Violation: Additional cost INR {cost} exceeds max configured budget INR {max_budget}.")
 
     # 3. Capacity check
-    if carrier_capacity_remaining <= 0 and chosen_action.get("action") in ("CARRIER_SWITCH", "EXPEDITE"):
+    if carrier_capacity_remaining <= 0 and chosen_action.get("action") in ("CARRIER_SWITCH", "EXPEDITE", "EXPEDITE_AIR", "RAIL_INTERMODAL"):
         violations.append("Violation: Insufficient alternate carrier capacity available on requested lane.")
+
 
     # 4. SLA check
     promised_del = datetime.fromisoformat(shipment["promised_delivery"].replace("Z", "+00:00"))

@@ -117,23 +117,8 @@ def seed_database_if_empty():
                 db.add(sh_db)
             db.commit()
 
-        # 4. Seed Initial Audit Log for Reference Shipment SH-2048
-        if db.query(AuditLogDB).filter_by(audit_id="AUD-SH-2048-INIT").first() is None:
-            audit_init = AuditLogDB(
-                audit_id="AUD-SH-2048-INIT",
-                shipment_id="SH-2048",
-                event_type="SHIPMENT_REGISTERED",
-                previous_state=None,
-                new_state={"status": "in_transit", "origin": "Chennai", "destination": "Bengaluru", "risk_score": 2},
-                trigger_source="INITIAL_LOGISTICS_REGISTRATION",
-                operator_id="SYSTEM",
-                justification="Consignment SH-2048 initialized for Chennai-Bengaluru corridor delivery.",
-                timestamp=datetime.now(timezone.utc),
-            )
-            db.add(audit_init)
-            db.commit()
-
         print(f"[Lifespan] Database seeding complete: {db.query(ShipmentDB).count()} shipments loaded.")
+
     finally:
         db.close()
 

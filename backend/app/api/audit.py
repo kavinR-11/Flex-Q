@@ -20,3 +20,11 @@ def get_shipment_audit_trail(shipment_id: str, db: Session = Depends(get_db)):
 def list_system_audit_logs(limit: int = Query(50, ge=1, le=200), db: Session = Depends(get_db)):
     logs = db.query(AuditLogDB).order_by(AuditLogDB.timestamp.desc()).limit(limit).all()
     return logs
+
+@router.delete("", response_model=dict)
+def clear_audit_logs(db: Session = Depends(get_db)):
+    """Purges all audit logs to start a fresh, clean demo session."""
+    deleted_count = db.query(AuditLogDB).delete()
+    db.commit()
+    return {"status": "CLEARED", "deleted_entries": deleted_count}
+

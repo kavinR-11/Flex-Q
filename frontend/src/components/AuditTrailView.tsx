@@ -3,10 +3,13 @@ import {
   History, 
   CheckCircle, 
   User, 
-  Clock 
+  Clock,
+  Trash2,
+  RefreshCw,
+  AlertCircle
 } from 'lucide-react';
 import { AuditLogEntry } from '../types';
-import { fetchAuditLogs } from '../services/api';
+import { fetchAuditLogs, clearAuditLogs } from '../services/api';
 
 interface AuditTrailViewProps {
   selectedShipmentId: string | null;
@@ -16,6 +19,7 @@ export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ selectedShipment
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
   const [filterShipment, setFilterShipment] = useState<string>(selectedShipmentId || '');
   const [loading, setLoading] = useState(false);
+  const [clearing, setClearing] = useState(false);
 
   const loadLogs = (shId?: string) => {
     setLoading(true);
@@ -25,9 +29,35 @@ export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ selectedShipment
       .finally(() => setLoading(false));
   };
 
+  const handleClear = async () => {
+    if (!window.confirm('Clear all audit logs to start a fresh demo session?')) return;
+    setClearing(true);
+    try {
+      await clearAuditLogs();
+      setLogs([]);
+    } catch (err) {
+      console.error('Failed to clear logs:', err);
+    } finally {
+      setClearing(false);
+    }
+  };
+
   useEffect(() => {
     loadLogs(filterShipment);
   }, [filterShipment]);
+
+  const formatTimestamp = (rawTs: string) => {
+    try {
+      const dt = new Date(rawTs);
+      if (isNaN(dt.getTime())) return rawTs;
+      const datePart = dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      const timePart = dt.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      return `${datePart} at ${timePart}`;
+    } catch {
+      return rawTs;
+    }
+  };
+
 
   return (
     <div className="space-y-4 font-sans text-[#101c29]">
@@ -80,12 +110,24 @@ export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ selectedShipment
               Chronological Audit Ledger ({logs.length} entries)
             </h2>
           </div>
-          <button
-            onClick={() => loadLogs(filterShipment)}
-            className="text-xs text-[#003c76] hover:text-[#005eb5] font-semibold transition"
-          >
-            Refresh Ledger
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleClear}
+              disabled={clearing || logs.length === 0}
+              className="text-xs text-red-600 hover:text-red-800 font-semibold transition flex items-center gap-1 px-2.5 py-1 rounded bg-red-50 hover:bg-red-100 border border-red-200 disabled:opacity-40"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              {clearing ? 'Clearing...' : 'Clear Ledger'}
+            </button>
+            <button
+              onClick={() => loadLogs(filterShipment)}
+              disabled={loading}
+              className="text-xs text-[#003c76] hover:text-[#005eb5] font-semibold transition flex items-center gap-1 px-2.5 py-1 rounded bg-[#e4efff] border border-[#a9c9ff]"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -93,8 +135,14 @@ export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ selectedShipment
             Loading audit records...
           </div>
         ) : logs.length === 0 ? (
-          <div className="p-8 text-center text-xs text-[#727782]">
-            No audit log entries found.
+          <div className="p-8 text-center text-xs text-[#727782] space-y-2">
+            <div className="w-10 h-10 rounded-full bg-[#f8f9ff] border border-slate-200 flex items-center justify-center mx-auto text-[#003c76]">
+              <History className="w-5 h-5" />
+            </div>
+            <p className="font-semibold text-[#101c29]">No audit log entries found.</p>
+            <p className="max-w-md mx-auto text-[11px] text-[#424751]">
+              The audit ledger is clean. Any disruption event injected in Disruption Lab or recovery plan authorized in Recovery Center will immediately be logged here in real-time.
+            </p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -122,9 +170,10 @@ export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ selectedShipment
                       </span>
                     </div>
                     <span className="font-mono text-[#727782] text-[11px]">
-                      {new Date(log.timestamp).toLocaleString()}
+                      {formatTimestamp(log.timestamp)}
                     </span>
                   </div>
+
 
                   {log.justification && (
                     <p className="text-[#424751] italic pl-8">

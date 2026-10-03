@@ -93,6 +93,19 @@ export interface QuantumBenchmarkReport {
   notes: string;
 }
 
+export interface TriageBreakdown {
+  total_fleet_variables: number;
+  classical_frozen_count: number;
+  classical_percentage: number;
+  quantum_residual_count: number;
+  quantum_percentage: number;
+  classical_consensus_status: string;
+  quantum_dispatch_status: string;
+  qubits_allocated: number;
+  circuit_depth_p: number;
+  optimizer: string;
+}
+
 export interface OptimizationResponse {
   shipment_id: string;
   solver_status: string;
@@ -101,7 +114,9 @@ export interface OptimizationResponse {
   plans: RecoveryPlanOption[];
   recommended_plan_id: string;
   quantum_benchmark?: QuantumBenchmarkReport;
+  triage_breakdown?: TriageBreakdown;
 }
+
 
 export interface AuditLogEntry {
   audit_id: string;

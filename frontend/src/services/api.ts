@@ -133,6 +133,15 @@ export async function fetchAuditLogs(shipmentId?: string): Promise<AuditLogEntry
   return res.json();
 }
 
+export async function clearAuditLogs(): Promise<{ status: string; deleted_entries: number }> {
+  const res = await fetch(`${API_BASE}/audit`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Failed to clear audit logs');
+  return res.json();
+}
+
+
 export async function fetchBenchmark(): Promise<any> {
   const res = await fetch(`${API_BASE}/optimization/benchmark`);
   if (!res.ok) throw new Error('Failed to fetch benchmark');
