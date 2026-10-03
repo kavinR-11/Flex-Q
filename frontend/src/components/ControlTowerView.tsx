@@ -10,13 +10,13 @@ import {
   ArrowUpRight 
 } from 'lucide-react';
 import { 
-  BarChart, 
-  Bar, 
+  AreaChart, 
+  Area, 
   XAxis, 
   YAxis, 
   Tooltip, 
   ResponsiveContainer, 
-  Cell 
+  CartesianGrid 
 } from 'recharts';
 import { Shipment, DisruptionEvent } from '../types';
 import { NetworkMapLibre } from './NetworkMapLibre';
@@ -40,17 +40,28 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
   const predictedBreaches = shipments.filter((s) => s.sla_breach_probability >= 0.50).length;
   const onTimeRate = total > 0 ? Math.round(((total - predictedBreaches) / total) * 100) : 92;
 
-  // Chart data: Risk Distribution
-  const riskGroups = [
-    { name: 'Low (1-3)', count: shipments.filter((s) => s.risk_score <= 3).length, color: '#10b981' },
-    { name: 'Moderate (4-6)', count: shipments.filter((s) => s.risk_score >= 4 && s.risk_score <= 6).length, color: '#f59e0b' },
-    { name: 'High (7-8)', count: shipments.filter((s) => s.risk_score >= 7 && s.risk_score <= 8).length, color: '#f97316' },
-    { name: 'Critical (9-10)', count: shipments.filter((s) => s.risk_score >= 9).length, color: '#ef4444' },
+  // Detailed Risk Score Spectrum (1 to 10) for Line Chart
+  const riskSpectrum = [
+    { score: 'R1', label: 'Score 1', count: shipments.filter((s) => s.risk_score === 1).length, tier: 'Low' },
+    { score: 'R2', label: 'Score 2', count: shipments.filter((s) => s.risk_score === 2).length, tier: 'Low' },
+    { score: 'R3', label: 'Score 3', count: shipments.filter((s) => s.risk_score === 3).length, tier: 'Low' },
+    { score: 'R4', label: 'Score 4', count: shipments.filter((s) => s.risk_score === 4).length, tier: 'Moderate' },
+    { score: 'R5', label: 'Score 5', count: shipments.filter((s) => s.risk_score === 5).length, tier: 'Moderate' },
+    { score: 'R6', label: 'Score 6', count: shipments.filter((s) => s.risk_score === 6).length, tier: 'Moderate' },
+    { score: 'R7', label: 'Score 7', count: shipments.filter((s) => s.risk_score === 7).length, tier: 'High' },
+    { score: 'R8', label: 'Score 8', count: shipments.filter((s) => s.risk_score === 8).length, tier: 'High' },
+    { score: 'R9', label: 'Score 9', count: shipments.filter((s) => s.risk_score === 9).length, tier: 'Critical' },
+    { score: 'R10', label: 'Score 10', count: shipments.filter((s) => s.risk_score === 10).length, tier: 'Critical' },
   ];
+
+  const lowCount = shipments.filter((s) => s.risk_score <= 3).length;
+  const modCount = shipments.filter((s) => s.risk_score >= 4 && s.risk_score <= 6).length;
+  const highCount = shipments.filter((s) => s.risk_score >= 7 && s.risk_score <= 8).length;
+  const critCount = shipments.filter((s) => s.risk_score >= 9).length;
 
   return (
     <div className="space-y-4 font-sans text-[#101c29]">
-      {/* Top Banner with Closed Loop Status (Pure White Theme) */}
+      {/* Top Banner with Closed Loop Status (Exact Stitch Pure White Theme) */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm border-l-4 border-l-[#003c76]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -74,7 +85,7 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
               onClick={() => onNavigateTab('disruption')}
               className="px-3.5 py-2 rounded-lg bg-[#f8f9ff] hover:bg-[#eef4ff] text-[#101c29] text-xs font-semibold flex items-center gap-2 border border-slate-200 shadow-sm transition"
             >
-              <Zap className="w-4 h-4 text-amber-500" />
+              <Zap className="w-4 h-4 text-amber-600" />
               Simulate Disruption
             </button>
             <button
@@ -88,65 +99,73 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
         </div>
       </div>
 
-      {/* KPI Cards (Pure White Theme Bento Tiles) */}
+      {/* KPI Cards (Exact Stitch Bento Tiles with Accent Top Borders) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all">
-          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold">
-            <span>Total Active Fleet</span>
-            <div className="p-2 rounded-lg bg-[#eef4ff] border border-slate-200 text-[#003c76]">
+        {/* Card 1: Total Fleet */}
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#005eb5]"></div>
+          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold mb-1">
+            <span className="uppercase tracking-wider text-[10px]">Total Active Fleet</span>
+            <div className="p-1.5 rounded-lg bg-[#eef4ff] text-[#003c76]">
               <Clock className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-[#101c29]">{total}</span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-bold text-[#101c29]">{total}</span>
             <span className="text-xs text-[#424751] font-mono">consignments</span>
           </div>
-          <div className="mt-2 text-[11px] text-emerald-600 flex items-center gap-1 font-semibold">
+          <div className="mt-2 text-[11px] text-[#047857] flex items-center gap-1 font-semibold">
             <TrendingUp className="w-3.5 h-3.5" /> 100% route verified
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all">
-          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold">
-            <span>High Risk Shipments</span>
-            <div className="p-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-700">
-              <AlertTriangle className="w-4 h-4" />
-            </div>
+        {/* Card 2: High Risk */}
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#ba1a1a]"></div>
+          <div className="flex items-center justify-between text-[#ba1a1a] text-xs font-bold mb-1">
+            <span className="uppercase tracking-wider text-[10px]">High Risk Shipments</span>
+            <span className="w-2 h-2 rounded-full bg-[#ba1a1a] animate-ping"></span>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-amber-600">{highRisk}</span>
-            <span className="text-xs text-[#424751] font-mono">score ≥ 7/10</span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-bold text-[#ba1a1a]">{highRisk}</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded font-bold font-mono bg-[#ffdad6] text-[#93000a]">
+              score ≥ 7/10
+            </span>
           </div>
-          <div className="mt-2 text-[11px] text-amber-700 flex items-center gap-1 font-semibold">
-            <Flame className="w-3.5 h-3.5" /> {critical} critical (score ≥ 8)
+          <div className="mt-2 text-[11px] text-[#93000a] flex items-center gap-1 font-semibold">
+            <Flame className="w-3.5 h-3.5 text-[#ba1a1a]" /> {critical} critical (score ≥ 8)
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all">
-          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold">
-            <span>Predicted SLA Breaches</span>
-            <div className="p-2 rounded-lg bg-red-50 border border-red-200 text-red-700">
+        {/* Card 3: Predicted SLA Breaches */}
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#00539f]"></div>
+          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold mb-1">
+            <span className="uppercase tracking-wider text-[10px]">Predicted SLA Breaches</span>
+            <div className="p-1.5 rounded-lg bg-[#eef4ff] text-[#00539f]">
               <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-red-600">{predictedBreaches}</span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-bold text-[#ba1a1a]">{predictedBreaches}</span>
             <span className="text-xs text-[#424751] font-mono">at risk</span>
           </div>
-          <div className="mt-2 text-[11px] text-red-700 flex items-center gap-1 font-semibold">
-            Intervention recommended
+          <div className="mt-2 text-[11px] text-[#93000a] flex items-center gap-1 font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ba1a1a]"></span> Intervention recommended
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all">
-          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold">
-            <span>Network Reliability</span>
-            <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700">
+        {/* Card 4: Network Reliability */}
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#005eb5]"></div>
+          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold mb-1">
+            <span className="uppercase tracking-wider text-[10px]">Network Reliability</span>
+            <div className="p-1.5 rounded-lg bg-[#d1fae5] text-[#047857]">
               <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-emerald-700">{onTimeRate}%</span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-bold text-[#047857]">{onTimeRate}%</span>
             <span className="text-xs text-[#424751] font-mono">SLA on-track</span>
           </div>
           <div className="mt-2 text-[11px] text-[#424751] font-mono">
@@ -155,17 +174,20 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
         </div>
       </div>
 
-      {/* Analytics Grid: Charts & Live Disruption Feed */}
+      {/* Analytics Grid: Line Chart & Live Disruption Feed */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Risk Distribution Chart */}
-        <div className="lg:col-span-2 bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-3">
+        {/* Risk Distribution Line Chart */}
+        <div className="lg:col-span-2 bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
             <div>
-              <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
-                Fleet Risk Score Distribution (1 - 10)
-              </h2>
-              <p className="text-[11px] text-[#424751]">
-                Formula: R = max(1, min(10, ceil(10 · p_sla)))
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#005eb5] text-[18px]">query_stats</span>
+                <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
+                  Fleet Risk Score Distribution Curve (Scores 1 - 10)
+                </h2>
+              </div>
+              <p className="text-[11px] text-[#424751] mt-0.5">
+                Formula: R = max(1, min(10, ceil(10 · p_sla))) • Continuous Consignment Telemetry
               </p>
             </div>
             <button
@@ -176,64 +198,105 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
             </button>
           </div>
 
-          <div className="h-56 w-full">
+          {/* Line / Area Chart Container */}
+          <div className="h-56 w-full mt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={riskGroups} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="name" stroke="#727782" fontSize={11} tickLine={false} />
+              <AreaChart data={riskSpectrum} margin={{ top: 10, right: 15, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="riskLineGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#005eb5" stopOpacity={0.28} />
+                    <stop offset="95%" stopColor="#005eb5" stopOpacity={0.0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef4ff" />
+                <XAxis dataKey="score" stroke="#727782" fontSize={11} tickLine={false} />
                 <YAxis stroke="#727782" fontSize={11} tickLine={false} />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#ffffff',
-                    borderColor: '#e2e8f0',
-                    color: '#101c29',
-                    borderRadius: '0.5rem',
-                    fontSize: '12px',
-                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.08)'
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200 shadow-md text-xs font-sans">
+                          <div className="font-bold text-[#101c29]">{data.label}</div>
+                          <div className="text-[11px] text-[#424751] mt-0.5">Category: <span className="font-semibold">{data.tier} Risk</span></div>
+                          <div className="text-[#005eb5] font-mono font-bold mt-1 text-sm">
+                            {payload[0].value} consignments
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
                   }}
                 />
-                <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                  {riskGroups.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Bar>
-              </BarChart>
+                <Area
+                  type="monotone"
+                  dataKey="count"
+                  name="Consignments"
+                  stroke="#005eb5"
+                  strokeWidth={2.5}
+                  fillOpacity={1}
+                  fill="url(#riskLineGrad)"
+                  dot={{ r: 3.5, fill: '#003c76', stroke: '#ffffff', strokeWidth: 1.5 }}
+                  activeDot={{ r: 6, fill: '#003c76' }}
+                />
+              </AreaChart>
             </ResponsiveContainer>
+          </div>
+
+          {/* Segmented Risk Summary Pills */}
+          <div className="grid grid-cols-4 gap-2 pt-3 mt-1 border-t border-slate-100 text-[11px]">
+            <div className="p-1.5 rounded-lg bg-[#eef4ff] flex flex-col items-center">
+              <span className="text-[#005eb5] font-bold">Low (1-3)</span>
+              <span className="font-mono font-bold text-[#101c29]">{lowCount}</span>
+            </div>
+            <div className="p-1.5 rounded-lg bg-[#fef3c7] flex flex-col items-center">
+              <span className="text-[#92400e] font-bold">Moderate (4-6)</span>
+              <span className="font-mono font-bold text-[#101c29]">{modCount}</span>
+            </div>
+            <div className="p-1.5 rounded-lg bg-[#ffedd5] flex flex-col items-center">
+              <span className="text-[#9a3412] font-bold">High (7-8)</span>
+              <span className="font-mono font-bold text-[#101c29]">{highCount}</span>
+            </div>
+            <div className="p-1.5 rounded-lg bg-[#ffdad6] flex flex-col items-center">
+              <span className="text-[#93000a] font-bold">Critical (9-10)</span>
+              <span className="font-mono font-bold text-[#ba1a1a]">{critCount}</span>
+            </div>
           </div>
         </div>
 
         {/* Modal Mix & Active Events Feed */}
         <div className="space-y-4">
           {/* Active Disruptions Snippet */}
-          <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between mb-3">
+          <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-[#ba1a1a] animate-pulse"></span>
                 <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
                   Live Disruption Signals
                 </h2>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#eef4ff] text-[#003c76] font-bold">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#ffdad6] text-[#93000a] font-bold">
                 {events.length} Active
               </span>
             </div>
 
-            <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
               {events.slice(0, 4).map((evt) => (
                 <div
                   key={evt.event_id}
-                  className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 hover:border-slate-300 transition"
+                  className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 hover:border-slate-300 transition border-l-4 border-l-[#ba1a1a]"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-xs font-semibold text-[#101c29] line-clamp-1">
                       {evt.location_name}
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded font-bold font-mono bg-red-100 text-red-800 border border-red-200">
+                    <span className="text-[10px] px-1.5 py-0.2 rounded font-bold font-mono bg-[#ffdad6] text-[#93000a]">
                       Sev {evt.severity}
                     </span>
                   </div>
                   <div className="flex items-center justify-between mt-1 text-[11px] text-[#424751]">
                     <span>{evt.event_type.replace('_', ' ')}</span>
-                    <span className="text-amber-700 font-mono font-bold">+{evt.estimated_delay_minutes}m delay</span>
+                    <span className="text-[#ba1a1a] font-mono font-bold">+{evt.estimated_delay_minutes}m delay</span>
                   </div>
                 </div>
               ))}
@@ -241,7 +304,7 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
 
             <button
               onClick={() => onNavigateTab('disruption')}
-              className="w-full mt-3 py-2 rounded-lg bg-[#eef4ff] hover:bg-[#dde9fb] text-[#003c76] text-xs font-bold transition border border-slate-200"
+              className="w-full mt-3 py-2 rounded-lg bg-[#eef4ff] hover:bg-[#dde9fb] text-[#003c76] text-xs font-bold transition border border-[#d7e4f5]"
             >
               Open Disruption Lab
             </button>
@@ -253,7 +316,7 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
       <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#003c76] text-[20px]">public</span>
+            <span className="material-symbols-outlined text-[#003c76] text-[20px]">hub</span>
             <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
               Live Multi-Modal Corridor Telematics &amp; Chokepoints (MapLibre GL)
             </h2>
@@ -320,7 +383,7 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
                       </span>
                     </td>
                     <td className="py-2.5 px-3 font-mono">
-                      <span className={sh.sla_buffer_minutes < 0 ? 'text-red-600 font-bold' : 'text-amber-700'}>
+                      <span className={sh.sla_buffer_minutes < 0 ? 'text-[#ba1a1a] font-bold' : 'text-[#92400e]'}>
                         {sh.sla_buffer_minutes}m
                       </span>
                     </td>
@@ -329,8 +392,8 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
                     </td>
                     <td className="py-2.5 px-3">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
-                        sh.risk_score >= 9 ? 'bg-red-100 text-red-800 border border-red-200' :
-                        'bg-amber-100 text-amber-800 border border-amber-200'
+                        sh.risk_score >= 9 ? 'bg-[#ffdad6] text-[#93000a] border border-[#ffdad6]' :
+                        'bg-[#fef3c7] text-[#92400e] border border-[#fef3c7]'
                       }`}>
                         {sh.risk_score}/10 {sh.risk_category}
                       </span>
@@ -338,7 +401,7 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
                     <td className="py-2.5 px-3 text-right">
                       <button
                         onClick={() => onSelectShipment(sh.shipment_id)}
-                        className="px-2.5 py-1 rounded bg-[#eef4ff] hover:bg-[#dde9fb] text-[#003c76] border border-slate-200 text-xs font-semibold transition"
+                        className="px-2.5 py-1 rounded bg-[#e4efff] hover:bg-[#dde9fb] text-[#003c76] border border-[#d7e4f5] text-xs font-semibold transition"
                       >
                         Evaluate
                       </button>
