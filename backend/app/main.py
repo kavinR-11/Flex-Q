@@ -159,6 +159,7 @@ app.add_middleware(
 )
 
 # Include API Routers
+app.include_router(health_router)
 app.include_router(health_router, prefix=settings.API_V1_STR)
 app.include_router(shipments_router, prefix=settings.API_V1_STR)
 app.include_router(events_router, prefix=settings.API_V1_STR)
