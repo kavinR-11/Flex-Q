@@ -750,69 +750,6 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Active Network Disruptions Registry */}
-      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-red-600 text-[18px]">warning</span>
-            <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
-              Live Network Disruption Registry ({events.length} Active Events)
-            </h2>
-          </div>
-          <span className="text-[11px] text-slate-500 font-mono">ERA5 Real-Time &amp; Simulated Nodes</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="bg-slate-100 text-slate-600 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
-                <th className="py-2 px-3">Event ID</th>
-                <th className="py-2 px-3">Type</th>
-                <th className="py-2 px-3">Location</th>
-                <th className="py-2 px-3">Mode</th>
-                <th className="py-2 px-3">Severity</th>
-                <th className="py-2 px-3">Impact Radius</th>
-                <th className="py-2 px-3">Estimated Delay</th>
-                <th className="py-2 px-3">Source</th>
-                <th className="py-2 px-3 text-right">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {events.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="py-6 text-center text-slate-400">
-                    No active disruptions on the network.
-                  </td>
-                </tr>
-              ) : (
-                events.map((evt) => (
-                  <tr key={evt.event_id} className="hover:bg-slate-50 transition">
-                    <td className="py-2 px-3 font-mono font-bold text-[#003c76]">{evt.event_id}</td>
-                    <td className="py-2 px-3">
-                      <span className="px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-amber-50 text-amber-800 border border-amber-200">
-                        {evt.event_type.replace(/_/g, ' ')}
-                      </span>
-                    </td>
-                    <td className="py-2 px-3 font-semibold text-slate-800">{evt.location_name}</td>
-                    <td className="py-2 px-3 font-mono text-[11px]">{evt.affected_mode}</td>
-                    <td className="py-2 px-3 font-mono font-bold text-red-600">{evt.severity}/10</td>
-                    <td className="py-2 px-3 font-mono">{evt.impact_radius_km} km</td>
-                    <td className="py-2 px-3 font-mono font-bold text-amber-700">+{evt.estimated_delay_minutes} min</td>
-                    <td className="py-2 px-3 text-slate-500 text-[11px] truncate max-w-[140px]">{evt.source}</td>
-                    <td className="py-2 px-3 text-right">
-                      <span className="px-2 py-0.5 rounded bg-red-100 text-red-800 text-[10px] font-bold uppercase tracking-wider inline-flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
-                        Active
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 };
