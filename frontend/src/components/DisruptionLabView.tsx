@@ -10,9 +10,7 @@ import {
   CheckCircle2, 
   AlertTriangle,
   RotateCcw,
-  Waves,
-  MapPin,
-  Trash2
+  Waves
 } from 'lucide-react';
 import { DisruptionEvent } from '../types';
 import { submitDisruptionEvent, clearSimulatedDisruptions } from '../services/api';
@@ -39,14 +37,19 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
   onDisruptionInjected,
   onNavigateToRecovery,
 }) => {
-  const [eventType, setEventType] = useState('TRAFFIC_CONGESTION');
-  const [severity, setSeverity] = useState(8.5);
-  const [locationName, setLocationName] = useState('NH48 Sriperumbudur Toll Corridor');
-  const [latitude, setLatitude] = useState(12.9675);
-  const [longitude, setLongitude] = useState(79.9431);
-  const [impactRadius, setImpactRadius] = useState(35.0);
+  // Preset Selection State
+  const [selectedPresetIndex, setSelectedPresetIndex] = useState<number | null>(0);
+  const [justLoadedMessage, setJustLoadedMessage] = useState<string | null>(null);
+
+  // Form State
+  const [eventType, setEventType] = useState('ROAD_CLOSURE');
+  const [severity, setSeverity] = useState(9.8);
+  const [locationName, setLocationName] = useState('NH48 Khandala Ghat Mountain Pass');
+  const [latitude, setLatitude] = useState(18.7500);
+  const [longitude, setLongitude] = useState(73.4000);
+  const [impactRadius, setImpactRadius] = useState(45.0);
   const [affectedMode, setAffectedMode] = useState('ROAD');
-  const [delayMinutes, setDelayMinutes] = useState(120);
+  const [delayMinutes, setDelayMinutes] = useState(240);
   const [loading, setLoading] = useState(false);
   const [clearing, setClearing] = useState(false);
 
@@ -63,7 +66,6 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
       title: 'Khandala Ghat Landslide Chokepoint',
       desc: 'Severe boulder blockage on NH-48 West Expressway constricting Mumbai-Pune-BLR flow to 15% (+240m delay)',
       icon: Construction,
-      color: 'red',
       data: {
         event_type: 'ROAD_CLOSURE',
         severity: 9.8,
@@ -79,7 +81,6 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
       title: 'NH48 Sriperumbudur Severe Monsoon Congestion',
       desc: 'Heavy traffic and waterlogging on Chennai-BLR arterial tech manufacturing lane (+120m delay)',
       icon: CloudRain,
-      color: 'amber',
       data: {
         event_type: 'TRAFFIC_CONGESTION',
         severity: 8.5,
@@ -95,7 +96,6 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
       title: 'Walajapet Bridge Structural Closure',
       desc: 'Complete highway bridge structural closure forcing detour via northern bypass (+210m delay)',
       icon: Construction,
-      color: 'rose',
       data: {
         event_type: 'ROAD_CLOSURE',
         severity: 9.5,
@@ -111,7 +111,6 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
       title: 'Delhi-Jaipur DMIC Highway Flash Flooding',
       desc: 'Monsoon flash flooding along Western Dedicated Highway near Rewari-Jaipur nexus (+180m delay)',
       icon: Waves,
-      color: 'blue',
       data: {
         event_type: 'SEVERE_WEATHER',
         severity: 8.2,
@@ -127,7 +126,6 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
       title: 'Chennai Port Container Gate Surge',
       desc: 'Berth waiting times and container dwell delay at CCTL deepwater maritime terminal (+300m delay)',
       icon: Anchor,
-      color: 'cyan',
       data: {
         event_type: 'PORT_CONGESTION',
         severity: 7.8,
@@ -143,7 +141,6 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
       title: 'Bengaluru Cargo Flight ATFM Air Delay',
       desc: 'Air Traffic Flow Management slot ground stop at BLR Kempegowda Airport (+90m delay)',
       icon: Plane,
-      color: 'purple',
       data: {
         event_type: 'FLIGHT_DELAY',
         severity: 7.2,
@@ -157,7 +154,9 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
     },
   ];
 
-  const handleApplyPreset = (p: typeof presets[0]) => {
+  // Apply Preset parameters to the Event Configuration Console
+  const handleApplyPreset = (p: typeof presets[0], idx: number) => {
+    setSelectedPresetIndex(idx);
     setEventType(p.data.event_type);
     setSeverity(p.data.severity);
     setLocationName(p.data.location_name);
@@ -166,10 +165,13 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
     setImpactRadius(p.data.impact_radius_km);
     setAffectedMode(p.data.affected_mode);
     setDelayMinutes(p.data.estimated_delay_minutes);
+
+    setJustLoadedMessage(`✓ Loaded "${p.title}" — all 8 parameters updated in Event Configuration Console below`);
   };
 
-  const handleQuickInject = async (p: typeof presets[0]) => {
-    handleApplyPreset(p);
+  // Instant 1-Click Quick Injection
+  const handleQuickInject = async (p: typeof presets[0], idx: number) => {
+    handleApplyPreset(p, idx);
     setLoading(true);
     try {
       const res = await submitDisruptionEvent({
@@ -190,14 +192,17 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
         affected_shipments: res.affected_shipments,
       });
 
+      setJustLoadedMessage(`⚡ INDUCED & INJECTED: "${p.title}" is active on the network and loaded into console below`);
       onDisruptionInjected();
     } catch (err) {
       console.error('Failed to quick inject disruption:', err);
+      setJustLoadedMessage(`⚠️ Injection failed: ${(err as any)?.message || 'Unknown network error'}`);
     } finally {
       setLoading(false);
     }
   };
 
+  // Manual Ingestion from Form
   const handleInject = async () => {
     setLoading(true);
     try {
@@ -219,9 +224,11 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
         affected_shipments: res.affected_shipments,
       });
 
+      setJustLoadedMessage(`⚡ Disruption Event ${res.event_id} successfully injected for ${locationName}`);
       onDisruptionInjected();
     } catch (err) {
       console.error('Failed to inject disruption:', err);
+      setJustLoadedMessage(`⚠️ Injection error: ${(err as any)?.message || 'Network error'}`);
     } finally {
       setLoading(false);
     }
@@ -232,6 +239,8 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
     try {
       await clearSimulatedDisruptions();
       setInjectionResult(null);
+      setSelectedPresetIndex(null);
+      setJustLoadedMessage('↺ All simulated disruption events cleared. Network state reset to baseline.');
       onDisruptionInjected();
     } catch (err) {
       console.error('Failed to clear simulated events:', err);
@@ -240,11 +249,43 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
     }
   };
 
-  const setCoordinates = (lat: number, lon: number, name: string) => {
+  const handleResetToBaseline = () => {
+    setSelectedPresetIndex(0);
+    const p = presets[0];
+    setEventType(p.data.event_type);
+    setSeverity(p.data.severity);
+    setLocationName(p.data.location_name);
+    setLatitude(p.data.latitude);
+    setLongitude(p.data.longitude);
+    setImpactRadius(p.data.impact_radius_km);
+    setAffectedMode(p.data.affected_mode);
+    setDelayMinutes(p.data.estimated_delay_minutes);
+    setJustLoadedMessage('Console reset to Scenario 1: Khandala Ghat Landslide.');
+  };
+
+  const applyShortcut = (
+    lat: number,
+    lon: number,
+    name: string,
+    mode: string,
+    type: string,
+    sev: number,
+    delay: number,
+    rad: number
+  ) => {
     setLatitude(lat);
     setLongitude(lon);
     setLocationName(name);
+    setAffectedMode(mode);
+    setEventType(type);
+    setSeverity(sev);
+    setDelayMinutes(delay);
+    setImpactRadius(rad);
+    setSelectedPresetIndex(null);
+    setJustLoadedMessage(`📍 Applied Epicenter Shortcut: "${name}" (${lat}, ${lon})`);
   };
+
+  const currentPresetTitle = selectedPresetIndex !== null ? presets[selectedPresetIndex]?.title : null;
 
   return (
     <div className="space-y-4 font-sans text-[#101c29]">
@@ -280,19 +321,30 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
       {/* Preset Quick Injections */}
       <div>
         <div className="flex items-center justify-between mb-2.5">
-          <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
-            Curated Operational Disruption Scenarios (India Nationwide)
-          </h2>
-          <span className="text-[11px] text-slate-500 font-mono">1-Click Stress Test</span>
+          <div className="flex items-center gap-2">
+            <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
+              Curated Operational Disruption Scenarios (India Nationwide)
+            </h2>
+            <span className="text-[10px] text-blue-900 bg-blue-100 px-2 py-0.5 rounded font-bold">
+              Click any card to load or induce scenario
+            </span>
+          </div>
+          <span className="text-[11px] text-slate-500 font-mono">1-Click Network Stress Test</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {presets.map((p, idx) => {
+            const isSelected = selectedPresetIndex === idx;
             const Icon = p.icon;
             return (
               <div
                 key={idx}
-                className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:border-[#003c76] hover:shadow-md transition-all flex flex-col justify-between"
+                onClick={() => handleApplyPreset(p, idx)}
+                className={`rounded-xl p-4 border transition-all flex flex-col justify-between cursor-pointer select-none ${
+                  isSelected
+                    ? 'bg-blue-50/60 border-[#003c76] ring-2 ring-[#003c76]/40 shadow-md'
+                    : 'bg-white border-slate-200 hover:border-[#003c76] hover:shadow-md'
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-between">
@@ -300,7 +352,17 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-mono font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
+                      {isSelected ? (
+                        <span className="text-[9px] font-mono font-bold text-[#003c76] bg-blue-100 px-2 py-0.5 rounded border border-blue-300 flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3 text-[#003c76]" />
+                          SYNCED IN CONSOLE
+                        </span>
+                      ) : (
+                        <span className="text-[9px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                          Click to Load
+                        </span>
+                      )}
+                      <span className="text-[10px] font-mono font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">
                         {p.data.affected_mode}
                       </span>
                       <span className="text-[10px] font-mono font-bold text-red-700 bg-red-50 px-1.5 py-0.5 rounded border border-red-200">
@@ -314,15 +376,25 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
 
                 <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
                   <button
-                    onClick={() => handleApplyPreset(p)}
-                    className="text-[11px] text-slate-600 hover:text-slate-900 font-semibold px-2 py-1 rounded hover:bg-slate-100 transition"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleApplyPreset(p, idx);
+                    }}
+                    className={`text-[11px] font-semibold px-2.5 py-1 rounded transition flex items-center gap-1 ${
+                      isSelected ? 'bg-blue-900 text-white font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    }`}
                   >
-                    Load Parameters
+                    {isSelected ? '✓ Loaded in Console' : '📋 Load Parameters'}
                   </button>
                   <button
-                    onClick={() => handleQuickInject(p)}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleQuickInject(p, idx);
+                    }}
                     disabled={loading}
-                    className="text-[11px] bg-[#003c76] hover:bg-[#00539f] text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition disabled:opacity-50"
+                    className="text-[11px] bg-[#003c76] hover:bg-[#00539f] text-white font-bold px-3 py-1 rounded shadow-xs flex items-center gap-1.5 transition disabled:opacity-50"
                   >
                     <Zap className="w-3 h-3 text-amber-400" />
                     <span>Quick Inject</span>
@@ -337,22 +409,69 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
       {/* Custom Injection Form & Ripple Results Split */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Custom Event Builder */}
-        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm space-y-3">
+        <div className={`bg-white rounded-xl p-4 border shadow-sm space-y-3 transition-all ${
+          selectedPresetIndex !== null ? 'border-[#003c76] ring-1 ring-[#003c76]/20' : 'border-slate-200'
+        }`}>
           <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-            <h3 className="text-xs font-bold text-[#101c29] uppercase tracking-wider flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-600" />
-              Event Configuration Console
-            </h3>
-            <span className="text-[10px] font-mono text-[#727782]">Live Ingestion Pipeline</span>
+              <div>
+                <h3 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
+                  Event Configuration Console
+                </h3>
+                {currentPresetTitle && (
+                  <p className="text-[10px] font-semibold text-[#003c76]">
+                    Synced with: {currentPresetTitle}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleResetToBaseline}
+                className="text-[10px] font-mono text-slate-500 hover:text-slate-800 underline transition"
+              >
+                Reset Default
+              </button>
+              {selectedPresetIndex !== null ? (
+                <span className="text-[10px] font-mono font-bold text-[#003c76] bg-blue-100 px-2 py-0.5 rounded border border-blue-200">
+                  Scenario #{selectedPresetIndex + 1}
+                </span>
+              ) : (
+                <span className="text-[10px] font-mono text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-bold">
+                  Custom
+                </span>
+              )}
+            </div>
           </div>
+
+          {/* Flash Feedback Alert */}
+          {justLoadedMessage && (
+            <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-300 text-xs text-emerald-900 font-semibold flex items-center justify-between gap-2 shadow-xs">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{justLoadedMessage}</span>
+              </div>
+              <button
+                onClick={() => setJustLoadedMessage(null)}
+                className="text-emerald-700 hover:text-emerald-900 font-bold text-xs"
+              >
+                ✕
+              </button>
+            </div>
+          )}
 
           <div className="space-y-2.5 text-xs">
             <div>
               <label className="text-[#424751] block mb-1 font-semibold">Disruption Event Type:</label>
               <select
                 value={eventType}
-                onChange={(e) => setEventType(e.target.value)}
-                className="w-full py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs text-[#101c29] focus:outline-none focus:border-[#003c76]"
+                onChange={(e) => {
+                  setEventType(e.target.value);
+                  setSelectedPresetIndex(null);
+                }}
+                className="w-full py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs text-[#101c29] font-medium focus:outline-none focus:border-[#003c76]"
               >
                 <option value="TRAFFIC_CONGESTION">TRAFFIC_CONGESTION (Toll Queue / Highway Surge)</option>
                 <option value="ROAD_CLOSURE">ROAD_CLOSURE (Landslide / Bridge Infeasibility)</option>
@@ -368,51 +487,54 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
               <input
                 type="text"
                 value={locationName}
-                onChange={(e) => setLocationName(e.target.value)}
-                className="w-full py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs text-[#101c29] focus:outline-none focus:border-[#003c76]"
+                onChange={(e) => {
+                  setLocationName(e.target.value);
+                  setSelectedPresetIndex(null);
+                }}
+                className="w-full py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs text-[#101c29] font-medium focus:outline-none focus:border-[#003c76]"
               />
             </div>
 
             {/* Quick Location Shortcuts */}
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">
+              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">
                 Corridor Epicenter Shortcuts:
               </span>
               <div className="flex flex-wrap gap-1">
                 <button
                   type="button"
-                  onClick={() => setCoordinates(18.7500, 73.4000, 'NH48 Khandala Ghat Chokepoint')}
-                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold"
+                  onClick={() => applyShortcut(18.7500, 73.4000, 'NH48 Khandala Ghat Mountain Pass', 'ROAD', 'ROAD_CLOSURE', 9.8, 240, 45)}
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold transition"
                 >
                   📍 Mumbai-Pune Khandala
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCoordinates(12.9675, 79.9431, 'NH48 Sriperumbudur Toll Corridor')}
-                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold"
+                  onClick={() => applyShortcut(12.9675, 79.9431, 'NH48 Sriperumbudur Toll Corridor', 'ROAD', 'TRAFFIC_CONGESTION', 8.5, 120, 35)}
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold transition"
                 >
                   📍 Chennai-BLR Sriperumbudur
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCoordinates(27.4500, 76.2000, 'DMIC NH-48 Rewari-Jaipur Belt')}
-                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold"
+                  onClick={() => applyShortcut(27.4500, 76.2000, 'DMIC NH-48 Rewari-Jaipur Belt', 'ROAD', 'SEVERE_WEATHER', 8.2, 180, 50)}
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold transition"
                 >
                   📍 Delhi-Jaipur DMIC
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCoordinates(14.6800, 77.6000, 'NH44 Anantapur Highway Toll')}
-                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold"
+                  onClick={() => applyShortcut(14.6800, 77.6000, 'NH44 Anantapur Highway Toll', 'ROAD', 'TRAFFIC_CONGESTION', 7.5, 90, 30)}
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold transition"
                 >
                   📍 Hyd-BLR Anantapur
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCoordinates(13.0850, 80.2980, 'Chennai Port Maritime Gateway')}
-                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold"
+                  onClick={() => applyShortcut(13.0850, 80.2980, 'Chennai Port Container Terminal (CCTL)', 'MARITIME', 'PORT_CONGESTION', 7.8, 300, 25)}
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold transition"
                 >
-                  📍 Chennai Port
+                  📍 Chennai Port CCTL
                 </button>
               </div>
             </div>
@@ -424,7 +546,10 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
                   type="number"
                   step="0.0001"
                   value={latitude}
-                  onChange={(e) => setLatitude(parseFloat(e.target.value))}
+                  onChange={(e) => {
+                    setLatitude(parseFloat(e.target.value) || 0);
+                    setSelectedPresetIndex(null);
+                  }}
                   className="w-full py-1 px-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 font-mono text-xs text-[#101c29] focus:outline-none focus:border-[#003c76]"
                 />
               </div>
@@ -434,7 +559,10 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
                   type="number"
                   step="0.0001"
                   value={longitude}
-                  onChange={(e) => setLongitude(parseFloat(e.target.value))}
+                  onChange={(e) => {
+                    setLongitude(parseFloat(e.target.value) || 0);
+                    setSelectedPresetIndex(null);
+                  }}
                   className="w-full py-1 px-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 font-mono text-xs text-[#101c29] focus:outline-none focus:border-[#003c76]"
                 />
               </div>
@@ -452,7 +580,10 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
                   max="10"
                   step="0.1"
                   value={severity}
-                  onChange={(e) => setSeverity(parseFloat(e.target.value))}
+                  onChange={(e) => {
+                    setSeverity(parseFloat(e.target.value));
+                    setSelectedPresetIndex(null);
+                  }}
                   className="w-full accent-red-600"
                 />
               </div>
@@ -467,7 +598,10 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
                   max="150"
                   step="5"
                   value={impactRadius}
-                  onChange={(e) => setImpactRadius(parseFloat(e.target.value))}
+                  onChange={(e) => {
+                    setImpactRadius(parseFloat(e.target.value));
+                    setSelectedPresetIndex(null);
+                  }}
                   className="w-full accent-[#003c76]"
                 />
               </div>
@@ -478,12 +612,16 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
                 <label className="text-[#424751] block mb-1 font-semibold">Affected Transport Mode:</label>
                 <select
                   value={affectedMode}
-                  onChange={(e) => setAffectedMode(e.target.value)}
-                  className="w-full py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs text-[#101c29] focus:outline-none focus:border-[#003c76]"
+                  onChange={(e) => {
+                    setAffectedMode(e.target.value);
+                    setSelectedPresetIndex(null);
+                  }}
+                  className="w-full py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs text-[#101c29] font-medium focus:outline-none focus:border-[#003c76]"
                 >
                   <option value="ROAD">ROAD</option>
                   <option value="AIR">AIR</option>
                   <option value="MARITIME">MARITIME</option>
+                  <option value="RAIL">RAIL</option>
                   <option value="ALL">ALL MODES</option>
                 </select>
               </div>
@@ -495,7 +633,10 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
                   max="720"
                   step="10"
                   value={delayMinutes}
-                  onChange={(e) => setDelayMinutes(parseInt(e.target.value) || 60)}
+                  onChange={(e) => {
+                    setDelayMinutes(parseInt(e.target.value) || 60);
+                    setSelectedPresetIndex(null);
+                  }}
                   className="w-full py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 font-mono text-xs text-amber-700 font-bold focus:outline-none focus:border-[#003c76]"
                 />
               </div>
