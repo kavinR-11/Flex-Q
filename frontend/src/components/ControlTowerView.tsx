@@ -326,91 +326,9 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
         <NetworkMapLibre
           shipments={shipments}
           events={events}
-          height="380px"
+          height="480px"
           onSelectShipment={onSelectShipment}
         />
-      </div>
-
-      {/* High-Risk Shipments Priority Table */}
-      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
-              Priority Consignments Requiring Operational Review
-            </h2>
-            <p className="text-[11px] text-[#424751]">
-              Shipments with SLA breach risk score ≥ 7 flagged for classical recovery optimization.
-            </p>
-          </div>
-          <button
-            onClick={() => onNavigateTab('recovery')}
-            className="text-xs text-[#003c76] hover:text-[#005eb5] font-semibold flex items-center gap-1 transition"
-          >
-            Open Recovery Center <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-[#eef4ff] border-b border-slate-200 text-[#424751] font-mono uppercase text-[10px] font-bold">
-                <th className="py-2.5 px-3">Shipment ID</th>
-                <th className="py-2.5 px-3">Corridor</th>
-                <th className="py-2.5 px-3">Carrier</th>
-                <th className="py-2.5 px-3">Mode</th>
-                <th className="py-2.5 px-3">SLA Buffer</th>
-                <th className="py-2.5 px-3">Breach Prob</th>
-                <th className="py-2.5 px-3">Risk Score</th>
-                <th className="py-2.5 px-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {shipments
-                .filter((s) => s.risk_score >= 7)
-                .slice(0, 5)
-                .map((sh) => (
-                  <tr key={sh.shipment_id} className="hover:bg-[#f8f9ff] transition">
-                    <td className="py-2.5 px-3 font-bold font-mono text-[#003c76]">
-                      {sh.shipment_id}
-                    </td>
-                    <td className="py-2.5 px-3 text-[#101c29] font-medium">
-                      {sh.origin} → {sh.destination}
-                    </td>
-                    <td className="py-2.5 px-3 text-[#424751]">{sh.carrier_id}</td>
-                    <td className="py-2.5 px-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#e4efff] text-[#003c76] font-semibold">
-                        {sh.transport_mode}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 font-mono">
-                      <span className={sh.sla_buffer_minutes < 0 ? 'text-[#ba1a1a] font-bold' : 'text-[#92400e]'}>
-                        {sh.sla_buffer_minutes}m
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 font-mono text-[#101c29] font-semibold">
-                      {Math.round(sh.sla_breach_probability * 100)}%
-                    </td>
-                    <td className="py-2.5 px-3">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
-                        sh.risk_score >= 9 ? 'bg-[#ffdad6] text-[#93000a] border border-[#ffdad6]' :
-                        'bg-[#fef3c7] text-[#92400e] border border-[#fef3c7]'
-                      }`}>
-                        {sh.risk_score}/10 {sh.risk_category}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 text-right">
-                      <button
-                        onClick={() => onSelectShipment(sh.shipment_id)}
-                        className="px-2.5 py-1 rounded bg-[#e4efff] hover:bg-[#dde9fb] text-[#003c76] border border-[#d7e4f5] text-xs font-semibold transition"
-                      >
-                        Evaluate
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );
