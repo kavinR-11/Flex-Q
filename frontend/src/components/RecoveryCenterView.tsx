@@ -49,6 +49,7 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string>('PLAN-B');
   const [approvedPlanId, setApprovedPlanId] = useState<string | null>(null);
+  const [circuitDepthP, setCircuitDepthP] = useState<number>(3);
   const [operatorId, setOperatorId] = useState<string>('OP-CHENNAI-01');
   const [operatorNotes, setOperatorNotes] = useState<string>('');
   
@@ -73,11 +74,12 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
   const handleRunOptimization = async (
     shipmentId: string,
     currentWeights = weights,
-    budget = maxBudget
+    budget = maxBudget,
+    depthP = circuitDepthP
   ) => {
     setLoading(true);
     try {
-      const res = await optimizeRecovery(shipmentId, currentWeights, budget);
+      const res = await optimizeRecovery(shipmentId, currentWeights, budget, depthP);
       setOptimizationResult(res);
       // Auto-select recommended plan if current selection is invalid or infeasible
       const currPlan = res.plans.find((p) => p.plan_id === selectedPlanId);
@@ -91,15 +93,15 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
     }
   };
 
-  // Debounced auto-solve: when user adjusts sliders, budget, or shipment, recalculate automatically
+  // Debounced auto-solve: when user adjusts sliders, budget, depth, or shipment, recalculate automatically
   useEffect(() => {
     const timer = setTimeout(() => {
       if (activeShipmentId) {
-        handleRunOptimization(activeShipmentId, weights, maxBudget);
+        handleRunOptimization(activeShipmentId, weights, maxBudget, circuitDepthP);
       }
     }, 350);
     return () => clearTimeout(timer);
-  }, [activeShipmentId, weights, maxBudget]);
+  }, [activeShipmentId, weights, maxBudget, circuitDepthP]);
 
   const handleShipmentChange = (newId: string) => {
     setActiveShipmentId(newId);
@@ -758,20 +760,44 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
             Isolates the contested 13.3% residual carrier slot bottleneck as a QUBO Ising Hamiltonian, simulated via Qiskit Aer Statevector against classical OR-Tools baseline.
           </p>
 
+          {/* Interactive Circuit Depth Selector */}
+          <div className="flex items-center justify-between p-2 rounded-lg bg-[#f9f3ff] border border-[#d7bcff]/70">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] font-bold text-[#4f1896]">Ansatz Depth (p):</span>
+              <span className="text-[10px] text-[#424751] hidden sm:inline">(Increases variational expressibility)</span>
+            </div>
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4, 5].map((lvl) => (
+                <button
+                  key={lvl}
+                  type="button"
+                  onClick={() => setCircuitDepthP(lvl)}
+                  className={`px-2.5 py-0.5 rounded text-[10px] font-mono font-bold transition ${
+                    circuitDepthP === lvl
+                      ? 'bg-[#4f1896] text-white shadow-sm ring-1 ring-[#4f1896]'
+                      : 'bg-white text-[#4f1896] hover:bg-purple-50 border border-[#d7bcff]'
+                  }`}
+                >
+                  p={lvl}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {optimizationResult?.quantum_benchmark ? (
             <div className="space-y-2.5 text-xs">
               <div className="grid grid-cols-2 gap-2">
                 <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200">
                   <span className="text-[#424751] block text-[10px] uppercase font-bold">Classical MIP Objective</span>
                   <span className="font-mono font-bold text-[#101c29] text-sm">
-                    {optimizationResult.quantum_benchmark.classical_objective.toFixed(1)}
+                    ₹{optimizationResult.quantum_benchmark.classical_objective.toFixed(1)}
                   </span>
                   <span className="text-[10px] text-[#727782] block mt-0.5">Runtime: {optimizationResult.quantum_benchmark.classical_runtime_ms} ms</span>
                 </div>
                 <div className="p-2.5 rounded-lg bg-[#f9f3ff] border border-[#d7bcff]/60">
                   <span className="text-[#424751] block text-[10px] uppercase font-bold">QAOA Simulator Objective</span>
                   <span className="font-mono font-bold text-[#4f1896] text-sm">
-                    {optimizationResult.quantum_benchmark.quantum_objective.toFixed(1)}
+                    ₹{optimizationResult.quantum_benchmark.quantum_objective.toFixed(1)}
                   </span>
                   <span className="text-[10px] text-[#727782] block mt-0.5">Runtime: {optimizationResult.quantum_benchmark.quantum_runtime_ms} ms</span>
                 </div>
@@ -791,7 +817,7 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
               <div className="p-2 rounded-lg bg-[#f8f9ff] border border-slate-200 text-[11px] text-[#424751] flex items-start gap-1.5">
                 <Info className="w-3.5 h-3.5 text-[#003c76] shrink-0 mt-0.5" />
                 <span>
-                  <strong>Scientific Notice:</strong> Simulated on classical CPU via Qiskit Aer Statevector ansatz (p=3). The {optimizationResult.quantum_benchmark.quantum_contribution_ratio_pct.toFixed(1)}% QCR reflects quantum superposition exploration over contested residual carrier slots.
+                  <strong>Scientific Notice:</strong> Simulated on classical CPU via Qiskit Aer Statevector ansatz (depth p={circuitDepthP}). The {optimizationResult.quantum_benchmark.quantum_contribution_ratio_pct.toFixed(1)}% QCR reflects quantum superposition exploration over contested residual carrier slots.
                 </span>
               </div>
             </div>

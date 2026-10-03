@@ -18,6 +18,7 @@ class RecoveryOptimizationRequest(BaseModel):
     weights: Optional[RecoveryWeights] = Field(default_factory=RecoveryWeights)
     max_budget_inr: float = 15000.0
     enable_quantum_experiment: bool = True
+    circuit_depth_p: int = 3
 
 class RecoveryPlanOption(BaseModel):
     recovery_id: str

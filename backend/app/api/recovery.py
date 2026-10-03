@@ -100,18 +100,21 @@ def optimize_recovery(payload: RecoveryOptimizationRequest, db: Session = Depend
         alpha = float(weights_dict.get("cost_weight", 0.30)) if weights_dict else 0.30
         beta = float(weights_dict.get("delay_weight", 0.40)) if weights_dict else 0.40
         gamma = float(weights_dict.get("sla_penalty_weight", 0.30)) if weights_dict else 0.30
+        delta = float(weights_dict.get("emissions_weight", 0.10)) if weights_dict else 0.10
+        depth_p = int(payload.circuit_depth_p or 3)
 
-        # Contested 2x2 residual slot matrix weighted by user preferences
+        # Contested 2x2 residual slot matrix weighted by user preferences and multi-modal candidate friction
         base_slot_costs = np.array([
-            [1150.0 * (1.0 + 0.2 * alpha), 1650.0 * (1.0 + 0.3 * beta)],
-            [2100.0 * (1.0 + 0.1 * gamma), 1450.0 * (1.0 + 0.2 * alpha)],
+            [1150.0 * (1.0 + 0.25 * alpha) + delta * 25.0, 1650.0 * (1.0 + 0.35 * beta) + delta * 10.0],
+            [2100.0 * (1.0 + 0.20 * gamma) + delta * 45.0, 1450.0 * (1.0 + 0.25 * alpha) + delta * 20.0],
         ])
 
         q_res = quantum_solver.run_qaoa_simulation(
             cost_matrix=base_slot_costs,
             classical_best_obj=float(res["objective_value"]),
-            circuit_depth_p=3,
+            circuit_depth_p=depth_p,
             shots=4096,
+            weights={"alpha": alpha, "beta": beta, "gamma": gamma, "delta": delta},
         )
 
         quantum_report = QuantumBenchmarkReport(

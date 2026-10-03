@@ -80,7 +80,8 @@ export async function submitDisruptionEvent(eventData: {
 export async function optimizeRecovery(
   shipmentId: string,
   weights?: { cost_weight: number; delay_weight: number; sla_penalty_weight: number; emissions_weight?: number },
-  maxBudget: number = 15000.0
+  maxBudget: number = 15000.0,
+  circuitDepthP: number = 3
 ): Promise<OptimizationResponse> {
   const res = await fetch(`${API_BASE}/recovery/optimize`, {
     method: 'POST',
@@ -94,6 +95,7 @@ export async function optimizeRecovery(
         emissions_weight: weights?.emissions_weight ?? 0.0,
       },
       max_budget_inr: maxBudget,
+      circuit_depth_p: circuitDepthP,
       enable_quantum_experiment: true,
     }),
   });
