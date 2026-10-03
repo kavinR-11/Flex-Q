@@ -44,8 +44,19 @@ class EventResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class AffectedShipmentDetail(BaseModel):
+    shipment_id: str
+    origin: str
+    destination: str
+    cargo_type: str
+    cargo_priority: int
+    new_risk_score: int
+    predicted_delay_minutes: float
+    sla_breach_probability: float
+
 class EventTriggerResponse(BaseModel):
     event_id: str
     affected_shipments_count: int
     affected_shipment_ids: list[str]
+    affected_shipments: Optional[list[AffectedShipmentDetail]] = None
     recomputed_status: str

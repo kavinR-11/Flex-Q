@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.database import get_db
 from backend.app.models_db import DisruptionEventDB, ShipmentDB, AuditLogDB
-from backend.app.schemas.event import EventCreate, EventResponse, EventTriggerResponse
+from backend.app.schemas.event import EventCreate, EventResponse, EventTriggerResponse, AffectedShipmentDetail
 from backend.app.features.spatial_temporal_join import haversine_distance_km
 from backend.app.ml.inference import RiskPredictor
 from backend.app.features.exposure_calculator import compute_shipment_exposure_profile
@@ -63,6 +63,7 @@ def submit_disruption_event(payload: EventCreate, db: Session = Depends(get_db))
     # Identify Affected Shipments
     all_shipments = db.query(ShipmentDB).filter(ShipmentDB.current_status != "delivered").all()
     affected_ids = []
+    affected_details = []
 
     for sh in all_shipments:
         # Distance check to event epicenter
@@ -117,6 +118,19 @@ def submit_disruption_event(payload: EventCreate, db: Session = Depends(get_db))
                 sh.current_status = "critical"
             sh.updated_at = now_utc
 
+            affected_details.append(
+                AffectedShipmentDetail(
+                    shipment_id=sh.shipment_id,
+                    origin=sh.origin,
+                    destination=sh.destination,
+                    cargo_type=sh.cargo_type,
+                    cargo_priority=sh.cargo_priority,
+                    new_risk_score=sh.risk_score,
+                    predicted_delay_minutes=sh.predicted_delay_minutes,
+                    sla_breach_probability=sh.sla_breach_probability
+                )
+            )
+
             # Log to Audit Trail
             audit_entry = AuditLogDB(
                 audit_id=f"AUD-{sh.shipment_id}-{now_utc.strftime('%H%M%S')}",
@@ -136,8 +150,18 @@ def submit_disruption_event(payload: EventCreate, db: Session = Depends(get_db))
         event_id=event_id,
         affected_shipments_count=len(affected_ids),
         affected_shipment_ids=affected_ids,
+        affected_shipments=affected_details,
         recomputed_status="recalculation_completed"
     )
+
+@router.delete("/events/simulated")
+def clear_simulated_events(db: Session = Depends(get_db)):
+    """
+    Clears all simulated events injected during Disruption Lab stress testing.
+    """
+    deleted = db.query(DisruptionEventDB).filter(DisruptionEventDB.is_simulated == True).delete()
+    db.commit()
+    return {"status": "cleared", "deleted_events": deleted}
 
 @router.post("/risk/recompute")
 def recompute_all_risks(db: Session = Depends(get_db)):

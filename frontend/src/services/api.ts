@@ -67,13 +67,35 @@ export async function submitDisruptionEvent(eventData: {
   impact_radius_km: number;
   affected_mode: string;
   estimated_delay_minutes: number;
-}): Promise<{ event_id: string; affected_shipments_count: number; affected_shipment_ids: string[] }> {
+}): Promise<{
+  event_id: string;
+  affected_shipments_count: number;
+  affected_shipment_ids: string[];
+  affected_shipments?: {
+    shipment_id: string;
+    origin: string;
+    destination: string;
+    cargo_type: string;
+    cargo_priority: number;
+    new_risk_score: number;
+    predicted_delay_minutes: number;
+    sla_breach_probability: number;
+  }[];
+}> {
   const res = await fetch(`${API_BASE}/events`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(eventData),
   });
   if (!res.ok) throw new Error('Failed to submit event');
+  return res.json();
+}
+
+export async function clearSimulatedDisruptions(): Promise<{ status: string; deleted_events: number }> {
+  const res = await fetch(`${API_BASE}/events/simulated`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Failed to clear simulated events');
   return res.json();
 }
 
