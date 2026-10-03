@@ -342,17 +342,18 @@ export const RouteMapView: React.FC<RouteMapViewProps> = ({
                         }`}
                       >
                         <td className="px-2 py-2.5 text-center">
-                          {c.affected_shipments.length > 0 && (
-                            <button
-                              onClick={() => toggleExpand(c.corridor_id)}
-                              className="w-5 h-5 rounded hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold"
-                              title="Toggle consignments"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                {isExpanded ? 'expand_more' : 'chevron_right'}
-                              </span>
-                            </button>
-                          )}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleExpand(c.corridor_id);
+                            }}
+                            className="w-5 h-5 rounded hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold transition"
+                            title={isExpanded ? 'Collapse consignments' : 'Expand consignments'}
+                          >
+                            <span className="material-symbols-outlined text-[16px]">
+                              {isExpanded ? 'expand_more' : 'chevron_right'}
+                            </span>
+                          </button>
                         </td>
                         <td className="px-2.5 py-2.5 font-mono font-bold flex items-center gap-1.5">
                           {c.is_overloaded && <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>}
@@ -451,59 +452,70 @@ export const RouteMapView: React.FC<RouteMapViewProps> = ({
                       </tr>
 
                       {/* Expandable Consignments Row */}
-                      {isExpanded && c.affected_shipments.length > 0 && (
+                      {isExpanded && (
                         <tr className="bg-slate-50 border-b border-slate-200">
                           <td className="px-2 py-2 text-center bg-slate-100"></td>
                           <td className="px-3 py-3" colSpan={14}>
                             <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm flex flex-col gap-2">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-1.5">
-                                  <span className="material-symbols-outlined text-red-600 text-[16px]">
-                                    emergency
+                                  <span className="material-symbols-outlined text-blue-900 text-[16px]">
+                                    inventory_2
                                   </span>
                                   <span className="text-xs font-bold text-slate-900 uppercase">
-                                    High-Value Consignments at Direct Risk on {c.corridor_id}:
+                                    {c.affected_shipments.length > 0
+                                      ? `High-Value Consignments Active on ${c.corridor_id}:`
+                                      : `Corridor Telematics Status for ${c.corridor_id}:`}
                                   </span>
                                 </div>
                                 <span className="text-[11px] text-purple-800 font-semibold">
-                                  Recommended Action: Shift volume to WDFC Dedicated Rail Spine
+                                  {c.is_overloaded
+                                    ? 'Recommended Action: Shift volume to WDFC Dedicated Rail Spine'
+                                    : 'Status: Clear Corridor Flow / High Throughput Reserve'}
                                 </span>
                               </div>
 
-                              <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 mt-1">
-                                {c.affected_shipments.map((sh, idx) => (
-                                  <div
-                                    key={idx}
-                                    className="bg-slate-50 p-2.5 rounded-lg flex items-center justify-between border border-slate-200"
-                                  >
-                                    <div>
-                                      <div className="flex items-center gap-1.5">
-                                        <span className="font-mono text-xs text-blue-900 font-bold">
-                                          {sh.shipment_id}
-                                        </span>
-                                        <span className="px-1.5 py-0.2 rounded bg-rose-100 text-rose-800 text-[9px] font-bold">
-                                          {sh.tag}
-                                        </span>
+                              {c.affected_shipments.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 mt-1">
+                                  {c.affected_shipments.map((sh, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="bg-slate-50 p-2.5 rounded-lg flex items-center justify-between border border-slate-200"
+                                    >
+                                      <div>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="font-mono text-xs text-blue-900 font-bold">
+                                            {sh.shipment_id}
+                                          </span>
+                                          <span className="px-1.5 py-0.2 rounded bg-rose-100 text-rose-800 text-[9px] font-bold">
+                                            {sh.tag}
+                                          </span>
+                                        </div>
+                                        <span className="text-xs text-slate-700 block mt-0.5">{sh.description}</span>
                                       </div>
-                                      <span className="text-xs text-slate-700 block mt-0.5">{sh.description}</span>
+                                      <div className="text-right flex flex-col items-end gap-1">
+                                        <span className="font-mono text-xs font-bold text-red-600">
+                                          {sh.predicted_delay_str}
+                                        </span>
+                                        <button
+                                          onClick={() => {
+                                            onSelectShipment(sh.shipment_id);
+                                            if (onNavigateToRisk) onNavigateToRisk(sh.shipment_id);
+                                          }}
+                                          className="text-[10px] text-blue-800 font-bold hover:underline"
+                                        >
+                                          Inspect Risk →
+                                        </button>
+                                      </div>
                                     </div>
-                                    <div className="text-right flex flex-col items-end gap-1">
-                                      <span className="font-mono text-xs font-bold text-red-600">
-                                        {sh.predicted_delay_str}
-                                      </span>
-                                      <button
-                                        onClick={() => {
-                                          onSelectShipment(sh.shipment_id);
-                                          if (onNavigateToRisk) onNavigateToRisk(sh.shipment_id);
-                                        }}
-                                        className="text-[10px] text-blue-800 font-bold hover:underline"
-                                      >
-                                        Inspect Risk →
-                                      </button>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div className="p-3 bg-slate-50 rounded-lg text-xs text-slate-600 flex items-center justify-between">
+                                  <span>No critical consignments delayed on this corridor. Operating at optimal nominal throughput.</span>
+                                  <span className="font-mono text-emerald-600 font-bold">100% On Schedule</span>
+                                </div>
+                              )}
                             </div>
                           </td>
                         </tr>

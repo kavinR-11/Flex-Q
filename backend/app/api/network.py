@@ -256,14 +256,29 @@ def get_corridors(
 
     for meta in CORRIDOR_METADATA:
         # Query database for matching shipments along this corridor
-        hubs = meta["hubs"]
-        shipment_query = db.query(ShipmentDB).filter(
-            ShipmentDB.origin.in_(hubs),
-            ShipmentDB.destination.in_(hubs)
-        )
+        if meta["corridor_id"] == "CORR-SEA-COAST":
+            shipment_query = db.query(ShipmentDB).filter(ShipmentDB.transport_mode == "MARITIME")
+        elif meta["corridor_id"] == "CORR-AIR-IND":
+            shipment_query = db.query(ShipmentDB).filter(ShipmentDB.transport_mode == "AIR")
+        elif meta["corridor_id"] == "CORR-WDFC-RAIL":
+            shipment_query = db.query(ShipmentDB).filter(
+                (ShipmentDB.transport_mode == "RAIL") |
+                ((ShipmentDB.origin.in_(["Mumbai", "Pune"])) & (ShipmentDB.destination.in_(["Bengaluru", "Chennai"])))
+            )
+        else:
+            hubs = meta["hubs"]
+            shipment_query = db.query(ShipmentDB).filter(
+                ShipmentDB.origin.in_(hubs),
+                ShipmentDB.destination.in_(hubs)
+            )
         
-        # Get matching high risk shipments
+        # Get matching high risk shipments, with fallback to top shipments on the corridor
         corridor_high_risk = shipment_query.filter(ShipmentDB.risk_score >= 7).order_by(ShipmentDB.risk_score.desc()).limit(3).all()
+        if len(corridor_high_risk) < 3:
+            existing_ids = [s.shipment_id for s in corridor_high_risk]
+            fallback_query = shipment_query.filter(~ShipmentDB.shipment_id.in_(existing_ids)) if existing_ids else shipment_query
+            more_shipments = fallback_query.order_by(ShipmentDB.risk_score.desc()).limit(3 - len(corridor_high_risk)).all()
+            corridor_high_risk.extend(more_shipments)
 
         linked_briefs: List[LinkedShipmentBrief] = []
         sla_penalty_lakhs = 0.0
