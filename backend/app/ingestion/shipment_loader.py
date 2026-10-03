@@ -143,6 +143,16 @@ def generate_shipments(num_records: int = 2500, seed: int = 42) -> list[dict]:
                 "Moderate (1-3h)" if actual_delay_duration <= 180 else "Major (> 3h)"
             )
         )
+
+        cargo_type = rng.choice(["Pharmaceuticals", "Electronics", "Automotive Components", "Precision Tooling", "Textiles"])
+        cargo_priority_map = {
+            "Pharmaceuticals": 1,
+            "Electronics": 2,
+            "Automotive Components": 3,
+            "Precision Tooling": 3,
+            "Textiles": 4,
+        }
+        cargo_priority = cargo_priority_map[cargo_type]
         
         shipments.append({
             "shipment_id": sh_id,
@@ -164,8 +174,8 @@ def generate_shipments(num_records: int = 2500, seed: int = 42) -> list[dict]:
             "current_eta": current_eta.isoformat(),
             "sla_hours": round(nominal_hours + sla_buffer_hours, 1),
             "sla_buffer_minutes": round(sla_buffer_mins, 1),
-            "cargo_type": rng.choice(["Automotive Components", "Pharmaceuticals", "Electronics", "Precision Tooling", "Textiles"]),
-            "cargo_priority": int(rng.choice([1, 2, 3, 4], p=[0.15, 0.35, 0.35, 0.15])),
+            "cargo_type": cargo_type,
+            "cargo_priority": cargo_priority,
             "cargo_value_inr": float(round(rng.uniform(50000, 2500000), -2)),
             "weight_kg": float(round(rng.uniform(200, 18000), 1)),
             "current_status": status,

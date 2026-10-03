@@ -8,12 +8,15 @@ import {
   TrendingUp, 
   TrendingDown, 
   ShieldAlert, 
-  RotateCcw, 
   Zap, 
   ArrowUpDown, 
   Package, 
   Clock, 
-  Truck 
+  Truck,
+  HeartPulse,
+  Cpu,
+  Wrench,
+  Shirt
 } from 'lucide-react';
 import { Shipment, ExplanationResponse } from '../types';
 import { fetchShipmentExplanation } from '../services/api';
@@ -25,7 +28,7 @@ interface ShipmentsViewProps {
   onNavigateToRecovery: (id: string) => void;
 }
 
-type SortField = 'shipment_id' | 'corridor' | 'mode' | 'promised' | 'eta' | 'buffer' | 'risk' | 'status';
+type SortField = 'shipment_id' | 'corridor' | 'priority' | 'mode' | 'promised' | 'eta' | 'buffer' | 'risk' | 'status';
 type SortDirection = 'asc' | 'desc';
 
 export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
@@ -37,11 +40,12 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterMode, setFilterMode] = useState<string>('all');
+  const [filterPriority, setFilterPriority] = useState<number>(0);
   const [filterMinRisk, setFilterMinRisk] = useState<number>(0);
 
   // Sorting
-  const [sortField, setSortField] = useState<SortField>('risk');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [sortField, setSortField] = useState<SortField>('priority');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc'); // Priority 1 first by default
 
   // Pagination
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -72,7 +76,7 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, filterStatus, filterMode, filterMinRisk]);
+  }, [searchTerm, filterStatus, filterMode, filterPriority, filterMinRisk]);
 
   // Fleet summary stats
   const stats = useMemo(() => {
@@ -80,10 +84,14 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
     const critical = shipments.filter((s) => s.risk_score >= 8 || s.current_status === 'critical').length;
     const delayed = shipments.filter((s) => s.risk_score === 7 || s.current_status === 'delayed').length;
     const normal = total - critical - delayed;
-    const road = shipments.filter((s) => s.transport_mode === 'ROAD').length;
-    const air = shipments.filter((s) => s.transport_mode === 'AIR').length;
-    const railMaritime = shipments.filter((s) => s.transport_mode === 'RAIL' || s.transport_mode === 'MARITIME').length;
-    return { total, critical, delayed, normal, road, air, railMaritime };
+    
+    // Priority Tier Breakdown (Medical P1 -> Electronics P2 -> Industrial P3 -> Textiles P4)
+    const p1Medical = shipments.filter((s) => s.cargo_priority === 1).length;
+    const p2Electronics = shipments.filter((s) => s.cargo_priority === 2).length;
+    const p3Industrial = shipments.filter((s) => s.cargo_priority === 3).length;
+    const p4Textiles = shipments.filter((s) => s.cargo_priority === 4).length;
+
+    return { total, critical, delayed, normal, p1Medical, p2Electronics, p3Industrial, p4Textiles };
   }, [shipments]);
 
   // Filtered & Sorted Shipments
@@ -98,14 +106,18 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
 
       const matchStatus = filterStatus === 'all' || s.current_status === filterStatus;
       const matchMode = filterMode === 'all' || s.transport_mode === filterMode;
+      const matchPriority = filterPriority === 0 || s.cargo_priority === filterPriority;
       const matchRisk = filterMinRisk === 0 || s.risk_score >= filterMinRisk;
 
-      return matchSearch && matchStatus && matchMode && matchRisk;
+      return matchSearch && matchStatus && matchMode && matchPriority && matchRisk;
     });
 
     return filtered.sort((a, b) => {
       let comparison = 0;
       switch (sortField) {
+        case 'priority':
+          comparison = (a.cargo_priority || 2) - (b.cargo_priority || 2);
+          break;
         case 'shipment_id':
           comparison = a.shipment_id.localeCompare(b.shipment_id);
           break;
@@ -135,7 +147,7 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
       }
       return sortDirection === 'asc' ? comparison : -comparison;
     });
-  }, [shipments, searchTerm, filterStatus, filterMode, filterMinRisk, sortField, sortDirection]);
+  }, [shipments, searchTerm, filterStatus, filterMode, filterPriority, filterMinRisk, sortField, sortDirection]);
 
   // Pagination calculation
   const totalPages = Math.ceil(processedShipments.length / pageSize) || 1;
@@ -149,7 +161,8 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
       setSortField(field);
-      setSortDirection('desc');
+      // For priority or risk, default to natural direction
+      setSortDirection(field === 'priority' ? 'asc' : 'desc');
     }
   };
 
@@ -157,26 +170,66 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
     setSearchTerm('');
     setFilterStatus('all');
     setFilterMode('all');
+    setFilterPriority(0);
     setFilterMinRisk(0);
   };
 
-  const hasActiveFilters = searchTerm !== '' || filterStatus !== 'all' || filterMode !== 'all' || filterMinRisk !== 0;
+  const hasActiveFilters = searchTerm !== '' || filterStatus !== 'all' || filterMode !== 'all' || filterPriority !== 0 || filterMinRisk !== 0;
+
+  // Semantic Priority Helper
+  const getPriorityMeta = (priority: number) => {
+    switch (priority) {
+      case 1:
+        return {
+          label: 'P1: Medical / Pharma',
+          short: 'Tier 1',
+          bg: 'bg-rose-50 text-rose-700 border-rose-200',
+          icon: '❤️',
+          desc: 'Mission Critical: Life-saving pharmaceuticals & cold-chain medicine',
+        };
+      case 2:
+        return {
+          label: 'P2: Electronics',
+          short: 'Tier 2',
+          bg: 'bg-blue-50 text-blue-700 border-blue-200',
+          icon: '⚡',
+          desc: 'High Priority: High-value semiconductors & computing assemblies',
+        };
+      case 3:
+        return {
+          label: 'P3: Auto / Precision',
+          short: 'Tier 3',
+          bg: 'bg-amber-50 text-amber-800 border-amber-200',
+          icon: '⚙️',
+          desc: 'Medium Priority: Automotive JIT components & industrial tooling',
+        };
+      case 4:
+      default:
+        return {
+          label: 'P4: Textiles / Cargo',
+          short: 'Tier 4',
+          bg: 'bg-slate-100 text-slate-700 border-slate-200',
+          icon: '🧵',
+          desc: 'Standard Priority: Commercial apparel, fabrics & non-perishable freight',
+        };
+    }
+  };
 
   return (
     <div className="space-y-4 font-sans text-[#101c29]">
-      {/* Fleet Telematics Overview Bar */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+      {/* Fleet Cargo Priority & Health Overview Bar */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2.5">
+        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-2.5">
           <div className="p-2 rounded-lg bg-blue-50 text-[#003c76]">
             <Package className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400">Total Tracked</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400">Total Fleet</span>
             <div className="text-base font-bold font-mono text-[#003c76]">{stats.total}</div>
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-2.5">
           <div className="p-2 rounded-lg bg-red-50 text-red-600">
             <ShieldAlert className="w-4 h-4" />
           </div>
@@ -186,7 +239,7 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-2.5">
           <div className="p-2 rounded-lg bg-amber-50 text-amber-600">
             <Clock className="w-4 h-4" />
           </div>
@@ -196,7 +249,7 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-2.5">
           <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600">
             <Truck className="w-4 h-4" />
           </div>
@@ -206,54 +259,101 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-slate-100 text-slate-700">
-            <span className="text-xs font-mono font-bold">🛣️</span>
+        {/* Priority Hierarchy Cards */}
+        <div 
+          onClick={() => setFilterPriority(filterPriority === 1 ? 0 : 1)}
+          className={`cursor-pointer p-3 rounded-xl border shadow-xs flex items-center gap-2.5 transition ${
+            filterPriority === 1 ? 'bg-rose-50 border-rose-300 ring-2 ring-rose-400' : 'bg-white border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          <div className="p-2 rounded-lg bg-rose-100 text-rose-700">
+            <HeartPulse className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400">Road</span>
-            <div className="text-base font-bold font-mono text-slate-700">{stats.road}</div>
+            <span className="text-[10px] uppercase font-bold text-rose-700">P1 Medical</span>
+            <div className="text-base font-bold font-mono text-rose-800">{stats.p1Medical}</div>
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-slate-100 text-slate-700">
-            <span className="text-xs font-mono font-bold">✈️</span>
+        <div 
+          onClick={() => setFilterPriority(filterPriority === 2 ? 0 : 2)}
+          className={`cursor-pointer p-3 rounded-xl border shadow-xs flex items-center gap-2.5 transition ${
+            filterPriority === 2 ? 'bg-blue-50 border-blue-300 ring-2 ring-blue-400' : 'bg-white border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          <div className="p-2 rounded-lg bg-blue-100 text-blue-700">
+            <Cpu className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400">Air Cargo</span>
-            <div className="text-base font-bold font-mono text-slate-700">{stats.air}</div>
+            <span className="text-[10px] uppercase font-bold text-blue-700">P2 Electronics</span>
+            <div className="text-base font-bold font-mono text-blue-800">{stats.p2Electronics}</div>
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-slate-100 text-slate-700">
-            <span className="text-xs font-mono font-bold">🚆</span>
+        <div 
+          onClick={() => setFilterPriority(filterPriority === 3 ? 0 : 3)}
+          className={`cursor-pointer p-3 rounded-xl border shadow-xs flex items-center gap-2.5 transition ${
+            filterPriority === 3 ? 'bg-amber-50 border-amber-300 ring-2 ring-amber-400' : 'bg-white border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          <div className="p-2 rounded-lg bg-amber-100 text-amber-800">
+            <Wrench className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400">Rail / Maritime</span>
-            <div className="text-base font-bold font-mono text-slate-700">{stats.railMaritime}</div>
+            <span className="text-[10px] uppercase font-bold text-amber-800">P3 Auto / Tooling</span>
+            <div className="text-base font-bold font-mono text-amber-900">{stats.p3Industrial}</div>
+          </div>
+        </div>
+
+        <div 
+          onClick={() => setFilterPriority(filterPriority === 4 ? 0 : 4)}
+          className={`cursor-pointer p-3 rounded-xl border shadow-xs flex items-center gap-2.5 transition ${
+            filterPriority === 4 ? 'bg-slate-100 border-slate-300 ring-2 ring-slate-400' : 'bg-white border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          <div className="p-2 rounded-lg bg-slate-200 text-slate-700">
+            <Shirt className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-bold text-slate-600">P4 Textiles</span>
+            <div className="text-base font-bold font-mono text-slate-700">{stats.p4Textiles}</div>
           </div>
         </div>
       </div>
 
       {/* Top Filter Bar */}
       <div className="bg-white rounded-xl p-3.5 border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3 items-center justify-between">
-        <div className="relative w-full md:w-80">
+        <div className="relative w-full md:w-72">
           <Search className="w-4 h-4 text-[#424751] absolute left-3 top-2.5" />
           <input
             type="text"
-            placeholder="Search ID, Corridor, Carrier, Cargo..."
+            placeholder="Search ID, Corridor, Cargo..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs text-[#101c29] placeholder-[#727782] focus:outline-none focus:border-[#003c76] transition"
           />
         </div>
 
-        <div className="flex items-center gap-2.5 w-full md:w-auto justify-end flex-wrap">
+        <div className="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+          {/* Priority Tier Filter */}
+          <div className="flex items-center gap-1">
+            <span className="text-[11px] text-slate-500 font-semibold">Priority:</span>
+            <select
+              value={filterPriority}
+              onChange={(e) => setFilterPriority(Number(e.target.value))}
+              className="py-1.5 px-2 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs text-[#101c29] font-medium focus:outline-none focus:border-[#003c76]"
+            >
+              <option value="0">All Tiers (P1-P4)</option>
+              <option value="1">❤️ Tier 1: Medical / Pharma</option>
+              <option value="2">⚡ Tier 2: Electronics</option>
+              <option value="3">⚙️ Tier 3: Auto / Precision</option>
+              <option value="4">🧵 Tier 4: Textiles / Cargo</option>
+            </select>
+          </div>
+
           {/* Mode Filter */}
           <div className="flex items-center gap-1">
-            <span className="text-[11px] text-slate-500 font-medium">Mode:</span>
+            <span className="text-[11px] text-slate-500 font-semibold">Mode:</span>
             <select
               value={filterMode}
               onChange={(e) => setFilterMode(e.target.value)}
@@ -285,7 +385,7 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
 
           {/* Min Risk Filter */}
           <div className="flex items-center gap-1">
-            <span className="text-[11px] text-slate-500 font-medium">Risk:</span>
+            <span className="text-[11px] text-slate-500 font-semibold">Risk:</span>
             <select
               value={filterMinRisk}
               onChange={(e) => setFilterMinRisk(Number(e.target.value))}
@@ -329,6 +429,15 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
                   >
                     <div className="flex items-center gap-1">
                       <span>Shipment ID</span>
+                      <ArrowUpDown className="w-3 h-3 text-slate-400" />
+                    </div>
+                  </th>
+                  <th
+                    onClick={() => toggleSort('priority')}
+                    className="py-2.5 px-3 cursor-pointer hover:bg-blue-100 transition"
+                  >
+                    <div className="flex items-center gap-1">
+                      <span>Priority Tier</span>
                       <ArrowUpDown className="w-3 h-3 text-slate-400" />
                     </div>
                   </th>
@@ -401,7 +510,7 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
               <tbody className="divide-y divide-slate-100">
                 {paginatedShipments.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-8 text-center text-xs text-slate-400">
+                    <td colSpan={10} className="py-8 text-center text-xs text-slate-400">
                       No consignments match the selected filters.
                     </td>
                   </tr>
@@ -411,6 +520,7 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
                     const isCritical = sh.risk_score >= 8;
                     const isModerate = sh.risk_score >= 4 && sh.risk_score < 8;
                     const roundedBuffer = Math.round(sh.sla_buffer_minutes || 0);
+                    const prio = getPriorityMeta(sh.cargo_priority);
 
                     return (
                       <tr
@@ -430,6 +540,15 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
                             </span>
                           )}
                         </td>
+
+                        {/* Priority Tier Column with Semantic Hierarchy */}
+                        <td className="py-2.5 px-3">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${prio.bg}`}>
+                            <span>{prio.icon}</span>
+                            <span>{prio.label}</span>
+                          </span>
+                        </td>
+
                         <td className="py-2.5 px-3 text-[#101c29] font-medium">
                           {sh.origin} → {sh.destination}
                         </td>
@@ -583,8 +702,23 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
               </div>
             </div>
 
-            {/* Cargo & Financial Context */}
+            {/* Priority Hierarchy & Cargo Context */}
             <div className="p-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs space-y-2">
+              <div className="flex justify-between items-center text-[#101c29]">
+                <span className="text-[#424751]">Priority Tier:</span>
+                {(() => {
+                  const prio = getPriorityMeta(selectedShipment.cargo_priority);
+                  return (
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${prio.bg}`}>
+                      <span>{prio.icon}</span>
+                      <span>{prio.label}</span>
+                    </span>
+                  );
+                })()}
+              </div>
+              <div className="text-[10px] text-slate-500 italic">
+                {getPriorityMeta(selectedShipment.cargo_priority).desc}
+              </div>
               <div className="flex justify-between text-[#101c29]">
                 <span className="text-[#424751]">Cargo Value:</span>
                 <span className="font-bold text-[#003c76] font-mono">
@@ -596,12 +730,8 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
                 <span className="font-mono">{Math.round(selectedShipment.weight_kg || 0).toLocaleString('en-IN')} kg</span>
               </div>
               <div className="flex justify-between text-[#101c29]">
-                <span className="text-[#424751]">Cargo Type:</span>
+                <span className="text-[#424751]">Cargo Category:</span>
                 <span className="font-semibold text-right max-w-[170px] truncate">{selectedShipment.cargo_type}</span>
-              </div>
-              <div className="flex justify-between text-[#101c29]">
-                <span className="text-[#424751]">Priority Tier:</span>
-                <span className="font-mono text-[#003c76] font-bold">Tier {selectedShipment.cargo_priority}</span>
               </div>
               <div className="flex justify-between text-[#101c29]">
                 <span className="text-[#424751]">Remaining Distance:</span>
