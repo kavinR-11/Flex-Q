@@ -24,7 +24,7 @@ export function App() {
     try {
       const [h, s, e] = await Promise.all([
         fetchHealth().catch(() => null),
-        fetchShipments({ limit: 150 }).catch(() => []),
+        fetchShipments({ limit: 300 }).catch(() => []),
         fetchEvents().catch(() => []),
       ]);
       setHealth(h);
