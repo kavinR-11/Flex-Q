@@ -17,7 +17,8 @@ interface AuditTrailViewProps {
 
 export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ selectedShipmentId }) => {
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
-  const [filterShipment, setFilterShipment] = useState<string>(selectedShipmentId || '');
+  // Default to empty string to show ALL system logs chronologically
+  const [filterShipment, setFilterShipment] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [clearing, setClearing] = useState(false);
 
@@ -81,22 +82,51 @@ export const AuditTrailView: React.FC<AuditTrailViewProps> = ({ selectedShipment
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <input
-              type="text"
-              placeholder="Filter by Shipment ID..."
-              value={filterShipment}
-              onChange={(e) => setFilterShipment(e.target.value)}
-              className="py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs font-mono text-[#101c29] focus:outline-none focus:border-[#003c76]"
-            />
-            {filterShipment && (
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <button
+                type="button"
                 onClick={() => setFilterShipment('')}
-                className="text-xs text-[#424751] hover:text-[#101c29] px-2 font-medium"
+                className={`py-1 px-2.5 rounded-lg text-xs font-semibold font-mono transition ${
+                  filterShipment === ''
+                    ? 'bg-[#003c76] text-white shadow-sm'
+                    : 'bg-[#f8f9ff] text-[#424751] border border-slate-200 hover:bg-slate-100'
+                }`}
               >
-                Clear
+                All Events
               </button>
-            )}
+              {selectedShipmentId && (
+                <button
+                  type="button"
+                  onClick={() => setFilterShipment(selectedShipmentId)}
+                  className={`py-1 px-2.5 rounded-lg text-xs font-semibold font-mono transition ${
+                    filterShipment === selectedShipmentId
+                      ? 'bg-[#003c76] text-white shadow-sm'
+                      : 'bg-[#f8f9ff] text-[#424751] border border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  Focus: {selectedShipmentId}
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-1">
+              <input
+                type="text"
+                placeholder="Filter by Shipment ID..."
+                value={filterShipment}
+                onChange={(e) => setFilterShipment(e.target.value)}
+                className="py-1 px-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs font-mono text-[#101c29] focus:outline-none focus:border-[#003c76] w-44"
+              />
+              {filterShipment && (
+                <button
+                  onClick={() => setFilterShipment('')}
+                  className="text-xs text-[#424751] hover:text-[#101c29] px-2 font-medium"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -145,6 +145,11 @@ export function App() {
                 <RecoveryCenterView
                   shipments={shipments}
                   selectedShipmentId={selectedShipmentId}
+                  onSelectShipment={setSelectedShipmentId}
+                  onNavigateTab={(tab) => {
+                    if (tab === 'audit' || tab === 'decision-audit') setActiveTab('decision-audit');
+                    else setActiveTab(tab);
+                  }}
                   onShipmentUpdated={reloadData}
                 />
               )}

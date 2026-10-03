@@ -77,6 +77,7 @@ export interface RecoveryPlanOption {
   predicted_eta: string;
   additional_cost_inr: number;
   expected_delay_minutes: number;
+  emissions_kg?: number;
   sla_outcome: string;
   feasible: boolean;
 }

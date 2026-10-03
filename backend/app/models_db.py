@@ -103,6 +103,7 @@ class RecoveryPlanDB(Base):
     additional_cost_inr = Column(Float, default=0.0)
     predicted_eta = Column(DateTime, nullable=False)
     expected_delay_minutes = Column(Float, default=0.0)
+    emissions_kg = Column(Float, default=0.0)
     sla_outcome = Column(String(64), default="WITHIN_COMMITMENT")
     is_feasible = Column(Boolean, default=True)
     

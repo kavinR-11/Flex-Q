@@ -29,6 +29,7 @@ class RecoveryPlanOption(BaseModel):
     predicted_eta: datetime
     additional_cost_inr: float
     expected_delay_minutes: float
+    emissions_kg: float = 0.0
     sla_outcome: str
     feasible: bool
 

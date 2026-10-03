@@ -54,6 +54,7 @@ class ClassicalRecoveryOptimizer:
                 "action": "MAINTAIN_ROUTE",
                 "cost_inr": 0.0,
                 "delay_mins": base_delay,
+                "emissions_kg": 140.0,
                 "feasible": not has_road_closure,
                 "route_name": "Original Planned Highway Corridor (NH48)",
                 "carrier": shipment.get("carrier_id", "CARRIER-A"),
@@ -64,6 +65,7 @@ class ClassicalRecoveryOptimizer:
                 "action": "ALTERNATE_ROUTE",
                 "cost_inr": 1150.0,
                 "delay_mins": max(10.0, base_delay * 0.12),
+                "emissions_kg": 125.0,
                 "feasible": max_budget >= 1150.0,
                 "route_name": "Via NH717 / State Highway Bypass Corridor",
                 "carrier": shipment.get("carrier_id", "CARRIER-A"),
@@ -74,6 +76,7 @@ class ClassicalRecoveryOptimizer:
                 "action": "RAIL_INTERMODAL",
                 "cost_inr": 1650.0,
                 "delay_mins": max(18.0, base_delay * 0.18),
+                "emissions_kg": 32.0,  # Green lowest carbon
                 "feasible": max_budget >= 1650.0,
                 "route_name": "Dedicated Freight Corridor (Container Train)",
                 "carrier": "CARRIER-C",
@@ -84,6 +87,7 @@ class ClassicalRecoveryOptimizer:
                 "action": "CARRIER_SWITCH",
                 "cost_inr": 2100.0,
                 "delay_mins": max(5.0, base_delay * 0.08),
+                "emissions_kg": 155.0,
                 "feasible": max_budget >= 2100.0,
                 "route_name": "Dedicated Linehaul Relay Corridor",
                 "carrier": "CARRIER-D",
@@ -94,6 +98,7 @@ class ClassicalRecoveryOptimizer:
                 "action": "EXPEDITE_AIR",
                 "cost_inr": 3200.0,
                 "delay_mins": 0.0,
+                "emissions_kg": 480.0,  # High emissions
                 "feasible": max_budget >= 3200.0,
                 "route_name": "Kempegowda / Chennai Airport Express Charter",
                 "carrier": "CARRIER-B",
@@ -117,16 +122,17 @@ class ClassicalRecoveryOptimizer:
             if not act["feasible"]:
                 solver.Add(x_vars[idx] == 0)
 
-        # Constraint 3: Budget limit
+        # Constraint 3: Budget limit: sum(x_ia * C_ia) <= max_budget
         solver.Add(
             solver.Sum([actions[i]["cost_inr"] * x_vars[i] for i in range(len(actions))]) <= max_budget
         )
 
         # Objective Function:
-        # min alpha * Cost + beta * (Delay * 25.0) + gamma * SLA_breach_penalty
+        # min sum_i sum_a x_ia * [ alpha * C_ia + beta * D_ia + gamma * B_ia + delta * E_ia ]
         alpha = float(weights.get("cost_weight", 0.30))
         beta = float(weights.get("delay_weight", 0.40))
         gamma = float(weights.get("sla_penalty_weight", 0.30))
+        delta = float(weights.get("emissions_weight", 0.0))
 
         objective = solver.Objective()
         for idx, act in enumerate(actions):
@@ -137,12 +143,13 @@ class ClassicalRecoveryOptimizer:
             sla_breach = projected_eta > promised_del
             sla_breach_penalty = 6500.0 if sla_breach else 0.0
 
-            # Scale delay minutes to monetary equivalent so sliders are balanced
+            # Scale components to harmonious units so sliders are dynamically sensitive
             cost_term = alpha * act["cost_inr"]
             delay_term = beta * (act["delay_mins"] * 35.0)
             sla_term = gamma * sla_breach_penalty
+            emissions_term = delta * (act["emissions_kg"] * 12.0)
 
-            coeff = cost_term + delay_term + sla_term
+            coeff = cost_term + delay_term + sla_term + emissions_term
             objective.SetCoefficient(x_vars[idx], coeff)
 
         objective.SetMinimization()
@@ -181,6 +188,7 @@ class ClassicalRecoveryOptimizer:
                 "predicted_eta": proj_eta.isoformat(),
                 "additional_cost_inr": act["cost_inr"],
                 "expected_delay_minutes": round(act["delay_mins"], 1),
+                "emissions_kg": act["emissions_kg"],
                 "sla_outcome": sla_outcome,
                 "feasible": act["feasible"],
             })

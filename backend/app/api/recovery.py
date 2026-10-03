@@ -3,6 +3,7 @@ Recovery Optimization & Human Approval API Router for YOLO x FluxQ
 """
 
 from datetime import datetime, timezone
+import uuid
 import numpy as np
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -83,6 +84,7 @@ def optimize_recovery(payload: RecoveryOptimizationRequest, db: Session = Depend
             additional_cost_inr=p["additional_cost_inr"],
             predicted_eta=datetime.fromisoformat(p["predicted_eta"]),
             expected_delay_minutes=p["expected_delay_minutes"],
+            emissions_kg=p.get("emissions_kg", 0.0),
             sla_outcome=p["sla_outcome"],
             is_feasible=p["feasible"],
             approval_status="PENDING",
@@ -164,8 +166,8 @@ def approve_recovery_plan(recovery_id: str, payload: ApprovalRequest, db: Sessio
     sh.flagged_for_review = False
     sh.updated_at = now_utc
 
-    # Commit Audit Log
-    audit_id = f"AUD-APP-{now_utc.strftime('%H%M%S')}"
+    # Commit Audit Log with unique ID
+    audit_id = f"AUD-APP-{int(now_utc.timestamp() * 1000)}-{uuid.uuid4().hex[:4].upper()}"
     audit_entry = AuditLogDB(
         audit_id=audit_id,
         shipment_id=sh.shipment_id,
@@ -200,7 +202,7 @@ def reject_recovery_plan(recovery_id: str, payload: ApprovalRequest, db: Session
     plan.notes = payload.notes
     plan.decided_at = now_utc
 
-    audit_id = f"AUD-REJ-{now_utc.strftime('%H%M%S')}"
+    audit_id = f"AUD-REJ-{int(now_utc.timestamp() * 1000)}-{uuid.uuid4().hex[:4].upper()}"
     audit_entry = AuditLogDB(
         audit_id=audit_id,
         shipment_id=plan.shipment_id,

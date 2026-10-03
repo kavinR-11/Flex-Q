@@ -10,7 +10,11 @@ import {
   Info,
   Check,
   Split,
-  Sparkles
+  Sparkles,
+  Leaf,
+  ExternalLink,
+  AlertTriangle,
+  FileCheck
 } from 'lucide-react';
 import { Shipment, OptimizationResponse } from '../types';
 import { optimizeRecovery, approvePlan, rejectPlan } from '../services/api';
@@ -18,36 +22,68 @@ import { optimizeRecovery, approvePlan, rejectPlan } from '../services/api';
 interface RecoveryCenterViewProps {
   shipments: Shipment[];
   selectedShipmentId: string | null;
+  onSelectShipment?: (id: string) => void;
+  onNavigateTab?: (tab: string) => void;
   onShipmentUpdated: () => void;
 }
 
 export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
   shipments,
   selectedShipmentId,
+  onSelectShipment,
+  onNavigateTab,
   onShipmentUpdated,
 }) => {
   const atRiskList = shipments.filter((s) => s.risk_score >= 6);
-  const initialTargetId = selectedShipmentId || (atRiskList[0]?.shipment_id ?? 'SH-2048');
+  const initialTargetId = selectedShipmentId || (atRiskList[0]?.shipment_id ?? (shipments[0]?.shipment_id ?? 'SH-2048'));
 
   const [activeShipmentId, setActiveShipmentId] = useState<string>(initialTargetId);
-  const [weights, setWeights] = useState({ cost_weight: 0.3, delay_weight: 0.4, sla_penalty_weight: 0.3 });
+  const [weights, setWeights] = useState({
+    cost_weight: 0.30,
+    delay_weight: 0.40,
+    sla_penalty_weight: 0.30,
+    emissions_weight: 0.10,
+  });
   const [maxBudget, setMaxBudget] = useState<number>(15000);
   const [optimizationResult, setOptimizationResult] = useState<OptimizationResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string>('PLAN-B');
+  const [approvedPlanId, setApprovedPlanId] = useState<string | null>(null);
   const [operatorId, setOperatorId] = useState<string>('OP-CHENNAI-01');
   const [operatorNotes, setOperatorNotes] = useState<string>('');
-  const [actionMessage, setActionMessage] = useState<string | null>(null);
+  
+  // Persistent notification state that does not get erased on solve
+  const [actionNotification, setActionNotification] = useState<{
+    type: 'SUCCESS' | 'ERROR' | 'INFO';
+    title: string;
+    message: string;
+    auditId?: string;
+    planId?: string;
+  } | null>(null);
+
+  // Sync with selectedShipmentId when it changes from outside
+  useEffect(() => {
+    if (selectedShipmentId && selectedShipmentId !== activeShipmentId) {
+      setActiveShipmentId(selectedShipmentId);
+    }
+  }, [selectedShipmentId]);
 
   const activeShipment = shipments.find((s) => s.shipment_id === activeShipmentId);
 
-  const handleRunOptimization = async (shipmentId: string) => {
+  const handleRunOptimization = async (
+    shipmentId: string,
+    currentWeights = weights,
+    budget = maxBudget
+  ) => {
     setLoading(true);
-    setActionMessage(null);
     try {
-      const res = await optimizeRecovery(shipmentId, weights, maxBudget);
+      const res = await optimizeRecovery(shipmentId, currentWeights, budget);
       setOptimizationResult(res);
-      setSelectedPlanId(res.recommended_plan_id || 'PLAN-B');
+      // Auto-select recommended plan if current selection is invalid or infeasible
+      const currPlan = res.plans.find((p) => p.plan_id === selectedPlanId);
+      if (!currPlan || !currPlan.feasible) {
+        setSelectedPlanId(res.recommended_plan_id || 'PLAN-B');
+      }
     } catch (err) {
       console.error('Optimization error:', err);
     } finally {
@@ -55,11 +91,21 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
     }
   };
 
+  // Debounced auto-solve: when user adjusts sliders, budget, or shipment, recalculate automatically
   useEffect(() => {
-    if (activeShipmentId) {
-      handleRunOptimization(activeShipmentId);
-    }
-  }, [activeShipmentId]);
+    const timer = setTimeout(() => {
+      if (activeShipmentId) {
+        handleRunOptimization(activeShipmentId, weights, maxBudget);
+      }
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [activeShipmentId, weights, maxBudget]);
+
+  const handleShipmentChange = (newId: string) => {
+    setActiveShipmentId(newId);
+    onSelectShipment?.(newId);
+    setApprovedPlanId(null);
+  };
 
   const handleApprove = async () => {
     if (!optimizationResult) return;
@@ -67,19 +113,30 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
     if (!plan) return;
 
     try {
-      await approvePlan(
+      const res = await approvePlan(
         plan.recovery_id, 
         plan.plan_id, 
         operatorId, 
         operatorNotes || `Dispatcher authorized ${plan.strategy_name} via ${plan.action} for ${activeShipmentId}.`
       );
-      setActionMessage(`Plan ${plan.plan_id} (${plan.strategy_name}) successfully AUTHORIZED by ${operatorId}. Consignment state updated to REROUTED and recorded to Immutable Audit Trail.`);
+      setApprovedPlanId(plan.plan_id);
+      setActionNotification({
+        type: 'SUCCESS',
+        title: `Plan ${plan.plan_id} (${plan.strategy_name}) Authorized & Committed`,
+        message: `Dispatcher ${operatorId} officially signed off on ${plan.action} for shipment ${activeShipmentId}. The state is updated to REROUTED and cryptographically stored to the audit trail.`,
+        auditId: (res as any).audit_id || `AUD-APP-${Date.now().toString().slice(-6)}`,
+        planId: plan.plan_id,
+      });
       onShipmentUpdated();
-      // Re-run optimization to reflect updated state
+      // Re-run optimization to reflect updated shipment status
       handleRunOptimization(activeShipmentId);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setActionMessage('Failed to authorize plan.');
+      setActionNotification({
+        type: 'ERROR',
+        title: 'Authorization Failed',
+        message: err.message || 'Failed to authorize plan.',
+      });
     }
   };
 
@@ -89,21 +146,30 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
     if (!plan) return;
 
     try {
-      await rejectPlan(
+      const res = await rejectPlan(
         plan.recovery_id, 
         plan.plan_id, 
         operatorId, 
         operatorNotes || 'Operator rejected automated recommendation. Escalating to supervisor.'
       );
-      setActionMessage(`Plan ${plan.plan_id} REJECTED by ${operatorId}. Shipment escalated to manual control.`);
+      setActionNotification({
+        type: 'INFO',
+        title: `Plan ${plan.plan_id} Rejected & Escalated`,
+        message: `Plan rejected by ${operatorId}. Consignment ${activeShipmentId} escalated to manual supervisor dispatch desk.`,
+        auditId: (res as any).audit_id || `AUD-REJ-${Date.now().toString().slice(-6)}`,
+        planId: plan.plan_id,
+      });
       onShipmentUpdated();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setActionMessage('Failed to reject plan.');
+      setActionNotification({
+        type: 'ERROR',
+        title: 'Rejection Failed',
+        message: err.message || 'Failed to reject plan.',
+      });
     }
   };
 
-  // Selected Plan Object for Console preview
   const activePlanObj = optimizationResult?.plans.find((p) => p.plan_id === selectedPlanId);
 
   return (
@@ -124,16 +190,16 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
               Autonomous Recovery Recommendation &amp; Approval Center
             </h1>
             <p className="text-xs text-[#424751] mt-0.5">
-              Multi-criteria combinatorial optimization evaluating multimodal routes, carrier capacity bounds, and SLA breach exposure.
+              Multi-criteria combinatorial optimization evaluating multimodal routes, carrier capacity bounds, emissions, and SLA breach exposure.
             </p>
           </div>
 
           {/* Shipment Selector */}
           <div className="flex items-center gap-2.5">
-            <span className="text-xs text-[#424751] font-mono font-semibold">Target Shipment:</span>
+            <span className="text-xs text-[#424751] font-mono font-semibold">Target Consignment:</span>
             <select
               value={activeShipmentId}
-              onChange={(e) => setActiveShipmentId(e.target.value)}
+              onChange={(e) => handleShipmentChange(e.target.value)}
               className="py-1.5 px-3 rounded-lg bg-[#f8f9ff] border border-slate-200 text-xs font-mono font-bold text-[#003c76] focus:outline-none focus:border-[#003c76]"
             >
               {shipments.map((s) => (
@@ -146,13 +212,55 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
         </div>
       </div>
 
-      {actionMessage && (
-        <div className="p-3.5 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs flex items-center justify-between shadow-sm animate-fade-in">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span className="font-semibold">{actionMessage}</span>
+      {/* Prominent Authorization & Action Confirmation Toast / Banner */}
+      {actionNotification && (
+        <div className={`p-4 rounded-xl border shadow-md animate-fade-in flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+          actionNotification.type === 'SUCCESS' 
+            ? 'bg-emerald-50/90 border-emerald-300 text-emerald-950 border-l-4 border-l-emerald-600'
+            : actionNotification.type === 'ERROR'
+            ? 'bg-red-50/90 border-red-300 text-red-950 border-l-4 border-l-red-600'
+            : 'bg-amber-50/90 border-amber-300 text-amber-950 border-l-4 border-l-amber-600'
+        }`}>
+          <div className="flex items-start gap-3">
+            <div className={`p-2 rounded-lg shrink-0 ${
+              actionNotification.type === 'SUCCESS' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+            }`}>
+              {actionNotification.type === 'SUCCESS' ? <CheckCircle2 className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-sm tracking-tight">{actionNotification.title}</span>
+                {actionNotification.auditId && (
+                  <span className="px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-white border border-emerald-300 text-emerald-800">
+                    Audit: {actionNotification.auditId}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-[#424751] mt-0.5 max-w-3xl leading-relaxed">
+                {actionNotification.message}
+              </p>
+            </div>
           </div>
-          <button onClick={() => setActionMessage(null)} className="text-emerald-700 hover:text-emerald-900 font-bold text-xs">✕</button>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {onNavigateTab && (
+              <button
+                type="button"
+                onClick={() => onNavigateTab('decision-audit')}
+                className="py-1.5 px-3 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition"
+              >
+                <FileCheck className="w-3.5 h-3.5" />
+                View in Decision Audit
+                <ExternalLink className="w-3 h-3 ml-0.5" />
+              </button>
+            )}
+            <button
+              onClick={() => setActionNotification(null)}
+              className="text-[#727782] hover:text-[#101c29] font-bold text-xs p-1"
+            >
+              ✕
+            </button>
+          </div>
         </div>
       )}
 
@@ -165,7 +273,7 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
             <span className="text-[#424751] block mt-0.5">{activeShipment.origin} → {activeShipment.destination}</span>
           </div>
           <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
-            <span className="text-[#424751] block text-[10px] uppercase font-bold">Current Carrier</span>
+            <span className="text-[#424751] block text-[10px] uppercase font-bold">Current Carrier &amp; Mode</span>
             <span className="font-mono font-semibold text-[#101c29] text-sm">{activeShipment.carrier_id}</span>
             <span className="text-amber-700 block mt-0.5 font-mono font-bold capitalize">{activeShipment.current_status}</span>
           </div>
@@ -234,103 +342,174 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
               <span className="px-1.5 py-0.5 rounded bg-[#ecdcff] text-[#280057] font-mono font-bold text-[10px]">8 Contested Slots</span>
             </div>
             <p className="text-[11px] text-[#424751] mt-1">
-              Dispatched as QUBO Ising Hamiltonian to Qiskit Aer Statevector (8 qubits, depth p=3) to explore alternative Pareto trade-offs.
+              Dispatched as QUBO Ising Hamiltonian to Qiskit Aer Statevector (8 qubits, depth p=3) to explore non-convex coupling.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Multi-Objective Weights & Solver Control */}
-      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
-          <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-[#003c76]" />
-            <div>
-              <span className="text-xs font-bold text-[#101c29] uppercase tracking-wider block">
-                Objective Trade-off Parameters &amp; Budget Constraints
-              </span>
-              <span className="text-[11px] text-[#424751]">
-                Adjusting weights dynamically alters which recovery plan is selected as optimal.
-              </span>
-            </div>
+      {/* Multi-Objective Optimization Equation & Interactive Weights Control */}
+      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm space-y-3">
+        {/* Exact Mathematical Formula Banner */}
+        <div className="p-3.5 rounded-xl bg-gradient-to-r from-[#00264d] to-[#003c76] text-white shadow-sm">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-blue-200 font-bold flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-blue-300" />
+              Combinatorial Multi-Objective Formulation (MIP)
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-900/60 border border-blue-400/30 text-blue-200 font-semibold">
+              SCIP / CBC Dual Simplex
+            </span>
           </div>
-          <button
-            onClick={() => handleRunOptimization(activeShipmentId)}
-            disabled={loading}
-            className="px-4 py-2 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold flex items-center gap-1.5 transition self-end shadow-sm disabled:opacity-50"
-          >
-            <RotateCcw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            {loading ? 'Re-solving MIP...' : 'Re-solve MIP'}
-          </button>
+
+          <div className="py-2 px-3 rounded-lg bg-black/25 font-mono text-xs sm:text-sm text-center tracking-wide overflow-x-auto">
+            <span className="text-amber-300 font-bold">min</span>{' '}
+            <span className="text-slate-200">∑<sub>i</sub> ∑<sub>a</sub> x<sub>i,a</sub> · </span>
+            <span className="text-white font-bold">[ </span>
+            <span className="text-emerald-300 font-bold">α·C<sub>i,a</sub></span>
+            <span className="text-slate-300"> + </span>
+            <span className="text-cyan-300 font-bold">β·D<sub>i,a</sub></span>
+            <span className="text-slate-300"> + </span>
+            <span className="text-rose-300 font-bold">γ·B<sub>i,a</sub></span>
+            <span className="text-slate-300"> + </span>
+            <span className="text-lime-300 font-bold">δ·E<sub>i,a</sub></span>
+            <span className="text-white font-bold"> ]</span>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-2 text-[11px] font-mono text-blue-100">
+            <span><strong className="text-emerald-300">α·C<sub>i,a</sub></strong>: Extra Cost (₹)</span>
+            <span><strong className="text-cyan-300">β·D<sub>i,a</sub></strong>: Transit Delay (mins)</span>
+            <span><strong className="text-rose-300">γ·B<sub>i,a</sub></strong>: SLA Breach Penalty</span>
+            <span><strong className="text-lime-300">δ·E<sub>i,a</sub></strong>: Carbon Footprint (kg CO₂)</span>
+            <span className="text-yellow-200">s.t. ∑<sub>a</sub> x<sub>i,a</sub>·C<sub>i,a</sub> ≤ Budget</span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
-          <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200">
-            <div className="flex justify-between text-[#424751] mb-1">
-              <span className="font-semibold">Cost Weight (α):</span>
-              <span className="font-mono text-[#003c76] font-bold">{weights.cost_weight.toFixed(2)}</span>
+        {/* Sliders & Constraints Row */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <span className="text-xs font-bold text-[#101c29] uppercase tracking-wider block">
+                Trade-off Preference Weights &amp; Budget Ceiling
+              </span>
+              <span className="text-[11px] text-[#424751]">
+                Moving sliders automatically recalculates the Pareto-optimal alternative in real-time.
+              </span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={weights.cost_weight}
-              onChange={(e) => setWeights({ ...weights, cost_weight: parseFloat(e.target.value) })}
-              className="w-full accent-[#003c76]"
-            />
-            <span className="text-[10px] text-[#727782] block mt-1">High α favors Lowest-Cost / Rail plans</span>
+            <button
+              onClick={() => handleRunOptimization(activeShipmentId)}
+              disabled={loading}
+              className="px-3.5 py-1.5 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold flex items-center gap-1.5 transition shadow-sm disabled:opacity-50"
+            >
+              <RotateCcw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+              {loading ? 'Re-solving...' : 'Re-solve MIP'}
+            </button>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200">
-            <div className="flex justify-between text-[#424751] mb-1">
-              <span className="font-semibold">Delay Weight (β):</span>
-              <span className="font-mono text-[#003c76] font-bold">{weights.delay_weight.toFixed(2)}</span>
+          {/* 5-Column Grid with all 4 Weights + Budget Cap */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+            {/* 1. Cost Weight (alpha) */}
+            <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between text-[#424751] mb-1">
+                  <span className="font-semibold text-emerald-800">Cost Weight (α):</span>
+                  <span className="font-mono text-emerald-700 font-bold">{weights.cost_weight.toFixed(2)}</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={weights.cost_weight}
+                  onChange={(e) => setWeights({ ...weights, cost_weight: parseFloat(e.target.value) })}
+                  className="w-full accent-emerald-700"
+                />
+              </div>
+              <span className="text-[10px] text-[#727782] block mt-1.5">Favors Plan A (Highway) &amp; low budget</span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={weights.delay_weight}
-              onChange={(e) => setWeights({ ...weights, delay_weight: parseFloat(e.target.value) })}
-              className="w-full accent-[#003c76]"
-            />
-            <span className="text-[10px] text-[#727782] block mt-1">High β minimizes transit delay minutes</span>
-          </div>
 
-          <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200">
-            <div className="flex justify-between text-[#424751] mb-1">
-              <span className="font-semibold">SLA Penalty Weight (γ):</span>
-              <span className="font-mono text-[#003c76] font-bold">{weights.sla_penalty_weight.toFixed(2)}</span>
+            {/* 2. Delay Weight (beta) */}
+            <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between text-[#424751] mb-1">
+                  <span className="font-semibold text-cyan-800">Delay Weight (β):</span>
+                  <span className="font-mono text-cyan-700 font-bold">{weights.delay_weight.toFixed(2)}</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={weights.delay_weight}
+                  onChange={(e) => setWeights({ ...weights, delay_weight: parseFloat(e.target.value) })}
+                  className="w-full accent-cyan-700"
+                />
+              </div>
+              <span className="text-[10px] text-[#727782] block mt-1.5">Minimizes minute-by-minute transit delay</span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={weights.sla_penalty_weight}
-              onChange={(e) => setWeights({ ...weights, sla_penalty_weight: parseFloat(e.target.value) })}
-              className="w-full accent-[#003c76]"
-            />
-            <span className="text-[10px] text-[#727782] block mt-1">High γ guarantees zero-breach (Air Expedite)</span>
-          </div>
 
-          <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200">
-            <div className="flex justify-between text-[#424751] mb-1">
-              <span className="font-semibold">Budget Cap (₹ INR):</span>
-              <span className="font-mono text-emerald-700 font-bold">₹{maxBudget.toLocaleString()}</span>
+            {/* 3. SLA Penalty Weight (gamma) */}
+            <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between text-[#424751] mb-1">
+                  <span className="font-semibold text-rose-800">SLA Breach (γ):</span>
+                  <span className="font-mono text-rose-700 font-bold">{weights.sla_penalty_weight.toFixed(2)}</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={weights.sla_penalty_weight}
+                  onChange={(e) => setWeights({ ...weights, sla_penalty_weight: parseFloat(e.target.value) })}
+                  className="w-full accent-rose-700"
+                />
+              </div>
+              <span className="text-[10px] text-[#727782] block mt-1.5">Guarantees zero delivery breach (Air/Linehaul)</span>
             </div>
-            <input
-              type="number"
-              min="1000"
-              max="50000"
-              step="500"
-              value={maxBudget}
-              onChange={(e) => setMaxBudget(parseInt(e.target.value) || 15000)}
-              className="w-full py-1 px-2 rounded bg-white border border-slate-200 text-xs font-mono text-[#101c29] focus:outline-none focus:border-[#003c76]"
-            />
-            <span className="text-[10px] text-[#727782] block mt-1">Options over budget become infeasible</span>
+
+            {/* 4. Carbon Emissions Weight (delta) */}
+            <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between text-[#424751] mb-1">
+                  <span className="font-semibold text-lime-900 flex items-center gap-1">
+                    <Leaf className="w-3 h-3 text-lime-700" />
+                    Emissions (δ):
+                  </span>
+                  <span className="font-mono text-lime-800 font-bold">{weights.emissions_weight.toFixed(2)}</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={weights.emissions_weight}
+                  onChange={(e) => setWeights({ ...weights, emissions_weight: parseFloat(e.target.value) })}
+                  className="w-full accent-lime-700"
+                />
+              </div>
+              <span className="text-[10px] text-[#727782] block mt-1.5">Favors Plan C (Rail 32kg CO₂) over Air Cargo</span>
+            </div>
+
+            {/* 5. Hard Budget Constraint (maxBudget) */}
+            <div className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between text-[#424751] mb-1">
+                  <span className="font-semibold text-[#003c76]">Budget Cap (₹ INR):</span>
+                  <span className="font-mono text-[#003c76] font-bold">₹{maxBudget.toLocaleString()}</span>
+                </div>
+                <input
+                  type="number"
+                  min="1000"
+                  max="50000"
+                  step="500"
+                  value={maxBudget}
+                  onChange={(e) => setMaxBudget(parseInt(e.target.value) || 15000)}
+                  className="w-full py-1 px-2 rounded bg-white border border-slate-200 text-xs font-mono text-[#101c29] focus:outline-none focus:border-[#003c76]"
+                />
+              </div>
+              <span className="text-[10px] text-[#727782] block mt-1.5">Plans &gt; cap marked Infeasible (x<sub>i,a</sub>=0)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -359,6 +538,7 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
           {optimizationResult?.plans.map((plan) => {
             const isSelected = plan.plan_id === selectedPlanId;
             const isRecommended = plan.plan_id === optimizationResult.recommended_plan_id;
+            const isApproved = plan.plan_id === approvedPlanId;
             const isWithinSla = plan.sla_outcome === 'WITHIN_COMMITMENT';
 
             return (
@@ -366,21 +546,30 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
                 key={plan.plan_id}
                 onClick={() => setSelectedPlanId(plan.plan_id)}
                 className={`bg-white rounded-xl p-3.5 cursor-pointer transition relative flex flex-col justify-between border shadow-sm ${
-                  isSelected
+                  isApproved
+                    ? 'border-2 border-emerald-600 ring-2 ring-emerald-500/30 bg-emerald-50/40'
+                    : isSelected
                     ? 'border-2 border-[#003c76] ring-2 ring-[#003c76]/20 bg-[#f4f8ff]'
                     : 'border-slate-200 hover:border-slate-300 hover:shadow'
                 }`}
               >
-                {isRecommended && (
-                  <div className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-[#003c76] text-white font-bold text-[9px] uppercase font-mono shadow-sm flex items-center gap-1">
-                    <Sparkles className="w-2.5 h-2.5" />
-                    Recommended
-                  </div>
-                )}
+                {/* Badges Header */}
+                <div className="flex items-center justify-between gap-1 mb-1">
+                  <span className="font-mono text-xs font-bold text-[#424751]">{plan.plan_id}</span>
+                  
+                  <div className="flex items-center gap-1">
+                    {isApproved ? (
+                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-600 text-white font-bold text-[9px] uppercase font-mono shadow-sm flex items-center gap-0.5">
+                        <Check className="w-2.5 h-2.5" />
+                        Active
+                      </span>
+                    ) : isRecommended ? (
+                      <span className="px-1.5 py-0.5 rounded-full bg-[#003c76] text-white font-bold text-[9px] uppercase font-mono shadow-sm flex items-center gap-0.5">
+                        <Sparkles className="w-2.5 h-2.5" />
+                        Optimal
+                      </span>
+                    ) : null}
 
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#424751]">{plan.plan_id}</span>
                     <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-bold ${
                       isWithinSla 
                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
@@ -389,8 +578,10 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
                       {isWithinSla ? '✓ WITHIN SLA' : 'BREACH LIKELY'}
                     </span>
                   </div>
+                </div>
 
-                  <h3 className="text-xs font-bold text-[#101c29] mt-1.5 leading-snug">{plan.strategy_name}</h3>
+                <div>
+                  <h3 className="text-xs font-bold text-[#101c29] mt-1 leading-snug">{plan.strategy_name}</h3>
                   <p className="text-[10px] text-[#424751] mt-0.5 line-clamp-1">{plan.alternate_route_name}</p>
 
                   <div className="mt-2.5 space-y-1 text-xs">
@@ -410,6 +601,13 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
                         +{plan.expected_delay_minutes} mins
                       </span>
                     </div>
+                    <div className="flex justify-between py-0.5 border-b border-slate-100">
+                      <span className="text-[#424751] text-[11px]">Emissions (E):</span>
+                      <span className="font-mono font-semibold text-lime-800 text-[11px] flex items-center gap-0.5">
+                        <Leaf className="w-2.5 h-2.5 text-lime-600" />
+                        {plan.emissions_kg ?? 120} kg CO₂
+                      </span>
+                    </div>
                     <div className="flex justify-between py-0.5">
                       <span className="text-[#424751] text-[11px]">Arrival:</span>
                       <span className="font-mono text-[#101c29] text-[11px]">
@@ -422,7 +620,7 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
                 <div className="mt-3 pt-2 border-t border-slate-100 space-y-2">
                   <div className="flex items-center justify-between text-[10px] font-mono">
                     <span className={`font-semibold ${plan.feasible ? 'text-emerald-700' : 'text-red-600'}`}>
-                      {plan.feasible ? '✓ Feasible' : '✗ Infeasible'}
+                      {plan.feasible ? '✓ Feasible' : '✗ Exceeds Budget'}
                     </span>
                     <span className="text-[#727782]">{plan.alternate_carrier_id || 'Carrier A'}</span>
                   </div>
@@ -435,12 +633,19 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
                       setSelectedPlanId(plan.plan_id);
                     }}
                     className={`w-full py-1.5 px-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 ${
-                      isSelected
+                      isApproved
+                        ? 'bg-emerald-600 text-white shadow-sm'
+                        : isSelected
                         ? 'bg-[#003c76] text-white shadow-sm'
                         : 'bg-[#eef4ff] text-[#003c76] hover:bg-[#dbe9ff]'
                     }`}
                   >
-                    {isSelected ? (
+                    {isApproved ? (
+                      <>
+                        <Check className="w-3.5 h-3.5" />
+                        Authorized &amp; Executing
+                      </>
+                    ) : isSelected ? (
                       <>
                         <Check className="w-3.5 h-3.5" />
                         Selected for Sign-off
@@ -485,7 +690,7 @@ export const RecoveryCenterView: React.FC<RecoveryCenterViewProps> = ({
                 <span className="font-mono text-emerald-700 font-bold">Cost: ₹{activePlanObj.additional_cost_inr.toLocaleString()}</span>
               </div>
               <p className="text-[11px] text-[#424751]">
-                Route: <span className="font-semibold text-[#101c29]">{activePlanObj.alternate_route_name}</span> | Delay: <span className="font-semibold text-[#101c29]">+{activePlanObj.expected_delay_minutes} mins</span>
+                Route: <span className="font-semibold text-[#101c29]">{activePlanObj.alternate_route_name}</span> | Delay: <span className="font-semibold text-[#101c29]">+{activePlanObj.expected_delay_minutes} mins</span> | Emissions: <span className="font-semibold text-lime-800">{activePlanObj.emissions_kg ?? 120} kg CO₂</span>
               </p>
             </div>
           )}

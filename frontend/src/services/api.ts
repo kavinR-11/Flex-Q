@@ -79,7 +79,7 @@ export async function submitDisruptionEvent(eventData: {
 
 export async function optimizeRecovery(
   shipmentId: string,
-  weights?: { cost_weight: number; delay_weight: number; sla_penalty_weight: number },
+  weights?: { cost_weight: number; delay_weight: number; sla_penalty_weight: number; emissions_weight?: number },
   maxBudget: number = 15000.0
 ): Promise<OptimizationResponse> {
   const res = await fetch(`${API_BASE}/recovery/optimize`, {
@@ -87,7 +87,12 @@ export async function optimizeRecovery(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       shipment_ids: [shipmentId],
-      weights: weights || { cost_weight: 0.3, delay_weight: 0.4, sla_penalty_weight: 0.3, emissions_weight: 0.0 },
+      weights: {
+        cost_weight: weights?.cost_weight ?? 0.30,
+        delay_weight: weights?.delay_weight ?? 0.40,
+        sla_penalty_weight: weights?.sla_penalty_weight ?? 0.30,
+        emissions_weight: weights?.emissions_weight ?? 0.0,
+      },
       max_budget_inr: maxBudget,
       enable_quantum_experiment: true,
     }),
