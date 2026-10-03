@@ -21,6 +21,7 @@ import {
   Cell 
 } from 'recharts';
 import { Shipment, DisruptionEvent } from '../types';
+import { NetworkMapLibre } from './NetworkMapLibre';
 
 interface ControlTowerViewProps {
   shipments: Shipment[];
@@ -248,6 +249,25 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Real-Time Geospatial Corridor Map (MapLibre GL Vector Engine) */}
+      <div className="glass-panel rounded-2xl p-5 border border-slate-800">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-cyan-400 text-[20px]">public</span>
+            <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+              Live Multi-Modal Corridor Telematics & Chokepoints (MapLibre GL)
+            </h2>
+          </div>
+          <span className="text-[11px] font-mono text-cyan-400">OpenFreeMap Liberty Vector Engine</span>
+        </div>
+        <NetworkMapLibre
+          shipments={shipments}
+          events={events}
+          height="380px"
+          onSelectShipment={onSelectShipment}
+        />
       </div>
 
       {/* High-Risk Shipments Priority Table */}

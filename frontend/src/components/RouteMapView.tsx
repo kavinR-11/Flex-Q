@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import L from 'leaflet';
+import React, { useState, useEffect } from 'react';
 import { Shipment, DisruptionEvent, CorridorSummary, NetworkOverview } from '../types';
 import { fetchCorridors, fetchNetworkOverview } from '../services/api';
+import { NetworkMapLibre } from './NetworkMapLibre';
 
 interface RouteMapViewProps {
   shipments: Shipment[];
@@ -33,9 +33,6 @@ export const RouteMapView: React.FC<RouteMapViewProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [showMapOverlay, setShowMapOverlay] = useState<boolean>(true);
 
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<L.Map | null>(null);
-
   useEffect(() => {
     Promise.all([
       fetchNetworkOverview().catch(() => null),
@@ -46,76 +43,6 @@ export const RouteMapView: React.FC<RouteMapViewProps> = ({
       setLoading(false);
     });
   }, [modeFilter, overloadedOnly]);
-
-  // Leaflet Map Synchronization
-  useEffect(() => {
-    if (!showMapOverlay || !mapContainerRef.current) return;
-
-    if (!mapInstanceRef.current) {
-      const map = L.map(mapContainerRef.current, {
-        center: [16.5, 76.5],
-        zoom: 6,
-        zoomControl: true,
-      });
-
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19,
-      }).addTo(map);
-
-      mapInstanceRef.current = map;
-    }
-
-    const map = mapInstanceRef.current;
-    map.eachLayer((layer) => {
-      if (!(layer instanceof L.TileLayer)) {
-        map.removeLayer(layer);
-      }
-    });
-
-    // 1. NH-48 Corridor (Mumbai -> Pune -> BLR)
-    const nh48Coords: [number, number][] = [
-      [18.95, 72.95], // JNPT
-      [18.75, 73.40], // Khandala Ghat
-      [18.52, 73.85], // Pune
-      [15.85, 74.50], // Belagavi
-      [15.36, 75.12], // Hubballi
-      [12.97, 77.59], // Bengaluru
-    ];
-    L.polyline(nh48Coords, {
-      color: '#d32f2f',
-      weight: 4,
-      dashArray: '6, 6',
-      opacity: 0.85,
-    }).addTo(map).bindPopup('<b>CORR-NH48-W (CRITICAL OVERLOAD)</b><br/>Khandala Ghat Landslide Chokepoint');
-
-    // 2. WDFC Dedicated Rail Spine (Bypass)
-    const wdfcCoords: [number, number][] = [
-      [18.99, 73.12], // Panvel Rail Yard
-      [17.65, 75.90], // Solapur Electric Spine
-      [15.35, 76.50], // Guntakal Rail Interchange
-      [12.97, 77.59], // Bengaluru ICD
-    ];
-    L.polyline(wdfcCoords, {
-      color: '#00897b',
-      weight: 4,
-      opacity: 0.9,
-    }).addTo(map).bindPopup('<b>CORR-WDFC-RAIL (OPTIMAL BYPASS)</b><br/>Dedicated Electrified Double-Stack Freight Corridor');
-
-    // 3. Disruption circles
-    events.forEach((evt) => {
-      const circle = L.circle([evt.latitude, evt.longitude], {
-        color: '#d32f2f',
-        fillColor: '#d32f2f',
-        fillOpacity: 0.25,
-        radius: evt.impact_radius_km * 1000,
-        weight: 1.5,
-      }).addTo(map);
-
-      circle.bindPopup(`<b>${evt.event_type}</b><br/>${evt.location_name}<br/>Severity: ${evt.severity}/10`);
-    });
-  }, [showMapOverlay, events]);
 
   const toggleExpand = (corridorId: string) => {
     setExpandedCorridors((prev) => ({
@@ -575,24 +502,27 @@ export const RouteMapView: React.FC<RouteMapViewProps> = ({
         </div>
       </div>
 
-      {/* 4. Spatial Route Network Map Overlay (Synchronized) */}
+      {/* 4. Spatial Route Network Map Overlay (Synchronized via MapLibre GL JS) */}
       {showMapOverlay && (
         <div className="w-full bg-white rounded-xl shadow-sm border border-slate-200 p-4">
           <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-blue-900 text-[20px]">map</span>
-              <h3 className="text-sm font-bold text-slate-900">Synchronized Spatial Route Topology & Bottlenecks</h3>
+              <h3 className="text-sm font-bold text-slate-900">
+                Synchronized Spatial Route Topology & Bottlenecks (MapLibre GL Vector Engine)
+              </h3>
             </div>
-            <div className="flex items-center gap-3 text-xs">
-              <span className="flex items-center gap-1 text-red-600 font-bold">
-                <span className="w-3 h-1 bg-red-600 inline-block"></span> NH-48 Landslide (Choke)
-              </span>
-              <span className="flex items-center gap-1 text-emerald-700 font-bold">
-                <span className="w-3 h-1 bg-emerald-600 inline-block"></span> WDFC Rail Bypass (Clear)
-              </span>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-slate-400 font-mono text-[11px]">OpenFreeMap Liberty Vector Tiles</span>
             </div>
           </div>
-          <div ref={mapContainerRef} className="h-72 w-full rounded-lg overflow-hidden border border-slate-200"></div>
+          <NetworkMapLibre
+            shipments={shipments}
+            events={events}
+            height="460px"
+            selectedShipmentId={selectedShipmentId}
+            onSelectShipment={onSelectShipment}
+          />
         </div>
       )}
     </div>
