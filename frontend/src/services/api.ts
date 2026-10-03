@@ -13,6 +13,7 @@ import {
   NetworkOverview,
   AssistantChatResponse,
   QAOASimulationResult,
+  CompiledProblemState,
 } from '../types';
 
 const API_BASE = 'http://localhost:8000/api/v1';
@@ -239,5 +240,54 @@ export async function runQuantumSimulation(payload: {
     body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error('Failed to execute QAOA simulation');
+  return res.json();
+}
+
+export async function compileDisruption(payload: {
+  event_type: string;
+  target_id: string;
+  severity?: number;
+}): Promise<CompiledProblemState> {
+  const res = await fetch(`${API_BASE}/compiler/compile`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error('Failed to compile disruption to constraints');
+  return res.json();
+}
+
+export async function fetchCompilerState(): Promise<CompiledProblemState> {
+  const res = await fetch(`${API_BASE}/compiler/state`);
+  if (!res.ok) throw new Error('Failed to fetch compiler problem state');
+  return res.json();
+}
+
+export async function resetCompiler(): Promise<{ status: string; state: CompiledProblemState }> {
+  const res = await fetch(`${API_BASE}/compiler/reset`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({}),
+  });
+  if (!res.ok) throw new Error('Failed to reset compiler state');
+  return res.json();
+}
+
+export async function updateShipmentPriority(
+  shipmentId: string,
+  cargoPriority: number,
+  cargoType?: string,
+  reason?: string
+): Promise<Shipment> {
+  const res = await fetch(`${API_BASE}/shipments/${shipmentId}/priority`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      cargo_priority: cargoPriority,
+      cargo_type: cargoType,
+      reason: reason || `Priority tier manually updated to Tier ${cargoPriority}`,
+    }),
+  });
+  if (!res.ok) throw new Error(`Failed to update priority for shipment ${shipmentId}`);
   return res.json();
 }

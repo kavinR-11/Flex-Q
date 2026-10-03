@@ -19,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'shipment-risk', label: 'Shipment Risk', icon: 'table_chart' },
     { id: 'route-network', label: 'Route Network', icon: 'hub' },
     { id: 'disruption-lab', label: 'Disruption Lab', icon: 'science', badge: 'SIM' },
+    { id: 'constraint-compiler', label: 'Constraint Compiler', icon: 'auto_fix_high', badge: 'CORE' },
     { id: 'recovery-center', label: 'Recovery Center', icon: 'alt_route' },
     { id: 'decision-audit', label: 'Decision Audit', icon: 'shield' },
     { id: 'quantum-lab', label: 'Quantum Lab', icon: 'grain', badge: 'EXP' },
@@ -137,7 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* 52px Fixed Left Rail Navigation */}
       <aside className="fixed left-0 top-[82px] bottom-0 w-[52px] bg-[#003c76] flex flex-col items-center py-2.5 z-40 shadow-md">
         <nav className="flex-1 flex flex-col items-center gap-1 w-full px-1 overflow-y-auto">
-          {tabs.slice(0, 6).map((t) => {
+          {tabs.slice(0, 7).map((t) => {
             const isActive = activeTab === t.id;
             return (
               <button

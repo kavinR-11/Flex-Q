@@ -246,3 +246,61 @@ export interface QAOASimulationResult {
   research_disclaimer: string;
 }
 
+export interface AffectedDetail {
+  shipment_id?: string;
+  action_id?: string;
+  region?: string;
+  parameter: string;
+  baseline_value: number;
+  compiled_value: number;
+  impact: string;
+}
+
+export interface TriageBreakdown {
+  num_solvers: number;
+  total_variables: number;
+  frozen_variables: number;
+  frozen_pct: number;
+  contested_variables: number;
+  contested_pct: number;
+  quantum_dispatched: boolean;
+  classical_runtime_ms: number;
+  quantum_qcr_pct: number;
+}
+
+export interface StrategyArchetype {
+  name: string;
+  routing: string;
+  cost_inr: number;
+  delay_mins: number;
+  sla_risk: string;
+  qcr_pct: number;
+  status: string;
+}
+
+export interface CompiledProblemState {
+  timestamp: string;
+  pillar_applied: string | null;
+  event_type: string;
+  target_id: string;
+  severity: number;
+  affected_details: AffectedDetail[];
+  C: number[][];
+  D: number[][];
+  B: number[][];
+  E: number[][];
+  sample_shipments: Array<{
+    shipment_id: string;
+    product_type: string;
+    cargo_priority: number;
+    current_buffer_mins: number;
+    origin: string;
+    destination: string;
+    current_status: string;
+  }>;
+  weights: Record<string, { alpha: number; beta: number; gamma: number; delta: number }>;
+  capacities: Record<string, number>;
+  triage_breakdown: TriageBreakdown;
+  strategy_archetypes: StrategyArchetype[];
+}
+

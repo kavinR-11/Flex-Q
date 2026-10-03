@@ -21,13 +21,14 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { Shipment, ExplanationResponse } from '../types';
-import { fetchShipmentExplanation } from '../services/api';
+import { fetchShipmentExplanation, updateShipmentPriority } from '../services/api';
 
 interface ShipmentsViewProps {
   shipments: Shipment[];
   selectedShipmentId: string | null;
   onSelectShipment: (id: string | null) => void;
   onNavigateToRecovery: (id: string) => void;
+  onShipmentUpdated?: () => void;
 }
 
 type SortField = 'shipment_id' | 'corridor' | 'priority' | 'mode' | 'promised' | 'eta' | 'buffer' | 'risk' | 'status';
@@ -38,6 +39,7 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
   selectedShipmentId,
   onSelectShipment,
   onNavigateToRecovery,
+  onShipmentUpdated,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -760,6 +762,44 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
                 }`}>
                   {selectedShipment.sla_buffer_minutes > 0 ? `+${Math.round(selectedShipment.sla_buffer_minutes)}m` : `${Math.round(selectedShipment.sla_buffer_minutes)}m`}
                 </span>
+              </div>
+
+              {/* Dynamic Priority Triage Control */}
+              <div className="pt-2 border-t border-slate-200 flex items-center justify-between gap-2">
+                <span className="text-[11px] text-slate-600 font-medium">Dynamic Triage:</span>
+                {selectedShipment.cargo_priority === 1 ? (
+                  <button
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      await updateShipmentPriority(
+                        selectedShipment.shipment_id,
+                        2,
+                        'High-Value Electronics',
+                        'Reverted to Tier 2 Electronics'
+                      );
+                      if (onShipmentUpdated) onShipmentUpdated();
+                    }}
+                    className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
+                  >
+                    <span>↺ Revert to Tier 2 (Electronics)</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      await updateShipmentPriority(
+                        selectedShipment.shipment_id,
+                        1,
+                        'Life-Saving Medical (Insulin/Cold-Chain)',
+                        'Priority spiked to Tier 1 Medical via Shipment Risk Triage'
+                      );
+                      if (onShipmentUpdated) onShipmentUpdated();
+                    }}
+                    className="px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[10px] font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
+                  >
+                    <span>⚡ Prioritize as Medical (Tier 1)</span>
+                  </button>
+                )}
               </div>
             </div>
 

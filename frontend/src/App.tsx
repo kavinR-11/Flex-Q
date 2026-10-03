@@ -5,6 +5,7 @@ import { ShipmentsView } from './components/ShipmentsView';
 import { RouteMapView } from './components/RouteMapView';
 import { RecoveryCenterView } from './components/RecoveryCenterView';
 import { DisruptionLabView } from './components/DisruptionLabView';
+import { CompilerView } from './components/CompilerView';
 import { AuditTrailView } from './components/AuditTrailView';
 import { QuantumLabView } from './components/QuantumLabView';
 import { AskFluxQView } from './components/AskFluxQView';
@@ -67,6 +68,7 @@ export function App() {
     if (activeTab === 'map') return 'route-network';
     if (activeTab === 'recovery') return 'recovery-center';
     if (activeTab === 'disruption') return 'disruption-lab';
+    if (activeTab === 'compiler') return 'constraint-compiler';
     if (activeTab === 'audit') return 'decision-audit';
     return activeTab;
   })();
@@ -116,6 +118,7 @@ export function App() {
                   selectedShipmentId={selectedShipmentId}
                   onSelectShipment={handleSelectShipment}
                   onNavigateToRecovery={handleNavigateToRecovery}
+                  onShipmentUpdated={reloadData}
                 />
               )}
 
@@ -137,6 +140,17 @@ export function App() {
                   events={events}
                   onDisruptionInjected={reloadData}
                   onNavigateToRecovery={handleNavigateToRecovery}
+                />
+              )}
+
+              {/* Screen 4.5: Disruption-to-Constraint Compiler & Dynamic Prioritization */}
+              {resolvedTab === 'constraint-compiler' && (
+                <CompilerView
+                  shipments={shipments}
+                  selectedShipmentId={selectedShipmentId}
+                  onSelectShipment={handleSelectShipment}
+                  onNavigateToRecovery={handleNavigateToRecovery}
+                  onShipmentPrioritized={reloadData}
                 />
               )}
 

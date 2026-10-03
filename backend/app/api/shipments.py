@@ -7,8 +7,9 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
+from pydantic import BaseModel, Field
 from backend.app.database import get_db
-from backend.app.models_db import ShipmentDB, DisruptionEventDB
+from backend.app.models_db import ShipmentDB, DisruptionEventDB, AuditLogDB
 from backend.app.schemas.shipment import (
     ShipmentResponse,
     ShipmentCreate,
@@ -22,6 +23,11 @@ from backend.app.features.exposure_calculator import compute_shipment_exposure_p
 router = APIRouter(prefix="/shipments", tags=["Shipments"])
 
 predictor = RiskPredictor()
+
+class ShipmentPriorityUpdate(BaseModel):
+    cargo_priority: int = Field(ge=1, le=4)
+    cargo_type: Optional[str] = None
+    reason: Optional[str] = "Manual operator triage priority adjustment"
 
 @router.get("", response_model=list[ShipmentResponse])
 def list_shipments(
@@ -174,3 +180,73 @@ def get_shipment_explanation(shipment_id: str, db: Session = Depends(get_db)):
         top_risk_drivers=explanation["top_risk_drivers"],
         disclaimer=explanation["disclaimer"],
     )
+
+@router.patch("/{shipment_id}/priority", response_model=ShipmentResponse)
+def update_shipment_priority(
+    shipment_id: str,
+    payload: ShipmentPriorityUpdate,
+    db: Session = Depends(get_db)
+):
+    sh = db.query(ShipmentDB).filter(ShipmentDB.shipment_id == shipment_id).first()
+    if not sh:
+        raise HTTPException(status_code=404, detail=f"Shipment {shipment_id} not found")
+    
+    old_priority = sh.cargo_priority
+    old_type = sh.cargo_type
+    old_risk = sh.risk_score
+    old_status = sh.current_status
+
+    sh.cargo_priority = payload.cargo_priority
+    if payload.cargo_type:
+        sh.cargo_type = payload.cargo_type
+    elif payload.cargo_priority == 1:
+        sh.cargo_type = "Life-Saving Medical (Insulin/Cold-Chain)"
+    elif payload.cargo_priority == 2:
+        sh.cargo_type = "High-Value Electronics"
+    elif payload.cargo_priority == 3:
+        sh.cargo_type = "Automotive / Precision Assemblies"
+    elif payload.cargo_priority == 4:
+        sh.cargo_type = "Standard Commercial Freight"
+
+    if payload.cargo_priority == 1:
+        sh.risk_score = max(sh.risk_score, 9)
+        sh.risk_category = "Critical"
+        sh.flagged_for_review = True
+        if sh.current_status != "rerouted":
+            sh.current_status = "critical"
+        sh.sla_breach_probability = max(sh.sla_breach_probability, 0.95)
+        sh.delay_probability = max(sh.delay_probability, 0.88)
+        sh.predicted_delay_minutes = max(float(sh.predicted_delay_minutes or 0), 85.0)
+    elif payload.cargo_priority == 2 and old_priority == 1:
+        # Reverting from P1 to P2
+        sh.risk_score = 3
+        sh.risk_category = "Low"
+        sh.flagged_for_review = False
+        if sh.current_status == "critical":
+            sh.current_status = "in_transit"
+
+    sh.updated_at = datetime.now(timezone.utc)
+
+    import uuid
+    # Persist immutable audit log for this priority shift
+    audit_entry = AuditLogDB(
+        audit_id=f"AUD-{uuid.uuid4().hex[:12].upper()}-{sh.shipment_id}",
+        shipment_id=sh.shipment_id,
+        event_type="CARGO_PRIORITY_UPDATE",
+        previous_state={"cargo_priority": old_priority, "cargo_type": old_type, "risk_score": old_risk, "status": old_status},
+        new_state={
+            "cargo_priority": sh.cargo_priority,
+            "cargo_type": sh.cargo_type,
+            "risk_score": sh.risk_score,
+            "status": sh.current_status
+        },
+        trigger_source="CONTROL_TOWER_OPERATOR",
+        operator_id="CONTROL_TOWER_DISPATCHER",
+        justification=payload.reason or f"Priority adjusted to Tier {payload.cargo_priority}",
+        timestamp=datetime.now(timezone.utc),
+    )
+    db.add(audit_entry)
+    db.commit()
+    db.refresh(sh)
+    return sh
+
