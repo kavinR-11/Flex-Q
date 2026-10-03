@@ -16,8 +16,6 @@ import {
   YAxis, 
   Tooltip, 
   ResponsiveContainer, 
-  PieChart, 
-  Pie, 
   Cell 
 } from 'recharts';
 import { Shipment, DisruptionEvent } from '../types';
@@ -50,45 +48,38 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
     { name: 'Critical (9-10)', count: shipments.filter((s) => s.risk_score >= 9).length, color: '#ef4444' },
   ];
 
-  // Mode Distribution
-  const modeData = [
-    { name: 'Road Highway', value: shipments.filter((s) => s.transport_mode === 'ROAD').length, color: '#38bdf8' },
-    { name: 'Priority Air', value: shipments.filter((s) => s.transport_mode === 'AIR').length, color: '#a855f7' },
-    { name: 'Maritime Dwell', value: shipments.filter((s) => s.transport_mode === 'MARITIME').length, color: '#06b6d4' },
-  ];
-
   return (
-    <div className="space-y-6">
-      {/* Top Banner with Closed Loop Status */}
-      <div className="glass-panel rounded-2xl p-5 border-l-4 border-cyan-500 bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30">
+    <div className="space-y-4 font-sans text-[#101c29]">
+      {/* Top Banner with Closed Loop Status (Pure White Theme) */}
+      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm border-l-4 border-l-[#003c76]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#e4efff] text-[#003c76] border border-[#a9c9ff] font-bold">
                 CLOSED-LOOP ACTIVE
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-[#424751]">
                 Sense → Predict → Explain → Optimize → Recommend → Replan
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white mt-1">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#101c29] mt-1">
               Logistics Network Operations Control Tower
             </h1>
-            <p className="text-sm text-slate-400">
+            <p className="text-xs text-[#424751] mt-0.5">
               Corridor telemetry across Chennai, Bengaluru, Mumbai, and Hyderabad trade corridors.
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <button
               onClick={() => onNavigateTab('disruption')}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 border border-slate-700 transition"
+              className="px-3.5 py-2 rounded-lg bg-[#f8f9ff] hover:bg-[#eef4ff] text-[#101c29] text-xs font-semibold flex items-center gap-2 border border-slate-200 shadow-sm transition"
             >
-              <Zap className="w-4 h-4 text-amber-400" />
+              <Zap className="w-4 h-4 text-amber-500" />
               Simulate Disruption
             </button>
             <button
               onClick={() => onNavigateTab('recovery')}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 text-white text-xs font-semibold flex items-center gap-2 shadow-lg shadow-cyan-600/20 transition"
+              className="px-4 py-2 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold flex items-center gap-2 shadow-sm transition"
             >
               <RotateCcwIcon className="w-4 h-4" />
               Recovery Center
@@ -97,101 +88,108 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-panel glass-panel-hover rounded-2xl p-4 transition-all">
-          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
+      {/* KPI Cards (Pure White Theme Bento Tiles) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all">
+          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold">
             <span>Total Active Fleet</span>
-            <div className="p-2 rounded-lg bg-sky-950/60 border border-sky-800/40 text-sky-400">
+            <div className="p-2 rounded-lg bg-[#eef4ff] border border-slate-200 text-[#003c76]">
               <Clock className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-white">{total}</span>
-            <span className="text-xs text-slate-400 font-mono">consignments</span>
+            <span className="text-2xl sm:text-3xl font-extrabold text-[#101c29]">{total}</span>
+            <span className="text-xs text-[#424751] font-mono">consignments</span>
           </div>
-          <div className="mt-2 text-[11px] text-emerald-400 flex items-center gap-1 font-mono">
+          <div className="mt-2 text-[11px] text-emerald-600 flex items-center gap-1 font-semibold">
             <TrendingUp className="w-3.5 h-3.5" /> 100% route verified
           </div>
         </div>
 
-        <div className="glass-panel glass-panel-hover rounded-2xl p-4 transition-all border-amber-900/40">
-          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all">
+          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold">
             <span>High Risk Shipments</span>
-            <div className="p-2 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-400">
+            <div className="p-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-700">
               <AlertTriangle className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-amber-400">{highRisk}</span>
-            <span className="text-xs text-slate-400 font-mono">score ≥ 7/10</span>
+            <span className="text-2xl sm:text-3xl font-extrabold text-amber-600">{highRisk}</span>
+            <span className="text-xs text-[#424751] font-mono">score ≥ 7/10</span>
           </div>
-          <div className="mt-2 text-[11px] text-amber-400 flex items-center gap-1 font-mono">
+          <div className="mt-2 text-[11px] text-amber-700 flex items-center gap-1 font-semibold">
             <Flame className="w-3.5 h-3.5" /> {critical} critical (score ≥ 8)
           </div>
         </div>
 
-        <div className="glass-panel glass-panel-hover rounded-2xl p-4 transition-all border-rose-900/40">
-          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all">
+          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold">
             <span>Predicted SLA Breaches</span>
-            <div className="p-2 rounded-lg bg-rose-950/60 border border-rose-800/40 text-rose-400">
+            <div className="p-2 rounded-lg bg-red-50 border border-red-200 text-red-700">
               <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-rose-400">{predictedBreaches}</span>
-            <span className="text-xs text-slate-400 font-mono">at risk</span>
+            <span className="text-2xl sm:text-3xl font-extrabold text-red-600">{predictedBreaches}</span>
+            <span className="text-xs text-[#424751] font-mono">at risk</span>
           </div>
-          <div className="mt-2 text-[11px] text-rose-400 flex items-center gap-1 font-mono">
+          <div className="mt-2 text-[11px] text-red-700 flex items-center gap-1 font-semibold">
             Intervention recommended
           </div>
         </div>
 
-        <div className="glass-panel glass-panel-hover rounded-2xl p-4 transition-all border-emerald-900/40">
-          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all">
+          <div className="flex items-center justify-between text-[#424751] text-xs font-semibold">
             <span>Network Reliability</span>
-            <div className="p-2 rounded-lg bg-emerald-950/60 border border-emerald-800/40 text-emerald-400">
+            <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700">
               <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-emerald-400">{onTimeRate}%</span>
-            <span className="text-xs text-slate-400 font-mono">SLA on-track</span>
+            <span className="text-2xl sm:text-3xl font-extrabold text-emerald-700">{onTimeRate}%</span>
+            <span className="text-xs text-[#424751] font-mono">SLA on-track</span>
           </div>
-          <div className="mt-2 text-[11px] text-slate-400 font-mono">
+          <div className="mt-2 text-[11px] text-[#424751] font-mono">
             Calibrated LightGBM model
           </div>
         </div>
       </div>
 
       {/* Analytics Grid: Charts & Live Disruption Feed */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Risk Distribution Chart */}
-        <div className="lg:col-span-2 glass-panel rounded-2xl p-5">
-          <div className="flex items-center justify-between mb-4">
+        <div className="lg:col-span-2 bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+              <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
                 Fleet Risk Score Distribution (1 - 10)
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-[11px] text-[#424751]">
                 Formula: R = max(1, min(10, ceil(10 · p_sla)))
               </p>
             </div>
             <button
               onClick={() => onNavigateTab('shipments')}
-              className="text-xs text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1 transition"
+              className="text-xs text-[#003c76] hover:text-[#005eb5] font-semibold flex items-center gap-1 transition"
             >
               View All <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="h-60 w-full">
+          <div className="h-56 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={riskGroups} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
+                <XAxis dataKey="name" stroke="#727782" fontSize={11} tickLine={false} />
+                <YAxis stroke="#727782" fontSize={11} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '0.75rem', fontSize: '12px' }}
+                  contentStyle={{
+                    backgroundColor: '#ffffff',
+                    borderColor: '#e2e8f0',
+                    color: '#101c29',
+                    borderRadius: '0.5rem',
+                    fontSize: '12px',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.08)'
+                  }}
                 />
                 <Bar dataKey="count" radius={[6, 6, 0, 0]}>
                   {riskGroups.map((entry, index) => (
@@ -204,38 +202,38 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
         </div>
 
         {/* Modal Mix & Active Events Feed */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Active Disruptions Snippet */}
-          <div className="glass-panel rounded-2xl p-5">
+          <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-                <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
                   Live Disruption Signals
                 </h2>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#eef4ff] text-[#003c76] font-bold">
                 {events.length} Active
               </span>
             </div>
 
-            <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
               {events.slice(0, 4).map((evt) => (
                 <div
                   key={evt.event_id}
-                  className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition"
+                  className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 hover:border-slate-300 transition"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="text-xs font-semibold text-slate-200 line-clamp-1">
+                    <span className="text-xs font-semibold text-[#101c29] line-clamp-1">
                       {evt.location_name}
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded font-bold font-mono bg-rose-950/80 border border-rose-800 text-rose-400">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded font-bold font-mono bg-red-100 text-red-800 border border-red-200">
                       Sev {evt.severity}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between mt-1 text-[11px] text-slate-400">
-                    <span className="text-slate-400">{evt.event_type.replace('_', ' ')}</span>
-                    <span className="text-amber-400 font-mono">+{evt.estimated_delay_minutes}m delay</span>
+                  <div className="flex items-center justify-between mt-1 text-[11px] text-[#424751]">
+                    <span>{evt.event_type.replace('_', ' ')}</span>
+                    <span className="text-amber-700 font-mono font-bold">+{evt.estimated_delay_minutes}m delay</span>
                   </div>
                 </div>
               ))}
@@ -243,7 +241,7 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
 
             <button
               onClick={() => onNavigateTab('disruption')}
-              className="w-full mt-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition"
+              className="w-full mt-3 py-2 rounded-lg bg-[#eef4ff] hover:bg-[#dde9fb] text-[#003c76] text-xs font-bold transition border border-slate-200"
             >
               Open Disruption Lab
             </button>
@@ -252,15 +250,15 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
       </div>
 
       {/* Real-Time Geospatial Corridor Map (MapLibre GL Vector Engine) */}
-      <div className="glass-panel rounded-2xl p-5 border border-slate-800">
+      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-cyan-400 text-[20px]">public</span>
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-              Live Multi-Modal Corridor Telematics & Chokepoints (MapLibre GL)
+            <span className="material-symbols-outlined text-[#003c76] text-[20px]">public</span>
+            <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
+              Live Multi-Modal Corridor Telematics &amp; Chokepoints (MapLibre GL)
             </h2>
           </div>
-          <span className="text-[11px] font-mono text-cyan-400">OpenFreeMap Liberty Vector Engine</span>
+          <span className="text-[11px] font-mono text-[#003c76] font-semibold">OpenFreeMap Liberty Vector Engine</span>
         </div>
         <NetworkMapLibre
           shipments={shipments}
@@ -271,28 +269,28 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
       </div>
 
       {/* High-Risk Shipments Priority Table */}
-      <div className="glass-panel rounded-2xl p-5">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+        <div className="flex items-center justify-between mb-3">
           <div>
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+            <h2 className="text-xs font-bold text-[#101c29] uppercase tracking-wider">
               Priority Consignments Requiring Operational Review
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-[11px] text-[#424751]">
               Shipments with SLA breach risk score ≥ 7 flagged for classical recovery optimization.
             </p>
           </div>
           <button
             onClick={() => onNavigateTab('recovery')}
-            className="text-xs text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1 transition"
+            className="text-xs text-[#003c76] hover:text-[#005eb5] font-semibold flex items-center gap-1 transition"
           >
             Open Recovery Center <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-mono uppercase text-[11px]">
+              <tr className="bg-[#eef4ff] border-b border-slate-200 text-[#424751] font-mono uppercase text-[10px] font-bold">
                 <th className="py-2.5 px-3">Shipment ID</th>
                 <th className="py-2.5 px-3">Corridor</th>
                 <th className="py-2.5 px-3">Carrier</th>
@@ -303,44 +301,44 @@ export const ControlTowerView: React.FC<ControlTowerViewProps> = ({
                 <th className="py-2.5 px-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-850">
+            <tbody className="divide-y divide-slate-100">
               {shipments
                 .filter((s) => s.risk_score >= 7)
                 .slice(0, 5)
                 .map((sh) => (
-                  <tr key={sh.shipment_id} className="hover:bg-slate-800/40 transition">
-                    <td className="py-3 px-3 font-bold font-mono text-cyan-400">
+                  <tr key={sh.shipment_id} className="hover:bg-[#f8f9ff] transition">
+                    <td className="py-2.5 px-3 font-bold font-mono text-[#003c76]">
                       {sh.shipment_id}
                     </td>
-                    <td className="py-3 px-3 text-slate-200">
+                    <td className="py-2.5 px-3 text-[#101c29] font-medium">
                       {sh.origin} → {sh.destination}
                     </td>
-                    <td className="py-3 px-3 text-slate-300">{sh.carrier_id}</td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300">
+                    <td className="py-2.5 px-3 text-[#424751]">{sh.carrier_id}</td>
+                    <td className="py-2.5 px-3">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#e4efff] text-[#003c76] font-semibold">
                         {sh.transport_mode}
                       </span>
                     </td>
-                    <td className="py-3 px-3 font-mono">
-                      <span className={sh.sla_buffer_minutes < 0 ? 'text-rose-400 font-bold' : 'text-amber-400'}>
+                    <td className="py-2.5 px-3 font-mono">
+                      <span className={sh.sla_buffer_minutes < 0 ? 'text-red-600 font-bold' : 'text-amber-700'}>
                         {sh.sla_buffer_minutes}m
                       </span>
                     </td>
-                    <td className="py-3 px-3 font-mono text-slate-200 font-semibold">
+                    <td className="py-2.5 px-3 font-mono text-[#101c29] font-semibold">
                       {Math.round(sh.sla_breach_probability * 100)}%
                     </td>
-                    <td className="py-3 px-3">
-                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold font-mono ${
-                        sh.risk_score >= 9 ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
-                        'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                    <td className="py-2.5 px-3">
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
+                        sh.risk_score >= 9 ? 'bg-red-100 text-red-800 border border-red-200' :
+                        'bg-amber-100 text-amber-800 border border-amber-200'
                       }`}>
                         {sh.risk_score}/10 {sh.risk_category}
                       </span>
                     </td>
-                    <td className="py-3 px-3 text-right">
+                    <td className="py-2.5 px-3 text-right">
                       <button
                         onClick={() => onSelectShipment(sh.shipment_id)}
-                        className="px-3 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/40 text-cyan-300 border border-cyan-500/30 text-xs font-medium transition"
+                        className="px-2.5 py-1 rounded bg-[#eef4ff] hover:bg-[#dde9fb] text-[#003c76] border border-slate-200 text-xs font-semibold transition"
                       >
                         Evaluate
                       </button>

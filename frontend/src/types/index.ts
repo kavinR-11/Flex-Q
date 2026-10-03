@@ -189,27 +189,44 @@ export interface AssistantChatResponse {
   suggested_actions: ActionSuggestion[];
 }
 
+export interface QuantumBitstringCandidate {
+  bitstring: string;
+  label: string;
+  energy: number;
+  probability_pct: number;
+  shots: number;
+  color: string;
+  is_ground_state?: boolean;
+  is_violation?: boolean;
+}
+
 export interface QAOASimulationResult {
   simulation_timestamp: string;
   qubits_allocated: number;
   grid_dimension: string;
   circuit_depth_p: number;
-  gamma: number;
-  beta: number;
-  penalty_lambda: number;
-  classical_baseline_inr: number;
-  qaoa_result: {
-    optimal_cost_inr: number;
-    optimality_gap_pct: number;
-    ground_state_overlap_pct: number;
-    qaoa_runtime_ms: number;
-    classical_runtime_ms: number;
-    circuit_depth_p: number;
-    is_feasible: boolean;
-    gamma: number;
-    beta: number;
-    num_qubits: number;
-    measured_bitstring: string;
-  };
+  optimizer?: string;
+  mixer?: string;
+  shots?: number;
+  noise_model?: string;
+  gamma?: number;
+  beta?: number;
+  penalty_lambda?: number;
+  penalty_lambda_1?: number;
+  penalty_lambda_2?: number;
+  penalty_lambda_3?: number;
+  classical_baseline_inr?: number;
+  solve_latency_ms?: number;
+  classical_latency_ms?: number;
+  classical_score?: string;
+  quantum_score?: string;
+  optimality_gap_pct?: number;
+  feasibility_rate_pct?: number;
+  state_energy?: number;
+  sampling_entropy?: number;
+  residual_error_pct?: number;
+  top_bitstrings?: QuantumBitstringCandidate[];
+  qaoa_result?: any;
   research_disclaimer: string;
 }
+

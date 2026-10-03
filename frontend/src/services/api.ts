@@ -181,11 +181,18 @@ export async function fetchQuantumBenchmark(): Promise<any> {
 }
 
 export async function runQuantumSimulation(payload: {
+  circuit_depth_p?: number;
+  optimizer?: string;
+  mixer?: string;
+  shots?: number;
+  noise_model?: string;
+  penalty_lambda_1?: number;
+  penalty_lambda_2?: number;
+  penalty_lambda_3?: number;
   num_shipments?: number;
   num_slots?: number;
   gamma?: number;
   beta?: number;
-  circuit_depth_p?: number;
   penalty_lambda?: number;
 }): Promise<QAOASimulationResult> {
   const res = await fetch(`${API_BASE}/quantum/simulate`, {

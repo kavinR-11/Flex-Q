@@ -1,54 +1,87 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
+@theme {
+  --color-surface: #f8f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eef4ff;
+  --color-surface-container: #e4efff;
+  --color-surface-container-high: #dde9fb;
+  --color-surface-container-highest: #d7e4f5;
+  --color-on-surface: #101c29;
+  --color-on-surface-variant: #424751;
+  --color-primary: #003c76;
+  --color-primary-container: #00539f;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #a9c9ff;
+  --color-primary-fixed: #d5e3ff;
+  --color-on-primary-fixed: #001b3c;
+  --color-secondary: #005eb5;
+  --color-secondary-container: #559cff;
+  --color-on-secondary: #ffffff;
+  --color-secondary-fixed: #d6e3ff;
+  --color-secondary-fixed-dim: #a8c8ff;
+  --color-tertiary: #4f1896;
+  --color-tertiary-container: #6737af;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #d7bcff;
+  --color-tertiary-fixed: #ecdcff;
+  --color-tertiary-fixed-dim: #d6baff;
+  --color-on-tertiary-fixed: #280057;
+  --color-outline: #727782;
+  --color-outline-variant: #c2c6d3;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+}
+
 body {
-  background-color: #020617;
-  color: #f8fafc;
-  font-family: Inter, system-ui, sans-serif;
+  background-color: #f8f9ff;
+  color: #101c29;
+  font-family: 'Roboto Flex', Inter, system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar for Light / Pure White Theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #94a3b8;
 }
 
-/* Leaflet map custom styling for Dark Theme */
+/* Leaflet map custom styling for Pure White Theme */
 .leaflet-container {
-  background-color: #0b1120 !important;
+  background-color: #f8f9ff !important;
   font-family: inherit;
 }
 .leaflet-tile {
-  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+  filter: none;
 }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-  background: #1e293b !important;
-  color: #f8fafc !important;
-  border: 1px solid #334155;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  background: #ffffff !important;
+  color: #101c29 !important;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
 }
 
-/* Glassmorphism helpers */
+/* Glassmorphism helpers for Pure White Theme */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.4);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 
 .glass-panel-hover:hover {
-  border-color: rgba(56, 189, 248, 0.4);
-  box-shadow: 0 0 20px -5px rgba(56, 189, 248, 0.15);
+  border-color: #93c5fd;
+  box-shadow: 0 4px 12px -2px rgba(0, 60, 118, 0.08);
 }
