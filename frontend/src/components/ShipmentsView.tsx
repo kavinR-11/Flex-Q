@@ -16,7 +16,9 @@ import {
   HeartPulse,
   Cpu,
   Wrench,
-  Shirt
+  Shirt,
+  Check,
+  CheckCircle2
 } from 'lucide-react';
 import { Shipment, ExplanationResponse } from '../types';
 import { fetchShipmentExplanation } from '../services/api';
@@ -594,16 +596,30 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
                         </td>
                         <td className="py-2.5 px-3 text-right">
                           <div className="flex items-center justify-end gap-1.5">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onNavigateToRecovery(sh.shipment_id);
-                              }}
-                              title="Evaluate in Recovery Center"
-                              className="p-1 rounded bg-[#003c76]/10 hover:bg-[#003c76] text-[#003c76] hover:text-white transition"
-                            >
-                              <Zap className="w-3.5 h-3.5" />
-                            </button>
+                            {sh.current_status === 'rerouted' ? (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onNavigateToRecovery(sh.shipment_id);
+                                }}
+                                title="Recovery Plan Active (Click to Review in Recovery Center)"
+                                className="px-2 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-mono font-bold flex items-center gap-1 transition shadow-xs"
+                              >
+                                <Check className="w-3 h-3 text-emerald-600" />
+                                <span>Rerouted</span>
+                              </button>
+                            ) : (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onNavigateToRecovery(sh.shipment_id);
+                                }}
+                                title="Evaluate in Recovery Center"
+                                className="p-1 rounded bg-[#003c76]/10 hover:bg-[#003c76] text-[#003c76] hover:text-white transition"
+                              >
+                                <Zap className="w-3.5 h-3.5" />
+                              </button>
+                            )}
                             <ChevronRight className="w-4 h-4 text-[#727782] inline" />
                           </div>
                         </td>
@@ -797,14 +813,41 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
               )}
             </div>
 
-            {/* Direct Recovery CTA */}
-            <button
-              onClick={() => onNavigateToRecovery(selectedShipment.shipment_id)}
-              className="w-full py-2.5 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition"
-            >
-              <Zap className="w-4 h-4 text-amber-400" />
-              ⚡ Launch Hybrid Optimizer (OR-Tools + Qiskit)
-            </button>
+            {/* Direct Recovery CTA or Active Reroute State */}
+            {selectedShipment.current_status === 'rerouted' ? (
+              <div className="space-y-2">
+                <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-950 flex items-center justify-between gap-2 shadow-xs">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <div>
+                      <span className="font-bold text-xs block leading-tight">Recovery Plan Active &amp; Committed</span>
+                      <span className="text-[10px] text-emerald-800">
+                        Consignment was rerouted via authorized mitigation route.
+                      </span>
+                    </div>
+                  </div>
+                  <span className="px-1.5 py-0.5 rounded font-mono font-bold text-[9px] bg-emerald-100 text-emerald-900 border border-emerald-300 shrink-0">
+                    REROUTED
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => onNavigateToRecovery(selectedShipment.shipment_id)}
+                  className="w-full py-2 rounded-lg bg-[#eef4ff] hover:bg-[#dde9fb] text-[#003c76] font-bold text-xs flex items-center justify-center gap-1.5 transition border border-[#d7e4f5]"
+                >
+                  <span>Review Active Execution Plan in Recovery Center</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => onNavigateToRecovery(selectedShipment.shipment_id)}
+                className="w-full py-2.5 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition"
+              >
+                <Zap className="w-4 h-4 text-amber-400" />
+                ⚡ Launch Hybrid Optimizer (OR-Tools + Qiskit)
+              </button>
+            )}
           </div>
         )}
       </div>
