@@ -16,6 +16,10 @@ import {
   Activity,
   Boxes,
   HelpCircle,
+  Plane,
+  Truck,
+  Train,
+  Check,
 } from 'lucide-react';
 import { Shipment, CompiledProblemState } from '../types';
 import { compileDisruption, fetchCompilerState, resetCompiler } from '../services/api';
@@ -40,7 +44,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
     selectedShipmentId || (shipments[0]?.shipment_id ?? 'SH-2048')
   );
   const [transportTarget, setTransportTarget] = useState<string>('Airport_Hub_BLR');
-  const [regionTarget, setRegionTarget] = useState<string>('NH48_Khandala');
+  const [regionTarget, setRegionTarget] = useState<string>('CORR-NH48-W');
 
   // Compiler state from backend
   const [compilerState, setCompilerState] = useState<CompiledProblemState | null>(null);
@@ -73,13 +77,9 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
       });
       setCompilerState(state);
 
-      // If Pillar 1 was applied, immediately notify App.tsx to reload data
-      // so Shipment Risk, Control Tower, Recovery Center, and Route Network see the updated priority
-      if (eventType === 'PRODUCT_PRIORITY') {
-        onSelectShipment(targetId);
-        if (onShipmentPrioritized) {
-          onShipmentPrioritized();
-        }
+      // Trigger global reload so Control Tower, Shipment Risk, and Recovery Center see the changes immediately
+      if (onShipmentPrioritized) {
+        onShipmentPrioritized();
       }
     } catch (err) {
       console.error('Error compiling pillar:', err);
@@ -105,13 +105,13 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
 
   const currentShipment = shipments.find((s) => s.shipment_id === targetShipmentId);
 
-  // Action column labels for matrices
+  // Multimodal Action column labels aligned with network corridors
   const actionLabels = [
-    'Plan A: Baseline NH48',
-    'Plan B: State Bypass',
-    'Plan C: Dedicated Rail',
-    'Plan D: Linehaul Relay',
-    'Plan E: Priority Air',
+    'Plan A: Baseline NH48 (CORR-NH48-W)',
+    'Plan B: State Highway Bypass (CORR-MAA-BLR)',
+    'Plan C: Dedicated Rail Relay (CORR-WDFC-RAIL)',
+    'Plan D: Linehaul Relay (CORR-NH44-S)',
+    'Plan E: Expedite Air Express (CORR-AIR-IND)',
   ];
 
   return (
@@ -144,14 +144,14 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
             <button
               onClick={handleResetCompiler}
               disabled={resetting}
-              className="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 border border-slate-200 shadow-xs transition"
+              className="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 border border-slate-200 shadow-xs transition cursor-pointer"
             >
               <RotateCcw className={`w-3.5 h-3.5 ${resetting ? 'animate-spin' : ''}`} />
               <span>Reset to Baseline Math</span>
             </button>
             <button
               onClick={() => onNavigateToRecovery(targetShipmentId)}
-              className="px-4 py-2 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold flex items-center gap-2 shadow-sm transition"
+              className="px-4 py-2 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold flex items-center gap-2 shadow-sm transition cursor-pointer"
             >
               <span>Proceed to Recovery Center</span>
               <ArrowRight className="w-4 h-4" />
@@ -160,56 +160,121 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
         </div>
       </div>
 
-      {/* Active Pillar Compilation Feedback Banner */}
-      {compilerState?.pillar_applied && (
-        <div className={`p-4 rounded-xl border shadow-sm flex items-start justify-between gap-4 transition-all ${
-          compilerState.pillar_applied === 'PILLAR_1_PRODUCT_WINS'
-            ? 'bg-rose-50 border-rose-200 text-rose-950'
-            : compilerState.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS'
-            ? 'bg-amber-50 border-amber-200 text-amber-950'
-            : 'bg-indigo-50 border-indigo-200 text-indigo-950'
-        }`}>
+      {/* ========================================================================= */}
+      {/* HIGH PRIORITY WARNING BANNERS FOR AIRPORT CLOSURE OR INFINITY WALL         */}
+      {/* ========================================================================= */}
+      {compilerState?.infinity_delay_warning && (
+        <div className="p-4 rounded-xl bg-red-950 text-white border-2 border-red-500 shadow-lg flex items-center justify-between gap-4 animate-pulse">
+          <div className="flex items-center gap-3.5">
+            <div className="p-2.5 bg-red-600 rounded-lg text-white shrink-0">
+              <AlertTriangle className="w-6 h-6 animate-bounce" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs uppercase font-mono tracking-widest text-red-300 font-bold">
+                  CRITICAL MATHEMATICAL BARRIER ERECTED
+                </span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-red-800 text-white font-mono font-bold">
+                  D_ia = 1,000,000 mins
+                </span>
+              </div>
+              <h2 className="text-sm font-bold text-white mt-0.5">
+                Regional Disaster Zone Impassable — Transit Delay Set to Infinity (10⁶ mins)
+              </h2>
+              <p className="text-xs text-red-200 mt-0.5">
+                All assignments crossing this hazard polygon are mathematically forbidden (x_i,a = 0).{' '}
+                <strong>{compilerState.impacted_count ?? 0} consignments</strong> currently trapped and queued for multimodal diversion.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              if (compilerState?.impacted_consignments?.[0]?.shipment_id) {
+                onNavigateToRecovery(compilerState.impacted_consignments[0].shipment_id);
+              } else {
+                onNavigateToRecovery(targetShipmentId);
+              }
+            }}
+            className="px-3.5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-md shrink-0 flex items-center gap-1.5 transition cursor-pointer"
+          >
+            <span>Dispatch to Recovery Network</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {compilerState?.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS' && (
+        <div className="p-4 rounded-xl bg-amber-950 text-white border-2 border-amber-500 shadow-lg flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="p-2.5 bg-amber-600 rounded-lg text-white shrink-0">
+              <Plane className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs uppercase font-mono tracking-widest text-amber-300 font-bold">
+                  AIR INFRASTRUCTURE SHUTDOWN
+                </span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-800 text-white font-mono font-bold">
+                  Cap_a = 0
+                </span>
+              </div>
+              <h2 className="text-sm font-bold text-white mt-0.5">
+                {compilerState.grounded_hub_name || 'Air Cargo Terminal'} Closed — Runway & Hub Flow Restamped to 0
+              </h2>
+              <p className="text-xs text-amber-200 mt-0.5">
+                <strong>{compilerState.impacted_count ?? 0} active air consignments</strong> grounded and flagged in database. 
+                Alternative rail and highway bypass corridors engaged.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              if (compilerState?.impacted_consignments?.[0]?.shipment_id) {
+                onNavigateToRecovery(compilerState.impacted_consignments[0].shipment_id);
+              } else {
+                onNavigateToRecovery(targetShipmentId);
+              }
+            }}
+            className="px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-md shrink-0 flex items-center gap-1.5 transition cursor-pointer"
+          >
+            <span>Re-route Air Consignments</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Active Pillar 1 Feedback Banner */}
+      {compilerState?.pillar_applied === 'PILLAR_1_PRODUCT_WINS' && (
+        <div className="p-4 rounded-xl bg-rose-50 border-rose-200 text-rose-950 border shadow-sm flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className={`p-2 rounded-lg text-white ${
-              compilerState.pillar_applied === 'PILLAR_1_PRODUCT_WINS'
-                ? 'bg-rose-600'
-                : compilerState.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS'
-                ? 'bg-amber-600'
-                : 'bg-indigo-600'
-            }`}>
-              {compilerState.pillar_applied === 'PILLAR_1_PRODUCT_WINS' ? (
-                <Flame className="w-5 h-5" />
-              ) : compilerState.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS' ? (
-                <ShieldAlert className="w-5 h-5" />
-              ) : (
-                <AlertTriangle className="w-5 h-5" />
-              )}
+            <div className="p-2 rounded-lg bg-rose-600 text-white shrink-0">
+              <Flame className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider font-mono">
-                  {compilerState.pillar_applied.replace(/_/g, ' ')} ACTIVE
+                  PILLAR 1: PRODUCT WINS (COLD-CHAIN MEDICAL PRIORITY SPIKE)
                 </span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-white/80 font-mono font-bold">
-                  Target: {compilerState.target_id}
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-200 text-rose-900 font-mono font-bold">
+                  γ = 2500.0 (50× Fine Penalty)
                 </span>
               </div>
-              <p className="text-xs mt-1 font-medium">
+              <p className="text-xs mt-1 font-medium text-rose-900">
                 {compilerState.affected_details[0]?.impact || 'Mathematical constraints updated across live matrix.'}
               </p>
               <div className="mt-1 text-[11px] text-slate-600 flex items-center gap-2">
-                <span>Persisted in DB: Target consignment priority updated.</span>
+                <span>Persisted in DB: Consignment {targetShipmentId} set to Priority 1 Medical (Risk 9/10).</span>
                 <span>•</span>
-                <span className="font-semibold text-blue-900">Synchronized with Shipment Risk & Recovery Center.</span>
+                <span className="font-semibold text-rose-900">Recovery Center auto-loads Cold-Chain Medical Regime.</span>
               </div>
             </div>
           </div>
           <button
             onClick={() => onNavigateToRecovery(targetShipmentId)}
-            className="px-3 py-1.5 rounded bg-white border border-slate-300 text-slate-800 text-xs font-bold hover:bg-slate-50 transition shadow-2xs shrink-0 flex items-center gap-1"
+            className="px-3 py-1.5 rounded bg-white border border-rose-300 text-rose-900 text-xs font-bold hover:bg-rose-100 transition shadow-2xs shrink-0 flex items-center gap-1 cursor-pointer"
           >
             <span>View in Recovery Center</span>
-            <ExternalLink className="w-3.5 h-3.5 text-blue-700" />
+            <ExternalLink className="w-3.5 h-3.5 text-rose-700" />
           </button>
         </div>
       )}
@@ -237,8 +302,8 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
             </div>
 
             <p className="text-[11px] text-[#424751] mt-2 mb-3">
-              Select any real-world disruption scenario below. The compiler dynamically recalculates 
-              matrices $[C, D, B, E]$ and modifies solver objective weights in real time.
+              Select any real-world disruption scenario below. The compiler dynamically alters 
+              matrices [C, D, B, E] and modifies solver objective weights in real time.
             </p>
 
             <div className="space-y-3">
@@ -263,7 +328,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                 </div>
                 <p className="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
                   Triggers temperature excursion alert for cold-chain medicine. Spikes SLA fine penalty parameter 
-                  γ_i from 10.0 &rarr; 500.0, forcing solver to prioritize immediate bypass over all cost metrics.
+                  γ_i from 50.0 &rarr; 2500.0, forcing solver to prioritize immediate bypass over all cost metrics.
                 </p>
 
                 {/* Target Shipment Selector */}
@@ -286,7 +351,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                   >
                     {shipments.map((s) => (
                       <option key={s.shipment_id} value={s.shipment_id}>
-                        {s.shipment_id} — {s.cargo_type} ({s.origin} → {s.destination}) [Risk: {s.risk_score}/10]
+                        {s.shipment_id} — {s.cargo_type} ({s.origin} → {s.destination}) [Risk: {s.risk_score}/10, P{s.cargo_priority}]
                       </option>
                     ))}
                   </select>
@@ -294,13 +359,13 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                   <button
                     onClick={() => handleCompilePillar('PRODUCT_PRIORITY', targetShipmentId)}
                     disabled={compilingPillar !== null}
-                    className="w-full py-2 px-3 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition disabled:opacity-50"
+                    className="w-full py-2 px-3 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition disabled:opacity-50 cursor-pointer"
                   >
                     <Flame className="w-3.5 h-3.5" />
                     <span>
                       {compilingPillar === 'PRODUCT_PRIORITY'
                         ? 'Compiling Linear Constraints...'
-                        : 'Compile Pillar 1 (Spike γ Fine Weight to 500)'}
+                        : 'Compile Pillar 1 (Spike γ Fine Weight to 2500)'}
                     </span>
                   </button>
                 </div>
@@ -332,7 +397,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
 
                 <div className="mt-2.5 pt-2 border-t border-amber-100 space-y-2">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-slate-500 font-medium">Failed Infrastructure Asset:</span>
+                    <span className="text-slate-500 font-medium">Airport Hub / Air Corridor:</span>
                     <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-white text-slate-700 border border-slate-200">
                       Cap: 15 → 0
                     </span>
@@ -342,21 +407,23 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                     onChange={(e) => setTransportTarget(e.target.value)}
                     className="w-full text-xs font-mono bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-hidden"
                   >
-                    <option value="Airport_Hub_BLR">Airport_Hub_BLR — Bengaluru International Air Cargo Hub</option>
-                    <option value="ACT-AIR-EXPEDITE">ACT-AIR-EXPEDITE — Priority Air Express Corridor</option>
-                    <option value="ACT-LINEHAUL-RELAY">ACT-LINEHAUL-RELAY — Arterial Linehaul Relay Hub</option>
+                    <option value="Airport_Hub_BLR">Airport_Hub_BLR — Bengaluru Kempegowda Cargo Terminal (BLR)</option>
+                    <option value="Airport_Hub_BOM">Airport_Hub_BOM — Mumbai Chhatrapati Shivaji Cargo Terminal (BOM)</option>
+                    <option value="Airport_Hub_MAA">Airport_Hub_MAA — Chennai International Air Cargo Hub (MAA)</option>
+                    <option value="Airport_Hub_DEL">Airport_Hub_DEL — Delhi Indira Gandhi Cargo Terminal (DEL)</option>
+                    <option value="CORR-AIR-IND">CORR-AIR-IND — Domestic Priority Air Cargo Spine (All Flights)</option>
                   </select>
 
                   <button
                     onClick={() => handleCompilePillar('TRANSPORT_FAILURE', transportTarget)}
                     disabled={compilingPillar !== null}
-                    className="w-full py-2 px-3 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition disabled:opacity-50"
+                    className="w-full py-2 px-3 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition disabled:opacity-50 cursor-pointer"
                   >
                     <ShieldAlert className="w-3.5 h-3.5" />
                     <span>
                       {compilingPillar === 'TRANSPORT_FAILURE'
                         ? 'Compiling Capacity Constraints...'
-                        : 'Compile Pillar 2 (Nullify Corridor Capacity to 0)'}
+                        : 'Compile Pillar 2 (Close Airport & Nullify Capacity)'}
                     </span>
                   </button>
                 </div>
@@ -378,7 +445,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                     </span>
                   </div>
                   <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">
-                    Delay D_ia → 10⁶ mins
+                    Delay D_ia → 10⁶ mins (∞)
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
@@ -388,7 +455,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
 
                 <div className="mt-2.5 pt-2 border-t border-indigo-100 space-y-2">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-slate-500 font-medium">Disaster Zone / Segment:</span>
+                    <span className="text-slate-500 font-medium">Disaster Corridor / Segment:</span>
                     <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-white text-slate-700 border border-slate-200">
                       Delay: 140m → 1,000,000m
                     </span>
@@ -398,21 +465,22 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                     onChange={(e) => setRegionTarget(e.target.value)}
                     className="w-full text-xs font-mono bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
                   >
-                    <option value="NH48_Khandala">NH48_Khandala — Khandala Western Ghats Landslide Corridor</option>
-                    <option value="Chennai_Port">Chennai_Port — Ennore Coastal Storm Surge Zone</option>
-                    <option value="Zone_4">Zone_4 — Central Arterial Flash Flood Polygon</option>
+                    <option value="CORR-NH48-W">CORR-NH48-W — NH-48 Khandala Ghat Landslide Corridor (Mumbai ↔ BLR)</option>
+                    <option value="CORR-MAA-BLR">CORR-MAA-BLR — Chennai-Bengaluru Expressway Corridor (Sriperumbudur Choke)</option>
+                    <option value="CORR-SEA-COAST">CORR-SEA-COAST — Bay of Bengal Coastal Feeder (Chennai Port Maritime)</option>
+                    <option value="CORR-NH44-S">CORR-NH44-S — NH-44 North-South Highway (Hyderabad ↔ BLR)</option>
                   </select>
 
                   <button
                     onClick={() => handleCompilePillar('REGIONAL_DISASTER', regionTarget)}
                     disabled={compilingPillar !== null}
-                    className="w-full py-2 px-3 rounded-lg bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition disabled:opacity-50"
+                    className="w-full py-2 px-3 rounded-lg bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition disabled:opacity-50 cursor-pointer"
                   >
                     <AlertTriangle className="w-3.5 h-3.5" />
                     <span>
                       {compilingPillar === 'REGIONAL_DISASTER'
                         ? 'Compiling Delay Barrier Matrix...'
-                        : 'Compile Pillar 3 (Erect 10⁶ min Delay Barrier)'}
+                        : 'Compile Pillar 3 (Erect 10⁶ min Barrier & Trap Corridor)'}
                     </span>
                   </button>
                 </div>
@@ -491,7 +559,6 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                 {Array.from({ length: 64 }).map((_, idx) => {
                   const isContested = idx >= 52 && idx < 60; // 8 contested variables
                   const isConsensus = idx < 52;              // 52 frozen consensus
-                  const isCoreMaster = idx >= 60;            // 4 arbiter threads
                   
                   return (
                     <div
@@ -565,6 +632,123 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
       </div>
 
       {/* ========================================================================= */}
+      {/* IMPACTED CONSIGNMENTS ADDRESSED WITH IMMEDIATE RECOVERY ACTIONS           */}
+      {/* ========================================================================= */}
+      {compilerState?.impacted_consignments && compilerState.impacted_consignments.length > 0 && (
+        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+            <div className="flex items-center gap-2">
+              <span className={`p-1.5 rounded-lg text-white ${
+                compilerState.pillar_applied === 'PILLAR_1_PRODUCT_WINS'
+                  ? 'bg-rose-600'
+                  : compilerState.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS'
+                  ? 'bg-amber-600'
+                  : 'bg-indigo-600'
+              }`}>
+                <ShieldAlert className="w-4 h-4" />
+              </span>
+              <div>
+                <h2 className="text-xs font-bold uppercase tracking-wider text-[#101c29] flex items-center gap-2">
+                  <span>
+                    {compilerState.pillar_applied === 'PILLAR_1_PRODUCT_WINS'
+                      ? 'Target Consignment Prioritized & Queued for Re-Route'
+                      : compilerState.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS'
+                      ? `Impacted Air Consignments Grounded at ${compilerState.grounded_hub_name || 'Airport'}`
+                      : 'Trapped Consignments in Disaster Hazard Zone'}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-100 text-slate-800">
+                    {compilerState.impacted_count} Consignments
+                  </span>
+                </h2>
+                <span className="text-[11px] text-[#424751]">
+                  Exact consignments identified from live database. Each consignment is armed with an alternative multi-modal recovery path.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  const firstId = compilerState.impacted_consignments?.[0]?.shipment_id;
+                  if (firstId) onNavigateToRecovery(firstId);
+                }}
+                className="px-3.5 py-1.5 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold shadow-xs flex items-center gap-1.5 transition cursor-pointer"
+              >
+                <span>Authorize Re-routes in Recovery Center</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs font-mono text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 text-slate-500">
+                  <th className="py-2.5 px-3 font-semibold">Consignment</th>
+                  <th className="py-2.5 px-3 font-semibold">Priority Tier</th>
+                  <th className="py-2.5 px-3 font-semibold">Route & Corridor</th>
+                  <th className="py-2.5 px-3 font-semibold">Carrier</th>
+                  <th className="py-2.5 px-3 font-semibold">Status / Failure Impact</th>
+                  <th className="py-2.5 px-3 font-semibold">Assigned Recovery Path</th>
+                  <th className="py-2.5 px-3 text-right font-semibold">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {compilerState.impacted_consignments.slice(0, 10).map((sh) => (
+                  <tr key={sh.shipment_id} className="hover:bg-slate-50 transition">
+                    <td className="py-2.5 px-3 font-bold text-blue-900">
+                      {sh.shipment_id}
+                    </td>
+                    <td className="py-2.5 px-3">
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                        sh.cargo_priority === 1
+                          ? 'bg-rose-50 text-rose-700 border-rose-200'
+                          : sh.cargo_priority === 2
+                          ? 'bg-blue-50 text-blue-700 border-blue-200'
+                          : 'bg-amber-50 text-amber-800 border-amber-200'
+                      }`}>
+                        {sh.cargo_priority === 1 ? '❤️ P1 Medical' : sh.cargo_priority === 2 ? '⚡ P2 Electronics' : `⚙️ P${sh.cargo_priority}`}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-800 font-medium">
+                      {sh.origin} → {sh.destination}
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-600">
+                      {sh.carrier_id}
+                    </td>
+                    <td className="py-2.5 px-3">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-rose-100 text-rose-900 font-bold block max-w-xs truncate">
+                        {sh.failure_reason}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold block max-w-xs truncate">
+                        {sh.recommended_recovery_plan}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-right">
+                      <button
+                        onClick={() => onNavigateToRecovery(sh.shipment_id)}
+                        className="px-2.5 py-1 rounded bg-[#003c76] hover:bg-[#00539f] text-white text-[10px] font-bold transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>Re-route</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {compilerState.impacted_consignments.length > 10 && (
+            <p className="text-[11px] text-slate-500 italic text-center pt-1">
+              Showing top 10 of {compilerState.impacted_count} impacted consignments. All are synchronized and loaded into Recovery Center.
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* ========================================================================= */}
       {/* UI ELEMENT C: Live Mathematical Array / Tensor Inspector                   */}
       {/* ========================================================================= */}
       <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
@@ -587,7 +771,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
           <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg text-xs font-mono font-semibold">
             <button
               onClick={() => setActiveMatrixTab('D')}
-              className={`px-3 py-1 rounded-md transition ${
+              className={`px-3 py-1 rounded-md transition cursor-pointer ${
                 activeMatrixTab === 'D'
                   ? 'bg-white text-blue-900 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -597,7 +781,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
             </button>
             <button
               onClick={() => setActiveMatrixTab('C')}
-              className={`px-3 py-1 rounded-md transition ${
+              className={`px-3 py-1 rounded-md transition cursor-pointer ${
                 activeMatrixTab === 'C'
                   ? 'bg-white text-blue-900 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -607,7 +791,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
             </button>
             <button
               onClick={() => setActiveMatrixTab('B')}
-              className={`px-3 py-1 rounded-md transition ${
+              className={`px-3 py-1 rounded-md transition cursor-pointer ${
                 activeMatrixTab === 'B'
                   ? 'bg-white text-blue-900 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -617,7 +801,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
             </button>
             <button
               onClick={() => setActiveMatrixTab('E')}
-              className={`px-3 py-1 rounded-md transition ${
+              className={`px-3 py-1 rounded-md transition cursor-pointer ${
                 activeMatrixTab === 'E'
                   ? 'bg-white text-blue-900 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -627,7 +811,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
             </button>
             <button
               onClick={() => setActiveMatrixTab('W')}
-              className={`px-3 py-1 rounded-md transition ${
+              className={`px-3 py-1 rounded-md transition cursor-pointer ${
                 activeMatrixTab === 'W'
                   ? 'bg-white text-rose-900 shadow-xs font-bold'
                   : 'text-rose-700 hover:text-rose-900'
@@ -645,7 +829,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-slate-500">
                   <th className="py-2.5 px-3 font-semibold">Shipment (i)</th>
-                  <th className="py-2.5 px-3 font-semibold">Product Type</th>
+                  <th className="py-2.5 px-3 font-semibold">Product & Priority</th>
                   {actionLabels.map((lbl, idx) => (
                     <th key={idx} className="py-2.5 px-3 font-semibold">
                       Action #{idx + 1}: {lbl}
@@ -680,18 +864,26 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                         )}
                       </td>
                       <td className="py-2.5 px-3 text-slate-700">
-                        {('product_type' in s ? s.product_type : s.cargo_type) || 'General Cargo'}
+                        <span className="font-semibold">{('product_type' in s ? s.product_type : s.cargo_type) || 'General Cargo'}</span>
+                        <span className="ml-1.5 text-[10px] text-slate-400">P{s.cargo_priority}</span>
                       </td>
                       {actionLabels.map((_, colIdx) => {
                         const val = matrix?.[rowIdx]?.[colIdx] ?? 0;
                         const isInfiniteDelay = activeMatrixTab === 'D' && val >= 900000;
                         const isHighBreach = activeMatrixTab === 'B' && val >= 0.9;
+                        const isAirAction = colIdx === 4;
+                        const isAirNullified = isAirAction && compilerState?.capacities?.['ACT-AIR-EXPEDITE'] === 0;
 
                         return (
                           <td key={colIdx} className="py-2.5 px-3">
                             {isInfiniteDelay ? (
-                              <span className="px-2 py-0.5 rounded bg-rose-600 text-white font-bold text-[10px]">
-                                1,000,000 (BARRIER WALL)
+                              <span className="px-2 py-0.5 rounded bg-rose-600 text-white font-bold text-[10px] inline-flex items-center gap-1 animate-pulse">
+                                <AlertTriangle className="w-3 h-3" />
+                                <span>1,000,000m (∞ WALL)</span>
+                              </span>
+                            ) : isAirNullified && activeMatrixTab === 'C' ? (
+                              <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold text-[10px]">
+                                Cap = 0 (GROUNDED)
                               </span>
                             ) : isHighBreach ? (
                               <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold">
@@ -719,19 +911,25 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
           ) : (
             /* Dynamic Weights Tab */
             <div className="p-3 bg-slate-50 rounded-xl space-y-3 font-mono text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-                <span className="font-bold text-slate-700 uppercase">
-                  Consignment Objective Fine Weight Vectors: min f(x) = α·Cost + β·Delay + γ·SLA + δ·CO₂
-                </span>
-                <span className="text-[10px] text-rose-700 font-bold">
-                  Pillar 1 forces γ to 500.0 for medical insulin cargo
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-slate-200 gap-1">
+                <div>
+                  <span className="font-bold text-slate-800 uppercase block">
+                    Product-Specific Objective Fine Weight Vectors: min f(x) = α·Cost + β·Delay + γ·SLA + δ·CO₂
+                  </span>
+                  <span className="text-[11px] text-slate-500 font-sans">
+                    Each product priority has a distinct baseline γ: P1 Medical (γ=50) &bull; P2 Electronics (γ=25) &bull; P3 Auto (γ=12) &bull; P4 Textiles (γ=4)
+                  </span>
+                </div>
+                <span className="text-[10px] text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded border border-rose-200 shrink-0">
+                  Pillar 1 spikes γ to 2500.0 for medical insulin cargo
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {Object.entries(compilerState?.weights || { '0': { alpha: 1, beta: 5, gamma: 10, delta: 2 } }).map(
+                {Object.entries(compilerState?.weights || { '0': { alpha: 1, beta: 5, gamma: 25, delta: 2 } }).map(
                   ([idx, w]) => {
                     const sh = compilerState?.sample_shipments?.[parseInt(idx)];
                     const isSpiked = w.gamma >= 100;
+                    const pTier = sh?.cargo_priority ?? 2;
                     return (
                       <div
                         key={idx}
@@ -744,29 +942,37 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                         <div className="flex items-center justify-between mb-1.5">
                           <span className="font-bold text-blue-900">{sh?.shipment_id || `Index #${idx}`}</span>
                           <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
-                            isSpiked ? 'bg-rose-200 text-rose-900' : 'bg-slate-100 text-slate-700'
+                            isSpiked
+                              ? 'bg-rose-600 text-white font-extrabold animate-pulse'
+                              : pTier === 1
+                              ? 'bg-rose-100 text-rose-800'
+                              : pTier === 2
+                              ? 'bg-blue-100 text-blue-800'
+                              : pTier === 3
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-slate-100 text-slate-700'
                           }`}>
-                            {isSpiked ? '🔥 SPIKED 50×' : 'Baseline'}
+                            {isSpiked ? '🔥 SPIKED 50× (2500)' : `Tier ${pTier} Baseline (γ=${w.gamma})`}
                           </span>
                         </div>
-                        <div className="text-[11px] text-slate-600 line-clamp-1 mb-2">
+                        <div className="text-[11px] text-slate-600 line-clamp-1 mb-2 font-sans font-medium">
                           {sh?.product_type || 'Cargo Consignment'}
                         </div>
                         <div className="grid grid-cols-4 gap-1 text-center font-bold text-[10px]">
                           <div className="bg-slate-100 p-1 rounded">
-                            <span className="block text-[8px] text-slate-400 font-normal">α Cost</span>
+                            <span className="block text-[8px] text-slate-400 font-normal font-sans">α Cost</span>
                             <span>{w.alpha}</span>
                           </div>
                           <div className="bg-slate-100 p-1 rounded">
-                            <span className="block text-[8px] text-slate-400 font-normal">β Delay</span>
+                            <span className="block text-[8px] text-slate-400 font-normal font-sans">β Delay</span>
                             <span>{w.beta}</span>
                           </div>
-                          <div className={`p-1 rounded ${isSpiked ? 'bg-rose-600 text-white font-extrabold' : 'bg-slate-100'}`}>
-                            <span className="block text-[8px] opacity-75 font-normal">γ SLA</span>
+                          <div className={`p-1 rounded ${isSpiked ? 'bg-rose-600 text-white font-extrabold' : 'bg-rose-50 text-rose-900 border border-rose-200'}`}>
+                            <span className="block text-[8px] opacity-75 font-normal font-sans">γ SLA</span>
                             <span>{w.gamma}</span>
                           </div>
                           <div className="bg-slate-100 p-1 rounded">
-                            <span className="block text-[8px] text-slate-400 font-normal">δ CO₂</span>
+                            <span className="block text-[8px] text-slate-400 font-normal font-sans">δ CO₂</span>
                             <span>{w.delta}</span>
                           </div>
                         </div>
@@ -792,24 +998,24 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
               </span>
               <div>
                 <h2 className="text-xs font-bold uppercase tracking-wider text-[#101c29]">
-                  4. Strategy Archetypes & Direct Closed-Loop Handoff
+                  4. Strategy Archetypes & Multi-Modal Recovery Network
                 </h2>
                 <span className="text-[11px] text-[#424751]">
-                  Comparison of compiled feasible paths generated for target consignment {targetShipmentId}
+                  Compiled multi-modal actions matching routes in Recovery Center & Route Network
                 </span>
               </div>
             </div>
 
             <button
               onClick={() => onNavigateToRecovery(targetShipmentId)}
-              className="px-4 py-2 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition"
+              className="px-4 py-2 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer"
             >
               <span>Authorize Plan in Recovery Center</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
             {/* Plan A Card */}
             <div className={`p-4 rounded-xl border transition ${
               compilerState?.pillar_applied === 'PILLAR_3_REGION_WINS' || compilerState?.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS'
@@ -817,19 +1023,22 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                 : 'bg-slate-50 border-slate-200'
             }`}>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-800">
-                  Plan A: Lowest Cost Optimization
+                <span className="text-xs font-bold text-slate-800 flex items-center gap-1">
+                  <Truck className="w-3.5 h-3.5 text-slate-600" />
+                  <span>Plan A: Baseline Highway (NH48)</span>
                 </span>
                 <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
-                  compilerState?.pillar_applied === 'PILLAR_3_REGION_WINS' || compilerState?.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS'
-                    ? 'bg-rose-100 text-rose-800'
+                  compilerState?.pillar_applied === 'PILLAR_3_REGION_WINS'
+                    ? 'bg-rose-600 text-white animate-pulse'
+                    : compilerState?.pillar_applied === 'PILLAR_2_TRANSPORTATION_WINS'
+                    ? 'bg-amber-100 text-amber-800'
                     : 'bg-slate-200 text-slate-800'
                 }`}>
-                  {compilerState?.pillar_applied === 'PILLAR_3_REGION_WINS' ? 'Infeasible (10⁶m Wall)' : 'Baseline Cost'}
+                  {compilerState?.pillar_applied === 'PILLAR_3_REGION_WINS' ? 'Infeasible (∞ Barrier)' : 'Baseline Cost'}
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 mt-1">
-                Routing: NH-48 Khandala Expressway Baseline (₹0 Extra Cost, +140 mins delay).
+                Routing: Original Planned Highway Corridor (NH48) &bull; Extra Cost: ₹0.
               </p>
               <div className="mt-3 pt-2 border-t border-slate-200 grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
                 <div>
@@ -838,42 +1047,74 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                 </div>
                 <div>
                   <span className="text-slate-400 block font-sans">Expected Delay</span>
-                  <span className="font-bold text-rose-700">+140m</span>
+                  <span className="font-bold text-rose-700">
+                    {compilerState?.pillar_applied === 'PILLAR_3_REGION_WINS' ? '1,000,000m (∞)' : '+140m'}
+                  </span>
                 </div>
                 <div>
                   <span className="text-slate-400 block font-sans">SLA Risk</span>
-                  <span className="font-bold text-rose-700">Critical (9/10)</span>
+                  <span className="font-bold text-rose-700">Critical (10/10)</span>
                 </div>
               </div>
             </div>
 
             {/* Plan B Card */}
+            <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/50">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-blue-950 flex items-center gap-1">
+                  <Truck className="w-3.5 h-3.5 text-blue-700" />
+                  <span>Plan B: State Highway Bypass</span>
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">
+                  Feasible Alternate
+                </span>
+              </div>
+              <p className="text-[11px] text-blue-900 mt-1">
+                Routing: Via NH717 / State Highway Bypass &bull; Extra Cost: ₹1,150.
+              </p>
+              <div className="mt-3 pt-2 border-t border-blue-200 grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
+                <div>
+                  <span className="text-blue-600 block font-sans">Extra Cost</span>
+                  <span className="font-bold text-blue-950">₹1,150</span>
+                </div>
+                <div>
+                  <span className="text-blue-600 block font-sans">Expected Delay</span>
+                  <span className="font-bold text-blue-900">+18m</span>
+                </div>
+                <div>
+                  <span className="text-blue-600 block font-sans">SLA Risk</span>
+                  <span className="font-bold text-emerald-700">Low (2/10)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Plan C Card */}
             <div className="p-4 rounded-xl border border-purple-300 bg-purple-50/50 shadow-xs relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-purple-400/10 rounded-full blur-xl pointer-events-none"></div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-purple-950 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-purple-700" />
-                  <span>Plan B: Speed Priority (Quantum-Assisted Bypass)</span>
+                  <Train className="w-3.5 h-3.5 text-purple-700" />
+                  <span>Plan C: Rail Relay (CONCOR WDFC)</span>
                 </span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-600 text-white font-bold">
-                  Recommended Optimal (+12.4% QCR)
+                  Recommended (+12.4% QCR)
                 </span>
               </div>
               <p className="text-[11px] text-purple-900 mt-1">
-                Routing: State Highway Arterial Relay Corridor (+₹1,200 Cost, +10 mins delay).
+                Routing: WDFC Dedicated Electric Rail Spine &bull; Zero Road Risk &bull; -77% Emissions.
               </p>
               <div className="mt-3 pt-2 border-t border-purple-200 grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
                 <div>
                   <span className="text-purple-600 block font-sans">Extra Cost</span>
-                  <span className="font-bold text-purple-950">₹1,200</span>
+                  <span className="font-bold text-purple-950">₹1,650</span>
                 </div>
                 <div>
                   <span className="text-purple-600 block font-sans">Expected Delay</span>
-                  <span className="font-bold text-emerald-700">+10m</span>
+                  <span className="font-bold text-emerald-700">+25m (On-Time)</span>
                 </div>
                 <div>
                   <span className="text-purple-600 block font-sans">SLA Risk</span>
-                  <span className="font-bold text-emerald-700">Low (2/10)</span>
+                  <span className="font-bold text-emerald-700">Optimal (1/10)</span>
                 </div>
               </div>
             </div>
@@ -887,7 +1128,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <button
           onClick={() => setShowPitchBlueprint(!showPitchBlueprint)}
-          className="w-full px-5 py-3.5 bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-left transition"
+          className="w-full px-5 py-3.5 bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-left transition cursor-pointer"
         >
           <div className="flex items-center gap-2">
             <span className="p-1 rounded bg-[#003c76] text-white">
@@ -923,7 +1164,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
               <h3 className="font-bold text-slate-800">Constraint Compilation</h3>
               <p className="text-[11px] text-slate-600 leading-relaxed">
                 "We don't hand-wave disruptions. Our Disruption Compiler maps alerts into 3 rigorous pillars. 
-                Triggering Pillar 1 spikes γ by 50x in real time, making cold-chain failure mathematically intolerable."
+                Triggering Pillar 1 spikes γ to 2500 in real time, making cold-chain failure mathematically intolerable."
               </p>
             </div>
 

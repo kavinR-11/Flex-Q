@@ -47,3 +47,5 @@ Thumbs.db
 
 # Local artifacts
 *.log
+*.zip
+

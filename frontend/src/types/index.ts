@@ -278,6 +278,22 @@ export interface StrategyArchetype {
   status: string;
 }
 
+export interface ImpactedConsignmentBrief {
+  shipment_id: string;
+  origin: string;
+  destination: string;
+  cargo_type: string;
+  cargo_priority: number;
+  carrier_id: string;
+  current_status: string;
+  risk_score: number;
+  sla_buffer_minutes: number;
+  predicted_delay_minutes: number;
+  failure_reason: string;
+  recovery_status: string;
+  recommended_recovery_plan: string;
+}
+
 export interface CompiledProblemState {
   timestamp: string;
   pillar_applied: string | null;
@@ -285,6 +301,10 @@ export interface CompiledProblemState {
   target_id: string;
   severity: number;
   affected_details: AffectedDetail[];
+  impacted_consignments?: ImpactedConsignmentBrief[];
+  impacted_count?: number;
+  infinity_delay_warning?: boolean;
+  grounded_hub_name?: string | null;
   C: number[][];
   D: number[][];
   B: number[][];
@@ -303,4 +323,5 @@ export interface CompiledProblemState {
   triage_breakdown: TriageBreakdown;
   strategy_archetypes: StrategyArchetype[];
 }
+
 

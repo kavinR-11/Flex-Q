@@ -20,6 +20,10 @@ def test_pillar_1_product_priority_compilation():
     assert data["triage_breakdown"]["frozen_pct"] == 86.7
     assert data["triage_breakdown"]["contested_pct"] == 13.3
 
+    # Check distinct priority-driven weights: spiked gamma for target, different gammas for others
+    weights = data["weights"]
+    assert weights["0"]["gamma"] == 2500.0 # Spiked 50x from 50.0
+
     # Verify that the shipment in database was updated in real time
     sh_res = client.get("/api/v1/shipments/SH-2048")
     assert sh_res.status_code == 200
@@ -45,19 +49,34 @@ def test_pillar_2_transportation_failure_compilation():
     assert response.status_code == 200
     data = response.json()
     assert data["pillar_applied"] == "PILLAR_2_TRANSPORTATION_WINS"
-    assert any("Airport_Hub_BLR" in d.get("action_id", "") or "AIR" in d.get("action_id", "") for d in data["affected_details"])
+    assert data["grounded_hub_name"] is not None
+    assert data["capacities"]["ACT-AIR-EXPEDITE"] == 0.0
+    assert data["impacted_count"] > 0
+    assert len(data["impacted_consignments"]) > 0
+    
+    # Grounded shipments must have recovery status and suggested plan
+    first_grounded = data["impacted_consignments"][0]
+    assert first_grounded["recovery_status"] == "READY_FOR_REROUTE"
+    assert "Grounded" in first_grounded["failure_reason"]
 
 def test_pillar_3_regional_disaster_compilation():
     response = client.post("/api/v1/compiler/compile", json={
         "event_type": "REGIONAL_DISASTER",
-        "target_id": "NH48_Khandala",
+        "target_id": "CORR-NH48-W",
         "severity": 1.0
     })
     assert response.status_code == 200
     data = response.json()
     assert data["pillar_applied"] == "PILLAR_3_REGION_WINS"
+    assert data["infinity_delay_warning"] is True
+    assert data["impacted_count"] > 0
     # Delay array should have 10^6
     assert any(any(val >= 900000 for val in row) for row in data["D"])
+
+    # Trapped shipments must be identified
+    first_trapped = data["impacted_consignments"][0]
+    assert first_trapped["predicted_delay_minutes"] >= 900000
+    assert first_trapped["risk_score"] == 10
 
 def test_shipment_priority_patch_endpoint():
     res = client.patch("/api/v1/shipments/SH-2048/priority", json={
