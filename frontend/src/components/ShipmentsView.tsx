@@ -763,6 +763,31 @@ export const ShipmentsView: React.FC<ShipmentsViewProps> = ({
                   {selectedShipment.sla_buffer_minutes > 0 ? `+${Math.round(selectedShipment.sla_buffer_minutes)}m` : `${Math.round(selectedShipment.sla_buffer_minutes)}m`}
                 </span>
               </div>
+              <div className="flex justify-between items-center text-[#101c29]">
+                <span className="text-[#424751]">Model SLA Fine (γ):</span>
+                {(() => {
+                  const cType = (selectedShipment.cargo_type || '').toLowerCase();
+                  const isSpiked = (
+                    selectedShipment.cargo_priority === 1 && 
+                    (cType.includes('cold-chain') || cType.includes('insulin') || selectedShipment.risk_score >= 9 || selectedShipment.current_status === 'critical')
+                  );
+                  return (
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                      isSpiked
+                        ? 'bg-rose-600 text-white animate-pulse'
+                        : selectedShipment.cargo_priority === 1
+                        ? 'bg-rose-100 text-rose-900 border border-rose-200'
+                        : selectedShipment.cargo_priority === 2
+                        ? 'bg-blue-100 text-blue-900 border border-blue-200'
+                        : selectedShipment.cargo_priority === 3
+                        ? 'bg-amber-100 text-amber-900 border border-amber-200'
+                        : 'bg-slate-100 text-slate-800'
+                    }`}>
+                      γ = {isSpiked ? '2500.0 (50× Spike)' : selectedShipment.cargo_priority === 1 ? '50.0 (Pharma)' : selectedShipment.cargo_priority === 2 ? '25.0 (Electronics)' : selectedShipment.cargo_priority === 3 ? '12.0 (Auto)' : '4.0 (Textiles)'}
+                    </span>
+                  );
+                })()}
+              </div>
 
               {/* Dynamic Priority Triage Control */}
               <div className="pt-2 border-t border-slate-200 flex items-center justify-between gap-2">

@@ -7,6 +7,7 @@ linear-quadratic constraints, per-consignment penalty matrices, and parallel sol
 from datetime import datetime, timezone
 import uuid
 import numpy as np
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from backend.app.models_db import ShipmentDB, DisruptionEventDB, CarrierDB, AuditLogDB
 
@@ -20,13 +21,16 @@ class DisruptionCompiler:
         Calculates mathematically distinct objective weights per shipment:
         min f(x) = alpha*Cost + beta*Delay + gamma*SLA_Penalty + delta*Emissions.
         Gamma directly reflects the product's SLA penalty and perishability criticality:
-        - Priority 1: Life-Saving Medical / Cold-Chain Pharma -> gamma=50.0 (Zero delay tolerance)
+        - Priority 1: Life-Saving Medical / Cold-Chain -> gamma=60.0 (Spikes to 2500.0 upon excursion)
+        - Priority 1: Standard Pharmaceuticals / Vaccines -> gamma=50.0 (High SLA fine)
         - Priority 2: High-Value Electronics / Semiconductors -> gamma=25.0 (High commercial SLA penalty)
         - Priority 3: Automotive JIT / Industrial Tooling -> gamma=12.0 (Balanced factory inventory trade-off)
         - Priority 4: Textiles / Non-Perishable Commercial -> gamma=4.0 (Cost-sensitive, low SLA fine)
         """
         c_type = (cargo_type or "").lower()
-        if cargo_priority == 1 or "medic" in c_type or "pharma" in c_type or "insulin" in c_type:
+        if "cold-chain" in c_type or "insulin" in c_type or "life-saving" in c_type:
+            return {"alpha": 0.5, "beta": 10.0, "gamma": 60.0, "delta": 1.0}
+        elif cargo_priority == 1 or "pharma" in c_type or "medic" in c_type:
             return {"alpha": 0.5, "beta": 8.0, "gamma": 50.0, "delta": 1.0}
         elif cargo_priority == 2 or "electr" in c_type or "semicon" in c_type:
             return {"alpha": 1.0, "beta": 5.0, "gamma": 25.0, "delta": 2.0}
@@ -210,62 +214,68 @@ class DisruptionCompiler:
                 db.add(audit_entry)
                 db.commit()
 
-                # Ensure target shipment is the first row of sample shipments and matrices
-                sh_ids = [s["shipment_id"] for s in shipments]
-                if target_sh.shipment_id not in sh_ids:
-                    shipments.insert(0, {
-                        "shipment_id": target_sh.shipment_id,
-                        "product_type": target_sh.cargo_type,
-                        "cargo_priority": target_sh.cargo_priority,
-                        "current_buffer_mins": float(target_sh.sla_buffer_minutes or 30),
-                        "origin": target_sh.origin,
-                        "destination": target_sh.destination,
-                        "current_status": target_sh.current_status,
-                        "transport_mode": target_sh.transport_mode,
-                        "carrier_id": target_sh.carrier_id,
-                        "risk_score": target_sh.risk_score
-                    })
-                    weight_matrix = {
-                        i: self.get_baseline_weights_for_shipment(s["cargo_priority"], s["product_type"])
-                        for i, s in enumerate(shipments)
-                    }
-                    num_shipments = len(shipments)
+                # Ensure target shipment is strictly placed at row 0 of sample shipments and matrices
+                shipments = [s for s in shipments if s["shipment_id"] != target_sh.shipment_id]
+                shipments.insert(0, {
+                    "shipment_id": target_sh.shipment_id,
+                    "product_type": target_sh.cargo_type,
+                    "cargo_priority": target_sh.cargo_priority,
+                    "current_buffer_mins": float(target_sh.sla_buffer_minutes or 30),
+                    "origin": target_sh.origin,
+                    "destination": target_sh.destination,
+                    "current_status": target_sh.current_status,
+                    "transport_mode": target_sh.transport_mode,
+                    "carrier_id": target_sh.carrier_id,
+                    "risk_score": target_sh.risk_score
+                })
+                num_shipments = len(shipments)
 
-            # Manipulate gamma weight for the targeted shipment (spike 50x from baseline 50 -> 2500)
-            for i, s in enumerate(shipments):
-                is_match = (
-                    s["shipment_id"] == target_id or 
-                    (target_sh and s["shipment_id"] == target_sh.shipment_id)
-                )
-                if is_match:
-                    baseline_gamma = 50.0  # Medical Tier 1 baseline
-                    spiked_gamma = baseline_gamma * 50.0  # 2500.0
-                    weight_matrix[i]["gamma"] = spiked_gamma
-                    weight_matrix[i]["beta"] = 15.0 # Elevated delay sensitivity
+                # Recompute matrices for the updated shipments list
+                C_matrix = np.zeros((num_shipments, num_actions))
+                D_matrix = np.zeros((num_shipments, num_actions))
+                B_matrix = np.zeros((num_shipments, num_actions))
+                E_matrix = np.zeros((num_shipments, num_actions))
+                for i, s in enumerate(shipments):
+                    for j, a in enumerate(available_actions):
+                        C_matrix[i, j] = a.get("base_cost", 100)
+                        D_matrix[i, j] = a.get("base_delay_mins", 10)
+                        B_matrix[i, j] = 1.0 if s["current_buffer_mins"] - D_matrix[i, j] < 0 else 0.1
+                        E_matrix[i, j] = a.get("base_emissions", 15)
 
-                    affected_details.append({
-                        "shipment_id": s["shipment_id"],
-                        "parameter": "gamma (SLA penalty fine weight)",
-                        "baseline_value": baseline_gamma,
-                        "compiled_value": spiked_gamma,
-                        "impact": f"Spike 50x ({baseline_gamma:.0f} -> {spiked_gamma:.0f}) — Zero SLA penalty tolerance. Solvers strictly prioritize this consignment."
-                    })
+                weight_matrix = {
+                    i: self.get_baseline_weights_for_shipment(s["cargo_priority"], s["product_type"])
+                    for i, s in enumerate(shipments)
+                }
 
-                    impacted_consignments.append({
-                        "shipment_id": s["shipment_id"],
-                        "origin": s["origin"],
-                        "destination": s["destination"],
-                        "cargo_type": "Life-Saving Medical (Insulin/Cold-Chain)",
-                        "cargo_priority": 1,
-                        "carrier_id": s.get("carrier_id", "CARRIER-A"),
-                        "current_status": "critical",
-                        "risk_score": 9,
-                        "sla_buffer_minutes": s["current_buffer_mins"],
-                        "predicted_delay_minutes": 85.0,
-                        "failure_reason": "Cold-Chain Telemetry Excursion: SLA Penalty Spiked 50x",
-                        "recovery_status": "READY_FOR_REROUTE",
-                        "recommended_recovery_plan": "Plan B: State Highway Bypass Corridor (Zero SLA Breach)"
-                    })
+                # Manipulate gamma weight for the targeted shipment at row 0 (spike 50x from baseline 50 -> 2500)
+                baseline_gamma = 50.0  # Medical Tier 1 baseline
+                spiked_gamma = 2500.0  # 50x penalty fine
+                weight_matrix[0]["gamma"] = spiked_gamma
+                weight_matrix[0]["beta"] = 15.0 # Elevated delay sensitivity
+
+                affected_details.append({
+                    "shipment_id": target_sh.shipment_id,
+                    "parameter": "gamma (SLA penalty fine weight)",
+                    "baseline_value": baseline_gamma,
+                    "compiled_value": spiked_gamma,
+                    "impact": f"Spike 50x ({baseline_gamma:.0f} -> {spiked_gamma:.0f}) — Zero SLA penalty tolerance. Solvers strictly prioritize this consignment."
+                })
+
+                impacted_consignments.append({
+                    "shipment_id": target_sh.shipment_id,
+                    "origin": target_sh.origin,
+                    "destination": target_sh.destination,
+                    "cargo_type": "Life-Saving Medical (Insulin/Cold-Chain)",
+                    "cargo_priority": 1,
+                    "carrier_id": target_sh.carrier_id or "CARRIER-A",
+                    "current_status": "critical",
+                    "risk_score": 9,
+                    "sla_buffer_minutes": float(target_sh.sla_buffer_minutes or 0),
+                    "predicted_delay_minutes": 85.0,
+                    "failure_reason": "Cold-Chain Telemetry Excursion: SLA Penalty Spiked 50x (γ = 2500.0)",
+                    "recovery_status": "READY_FOR_REROUTE",
+                    "recommended_recovery_plan": "Plan B: State Highway Bypass Corridor (Zero SLA Breach)"
+                })
 
         # ==========================================
         # PILLAR 2: When Transportation Wins (Airport Hub Grounding & Capacity Cap_a -> 0)
@@ -352,18 +362,20 @@ class DisruptionCompiler:
                 region_name = "CORR-NH48-W (NH-48 Khandala Western Ghats Landslide Corridor)"
                 impacted_db_ships = db.query(ShipmentDB).filter(
                     ShipmentDB.transport_mode == "ROAD",
-                    (
-                        (ShipmentDB.origin.in_(["Mumbai", "Pune", "Bengaluru"]) & ShipmentDB.destination.in_(["Mumbai", "Pune", "Bengaluru"]))
-                        | ShipmentDB.route_id.ilike("%NH48%")
+                    or_(
+                        ShipmentDB.origin.in_(["Mumbai", "Pune"]),
+                        ShipmentDB.destination.in_(["Mumbai", "Pune"]),
+                        ShipmentDB.route_id.ilike("%NH48%")
                     )
                 ).all()
             elif "MAA-BLR" in target_id or target_id == "CORR-MAA-BLR":
                 region_name = "CORR-MAA-BLR (Chennai-Bengaluru Expressway Corridor)"
                 impacted_db_ships = db.query(ShipmentDB).filter(
                     ShipmentDB.transport_mode == "ROAD",
-                    (
-                        (ShipmentDB.origin.in_(["Chennai", "Bengaluru"]) & ShipmentDB.destination.in_(["Chennai", "Bengaluru"]))
-                        | ShipmentDB.route_id.ilike("%MAA-BLR%")
+                    or_(
+                        ShipmentDB.origin.in_(["Chennai", "Bengaluru"]),
+                        ShipmentDB.destination.in_(["Chennai", "Bengaluru"]),
+                        ShipmentDB.route_id.ilike("%MAA-BLR%")
                     )
                 ).all()
             elif "SEA" in target_id or target_id == "CORR-SEA-COAST":
@@ -374,7 +386,10 @@ class DisruptionCompiler:
             else:
                 region_name = target_id
                 impacted_db_ships = db.query(ShipmentDB).filter(
-                    (ShipmentDB.origin.ilike(f"%{target_id}%")) | (ShipmentDB.destination.ilike(f"%{target_id}%"))
+                    or_(
+                        ShipmentDB.origin.ilike(f"%{target_id}%"),
+                        ShipmentDB.destination.ilike(f"%{target_id}%")
+                    )
                 ).all()
 
             # Set delay in D_matrix for Plan A (Baseline NH48 Route) to simulated infinity 1e6
@@ -447,12 +462,12 @@ class DisruptionCompiler:
             "impacted_count": len(impacted_consignments),
             "infinity_delay_warning": infinity_delay_warning,
             "grounded_hub_name": grounded_hub_name,
-            "C": C_matrix[:5, :5].tolist(), # Top 5x5 sub-matrix for concise presentation
-            "D": D_matrix[:5, :5].tolist(),
-            "B": B_matrix[:5, :5].tolist(),
-            "E": E_matrix[:5, :5].tolist(),
-            "sample_shipments": shipments[:5],
-            "weights": {str(k): v for k, v in list(weight_matrix.items())[:5]},
+            "C": C_matrix[:10, :5].tolist(), # Top 10x5 sub-matrix for rich presentation
+            "D": D_matrix[:10, :5].tolist(),
+            "B": B_matrix[:10, :5].tolist(),
+            "E": E_matrix[:10, :5].tolist(),
+            "sample_shipments": shipments[:10],
+            "weights": {str(k): v for k, v in list(weight_matrix.items())[:10]},
             "capacities": action_capacities,
             "triage_breakdown": triage_breakdown,
             "strategy_archetypes": [
