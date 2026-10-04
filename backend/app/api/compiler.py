@@ -47,6 +47,18 @@ def get_compiler_state(db: Session = Depends(get_db)):
             target_id="NONE",
             severity=1.0
         )
+    elif "impacted_consignments" in _last_compiled_state and _last_compiled_state["impacted_consignments"]:
+        # Synchronize live status from DB for all flagged consignments
+        ids = [c["shipment_id"] for c in _last_compiled_state["impacted_consignments"]]
+        db_ships = {s.shipment_id: s for s in db.query(ShipmentDB).filter(ShipmentDB.shipment_id.in_(ids)).all()}
+        for c in _last_compiled_state["impacted_consignments"]:
+            db_s = db_ships.get(c["shipment_id"])
+            if db_s:
+                c["current_status"] = db_s.current_status
+                c["carrier_id"] = db_s.carrier_id
+                c["risk_score"] = db_s.risk_score
+                if db_s.current_status == "rerouted":
+                    c["recovery_status"] = "REROUTED_COMPLETED"
     return _last_compiled_state
 
 @router.post("/compiler/reset")

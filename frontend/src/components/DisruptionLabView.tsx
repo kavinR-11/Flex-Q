@@ -12,11 +12,12 @@ import {
   RotateCcw,
   Waves
 } from 'lucide-react';
-import { DisruptionEvent } from '../types';
+import { DisruptionEvent, Shipment } from '../types';
 import { submitDisruptionEvent, clearSimulatedDisruptions } from '../services/api';
 
 interface DisruptionLabViewProps {
   events: DisruptionEvent[];
+  shipments?: Shipment[];
   onDisruptionInjected: () => void;
   onNavigateToRecovery: (shipmentId: string) => void;
 }
@@ -34,6 +35,7 @@ interface AffectedDetail {
 
 export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
   events,
+  shipments = [],
   onDisruptionInjected,
   onNavigateToRecovery,
 }) => {
@@ -53,12 +55,29 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
   const [loading, setLoading] = useState(false);
   const [clearing, setClearing] = useState(false);
 
+  // Persistent injection result across tab navigation
   const [injectionResult, setInjectionResult] = useState<{
     event_id: string;
     affected_shipments_count: number;
     affected_shipment_ids: string[];
     affected_shipments?: AffectedDetail[];
-  } | null>(null);
+  } | null>(() => {
+    try {
+      const saved = sessionStorage.getItem('fluxq_last_injection_result');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const saveInjectionResult = (data: any) => {
+    setInjectionResult(data);
+    if (data) {
+      sessionStorage.setItem('fluxq_last_injection_result', JSON.stringify(data));
+    } else {
+      sessionStorage.removeItem('fluxq_last_injection_result');
+    }
+  };
 
   // 6 Nationwide Indian Logistics Presets
   const presets = [
@@ -185,7 +204,7 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
         estimated_delay_minutes: p.data.estimated_delay_minutes,
       });
 
-      setInjectionResult({
+      saveInjectionResult({
         event_id: res.event_id,
         affected_shipments_count: res.affected_shipments_count,
         affected_shipment_ids: res.affected_shipment_ids || [],
@@ -217,7 +236,7 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
         estimated_delay_minutes: delayMinutes,
       });
 
-      setInjectionResult({
+      saveInjectionResult({
         event_id: res.event_id,
         affected_shipments_count: res.affected_shipments_count,
         affected_shipment_ids: res.affected_shipment_ids || [],
@@ -238,7 +257,7 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
     setClearing(true);
     try {
       await clearSimulatedDisruptions();
-      setInjectionResult(null);
+      saveInjectionResult(null);
       setSelectedPresetIndex(null);
       setJustLoadedMessage('↺ All simulated disruption events cleared. Network state reset to baseline.');
       onDisruptionInjected();
@@ -682,54 +701,103 @@ export const DisruptionLabView: React.FC<DisruptionLabViewProps> = ({
                   </h4>
                   <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                     {injectionResult.affected_shipments && injectionResult.affected_shipments.length > 0 ? (
-                      injectionResult.affected_shipments.map((sh) => (
-                        <div
-                          key={sh.shipment_id}
-                          className="p-2.5 rounded-lg bg-[#f8f9ff] border border-slate-200 flex items-center justify-between text-xs"
-                        >
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-mono font-bold text-[#003c76]">{sh.shipment_id}</span>
-                              <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-rose-100 text-rose-800">
-                                {sh.cargo_priority === 1 ? '❤️ P1 Medical' : sh.cargo_priority === 2 ? '⚡ P2 Electronics' : 'P3 Industrial'}
-                              </span>
-                              <span className="font-mono font-bold text-red-600 text-[11px]">
-                                Risk {sh.new_risk_score}/10
+                      injectionResult.affected_shipments.map((sh) => {
+                        const liveSh = shipments.find((s) => s.shipment_id === sh.shipment_id);
+                        const isRerouted = liveSh?.current_status === 'rerouted';
+
+                        return (
+                          <div
+                            key={sh.shipment_id}
+                            className={`p-2.5 rounded-lg border flex items-center justify-between text-xs transition ${
+                              isRerouted ? 'bg-emerald-50/50 border-emerald-200' : 'bg-[#f8f9ff] border-slate-200'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono font-bold text-[#003c76]">{sh.shipment_id}</span>
+                                <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-rose-100 text-rose-800">
+                                  {sh.cargo_priority === 1 ? '❤️ P1 Medical' : sh.cargo_priority === 2 ? '⚡ P2 Electronics' : 'P3 Industrial'}
+                                </span>
+                                {isRerouted ? (
+                                  <span className="font-mono font-bold text-emerald-700 text-[11px] bg-emerald-100 px-1.5 py-0.2 rounded border border-emerald-300 inline-flex items-center gap-1">
+                                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                    Risk {liveSh?.risk_score ?? 3}/10 (Resolved)
+                                  </span>
+                                ) : (
+                                  <span className="font-mono font-bold text-red-600 text-[11px]">
+                                    Risk {sh.new_risk_score}/10
+                                  </span>
+                                )}
+                              </div>
+                              <span className="text-[11px] text-slate-600 block mt-0.5">
+                                {sh.origin} → {sh.destination} ({sh.cargo_type})
                               </span>
                             </div>
-                            <span className="text-[11px] text-slate-600 block mt-0.5">
-                              {sh.origin} → {sh.destination} ({sh.cargo_type})
-                            </span>
-                          </div>
 
-                          <div className="text-right flex flex-col items-end gap-1">
-                            <span className="text-xs font-mono font-bold text-amber-700">
-                              +{Math.round(sh.predicted_delay_minutes)}m delay
-                            </span>
-                            <button
-                              onClick={() => onNavigateToRecovery(sh.shipment_id)}
-                              className="px-2 py-0.5 rounded bg-[#003c76] hover:bg-[#00539f] text-white text-[10px] font-bold shadow-xs transition"
-                            >
-                              ⚡ Recover
-                            </button>
+                            <div className="text-right flex flex-col items-end gap-1">
+                              {isRerouted ? (
+                                <span className="text-xs font-mono font-bold text-emerald-700">
+                                  ✓ Rerouted &amp; On-Time
+                                </span>
+                              ) : (
+                                <span className="text-xs font-mono font-bold text-amber-700">
+                                  +{Math.round(sh.predicted_delay_minutes)}m delay
+                                </span>
+                              )}
+
+                              {isRerouted ? (
+                                <button
+                                  disabled
+                                  className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-300 text-[10px] font-bold shadow-none cursor-not-allowed inline-flex items-center gap-1 opacity-90"
+                                  title="Consignment rerouted and committed in Decision Audit"
+                                >
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                  <span>Rerouted</span>
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => onNavigateToRecovery(sh.shipment_id)}
+                                  className="px-2 py-0.5 rounded bg-[#003c76] hover:bg-[#00539f] text-white text-[10px] font-bold shadow-xs transition cursor-pointer"
+                                >
+                                  ⚡ Recover
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))
+                        );
+                      })
                     ) : (
-                      injectionResult.affected_shipment_ids.map((id) => (
-                        <div
-                          key={id}
-                          className="p-2 rounded-lg bg-[#f8f9ff] border border-slate-200 flex items-center justify-between text-xs"
-                        >
-                          <span className="font-mono font-bold text-[#003c76]">{id}</span>
-                          <button
-                            onClick={() => onNavigateToRecovery(id)}
-                            className="px-2.5 py-1 rounded bg-[#003c76] hover:bg-[#00539f] text-white text-[11px] font-semibold transition"
+                      injectionResult.affected_shipment_ids.map((id) => {
+                        const liveSh = shipments.find((s) => s.shipment_id === id);
+                        const isRerouted = liveSh?.current_status === 'rerouted';
+
+                        return (
+                          <div
+                            key={id}
+                            className={`p-2 rounded-lg border flex items-center justify-between text-xs transition ${
+                              isRerouted ? 'bg-emerald-50/50 border-emerald-200' : 'bg-[#f8f9ff] border-slate-200'
+                            }`}
                           >
-                            Trigger Recovery
-                          </button>
-                        </div>
-                      ))
+                            <span className="font-mono font-bold text-[#003c76]">{id}</span>
+                            {isRerouted ? (
+                              <button
+                                disabled
+                                className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-300 text-[11px] font-semibold cursor-not-allowed inline-flex items-center gap-1 opacity-90"
+                              >
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                <span>Rerouted (In Audit)</span>
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => onNavigateToRecovery(id)}
+                                className="px-2.5 py-1 rounded bg-[#003c76] hover:bg-[#00539f] text-white text-[11px] font-semibold transition cursor-pointer"
+                              >
+                                Trigger Recovery
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })
                     )}
                   </div>
                 </div>

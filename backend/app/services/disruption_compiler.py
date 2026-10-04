@@ -261,6 +261,7 @@ class DisruptionCompiler:
                     "impact": f"Spike 50x ({baseline_gamma:.0f} -> {spiked_gamma:.0f}) — Zero SLA penalty tolerance. Solvers strictly prioritize this consignment."
                 })
 
+                is_already_rerouted = (target_sh.current_status == "rerouted")
                 impacted_consignments.append({
                     "shipment_id": target_sh.shipment_id,
                     "origin": target_sh.origin,
@@ -268,12 +269,12 @@ class DisruptionCompiler:
                     "cargo_type": "Life-Saving Medical (Insulin/Cold-Chain)",
                     "cargo_priority": 1,
                     "carrier_id": target_sh.carrier_id or "CARRIER-A",
-                    "current_status": "critical",
-                    "risk_score": 9,
+                    "current_status": target_sh.current_status if is_already_rerouted else "critical",
+                    "risk_score": 3 if is_already_rerouted else 9,
                     "sla_buffer_minutes": float(target_sh.sla_buffer_minutes or 0),
-                    "predicted_delay_minutes": 85.0,
+                    "predicted_delay_minutes": 0.0 if is_already_rerouted else 85.0,
                     "failure_reason": "Cold-Chain Telemetry Excursion: SLA Penalty Spiked 50x (γ = 2500.0)",
-                    "recovery_status": "READY_FOR_REROUTE",
+                    "recovery_status": "REROUTED_COMPLETED" if is_already_rerouted else "READY_FOR_REROUTE",
                     "recommended_recovery_plan": "Plan B: State Highway Bypass Corridor (Zero SLA Breach)"
                 })
 
@@ -336,7 +337,7 @@ class DisruptionCompiler:
                     "sla_buffer_minutes": float(sh.sla_buffer_minutes or 0),
                     "predicted_delay_minutes": float(sh.predicted_delay_minutes or 0),
                     "failure_reason": f"Grounded: {grounded_hub_name} Closed (Capacity Cap_a = 0)",
-                    "recovery_status": "READY_FOR_REROUTE",
+                    "recovery_status": "REROUTED_COMPLETED" if sh.current_status == "rerouted" else "READY_FOR_REROUTE",
                     "recommended_recovery_plan": "Plan C: Dedicated Rail Freight Relay (CONCOR WDFC) or Plan B (Highway Bypass)"
                 })
 
@@ -419,7 +420,7 @@ class DisruptionCompiler:
                     "sla_buffer_minutes": float(sh.sla_buffer_minutes or 0),
                     "predicted_delay_minutes": 1000000.0,
                     "failure_reason": f"Trapped: {region_name} Impassable (Delay D = 10^6 mins)",
-                    "recovery_status": "READY_FOR_REROUTE",
+                    "recovery_status": "REROUTED_COMPLETED" if sh.current_status == "rerouted" else "READY_FOR_REROUTE",
                     "recommended_recovery_plan": "Plan C: Dedicated Rail Freight Relay (CONCOR WDFC) or Plan B: Bypass"
                 })
 

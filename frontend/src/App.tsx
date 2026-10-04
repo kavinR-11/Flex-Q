@@ -138,6 +138,7 @@ export function App() {
               {resolvedTab === 'disruption-lab' && (
                 <DisruptionLabView
                   events={events}
+                  shipments={shipments}
                   onDisruptionInjected={reloadData}
                   onNavigateToRecovery={handleNavigateToRecovery}
                 />

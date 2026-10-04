@@ -56,12 +56,12 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
     }
   }, [selectedShipmentId]);
 
-  // Load initial compiled state
+  // Load initial compiled state & synchronize when shipments update
   useEffect(() => {
     fetchCompilerState()
       .then((state) => setCompilerState(state))
       .catch((err) => console.error('Error fetching compiler state:', err));
-  }, []);
+  }, [shipments]);
 
   const handleCompilePillar = async (eventType: string, targetId: string) => {
     setCompilingPillar(eventType);
@@ -681,7 +681,7 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                   </span>
                 </h2>
                 <span className="text-[11px] text-[#424751]">
-                  Exact consignments identified from live database. Each consignment is armed with an alternative multi-modal recovery path.
+                  Exact consignments identified from live database flagged for multi-modal recovery routing.
                 </span>
               </div>
             </div>
@@ -689,8 +689,11 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => {
-                  const firstId = compilerState.impacted_consignments?.[0]?.shipment_id;
-                  if (firstId) onNavigateToRecovery(firstId);
+                  const pending = compilerState.impacted_consignments?.find(
+                    (s) => shipments.find((ls) => ls.shipment_id === s.shipment_id)?.current_status !== 'rerouted' && s.current_status !== 'rerouted'
+                  );
+                  const targetId = pending?.shipment_id || compilerState.impacted_consignments?.[0]?.shipment_id;
+                  if (targetId) onNavigateToRecovery(targetId);
                 }}
                 className="px-3.5 py-1.5 rounded-lg bg-[#003c76] hover:bg-[#00539f] text-white text-xs font-bold shadow-xs flex items-center gap-1.5 transition cursor-pointer"
               >
@@ -709,60 +712,89 @@ export const CompilerView: React.FC<CompilerViewProps> = ({
                   <th className="py-2.5 px-3 font-semibold">Route & Corridor</th>
                   <th className="py-2.5 px-3 font-semibold">Carrier</th>
                   <th className="py-2.5 px-3 font-semibold">Status / Failure Impact</th>
-                  <th className="py-2.5 px-3 font-semibold">Assigned Recovery Path</th>
                   <th className="py-2.5 px-3 text-right font-semibold">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {compilerState.impacted_consignments.map((sh) => (
-                  <tr key={sh.shipment_id} className="hover:bg-slate-50 transition">
-                    <td className="py-2.5 px-3 font-bold text-blue-900">
-                      {sh.shipment_id}
-                    </td>
-                    <td className="py-2.5 px-3">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                        sh.cargo_priority === 1
-                          ? 'bg-rose-50 text-rose-700 border-rose-200'
-                          : sh.cargo_priority === 2
-                          ? 'bg-blue-50 text-blue-700 border-blue-200'
-                          : 'bg-amber-50 text-amber-800 border-amber-200'
-                      }`}>
-                        {sh.cargo_priority === 1 ? '❤️ P1 Medical' : sh.cargo_priority === 2 ? '⚡ P2 Electronics' : `⚙️ P${sh.cargo_priority}`}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 text-slate-800 font-medium">
-                      {sh.origin} → {sh.destination}
-                    </td>
-                    <td className="py-2.5 px-3 text-slate-600">
-                      {sh.carrier_id}
-                    </td>
-                    <td className="py-2.5 px-3">
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-rose-100 text-rose-900 font-bold block max-w-xs truncate">
-                        {sh.failure_reason}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3">
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold block max-w-xs truncate">
-                        {sh.recommended_recovery_plan}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 text-right">
-                      <button
-                        onClick={() => onNavigateToRecovery(sh.shipment_id)}
-                        className="px-2.5 py-1 rounded bg-[#003c76] hover:bg-[#00539f] text-white text-[10px] font-bold transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
-                      >
-                        <span>Re-route</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {compilerState.impacted_consignments.map((sh) => {
+                  const liveShipment = shipments.find((s) => s.shipment_id === sh.shipment_id);
+                  const isRerouted = liveShipment?.current_status === 'rerouted' || sh.current_status === 'rerouted';
+
+                  return (
+                    <tr key={sh.shipment_id} className={`transition ${isRerouted ? 'bg-emerald-50/30 hover:bg-emerald-50/60' : 'hover:bg-slate-50'}`}>
+                      <td className="py-2.5 px-3 font-bold text-blue-900">
+                        {sh.shipment_id}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                          sh.cargo_priority === 1
+                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                            : sh.cargo_priority === 2
+                            ? 'bg-blue-50 text-blue-700 border-blue-200'
+                            : 'bg-amber-50 text-amber-800 border-amber-200'
+                        }`}>
+                          {sh.cargo_priority === 1 ? '❤️ P1 Medical' : sh.cargo_priority === 2 ? '⚡ P2 Electronics' : `⚙️ P${sh.cargo_priority}`}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3 text-slate-800 font-medium">
+                        {sh.origin} → {sh.destination}
+                      </td>
+                      <td className="py-2.5 px-3 text-slate-600">
+                        {sh.carrier_id}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        {isRerouted ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold inline-flex items-center gap-1 shrink-0">
+                              <Check className="w-3 h-3 text-emerald-600" />
+                              REROUTED (Resolved)
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-medium truncate max-w-[160px]" title={sh.failure_reason}>
+                              Was: {sh.failure_reason}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-rose-100 text-rose-900 font-bold block max-w-xs truncate" title={sh.failure_reason}>
+                            {sh.failure_reason}
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-2.5 px-3 text-right">
+                        {isRerouted ? (
+                          <button
+                            disabled
+                            className="px-2.5 py-1 rounded bg-slate-100 text-slate-400 border border-slate-200 text-[10px] font-bold inline-flex items-center gap-1 cursor-not-allowed shadow-none"
+                            title="This consignment has been rerouted and committed in Decision Audit."
+                          >
+                            <Check className="w-3 h-3 text-emerald-600" />
+                            <span>Rerouted</span>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => onNavigateToRecovery(sh.shipment_id)}
+                            className="px-2.5 py-1 rounded bg-[#003c76] hover:bg-[#00539f] text-white text-[10px] font-bold transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
+                            title="Navigate to Recovery Center to execute multi-modal reroute"
+                          >
+                            <span>Re-route</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
           <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 font-medium gap-1">
             <span>
-              All <strong>{compilerState.impacted_consignments.length}</strong> flagged consignments active &amp; displayed. Each can be routed to Recovery Center in 1 click.
+              All <strong>{compilerState.impacted_consignments.length}</strong> flagged consignments active in live database.
+              {compilerState.impacted_consignments.some((s) => shipments.find((ls) => ls.shipment_id === s.shipment_id)?.current_status === 'rerouted' || s.current_status === 'rerouted') && (
+                <span className="ml-2 text-emerald-700 font-bold inline-flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-emerald-600 inline" />
+                  {compilerState.impacted_consignments.filter((s) => shipments.find((ls) => ls.shipment_id === s.shipment_id)?.current_status === 'rerouted' || s.current_status === 'rerouted').length} Rerouted in Audit
+                </span>
+              )}
             </span>
             <span className="font-mono text-[11px] text-[#003c76] font-bold">
               Correlated with Network &amp; DB (No Contradictions)

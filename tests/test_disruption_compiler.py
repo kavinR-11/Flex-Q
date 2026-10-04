@@ -7,6 +7,9 @@ from backend.app.models_db import ShipmentDB, AuditLogDB
 client = TestClient(app)
 
 def test_pillar_1_product_priority_compilation():
+    # Ensure baseline state before running
+    client.post("/api/v1/compiler/reset", json={})
+
     # Compile Pillar 1 for SH-2048
     response = client.post("/api/v1/compiler/compile", json={
         "event_type": "PRODUCT_PRIORITY",
@@ -94,3 +97,54 @@ def test_compiler_reset():
     assert res.status_code == 200
     data = res.json()
     assert data["status"] == "reset"
+
+def test_compiler_rerouted_state_sync():
+    # 1. Compile disruption for SH-2048
+    compile_res = client.post("/api/v1/compiler/compile", json={
+        "event_type": "PRODUCT_PRIORITY",
+        "target_id": "SH-2048",
+        "severity": 1.0
+    })
+    assert compile_res.status_code == 200
+
+    # 2. Optimize recovery for SH-2048
+    opt_res = client.post("/api/v1/recovery/optimize", json={
+        "shipment_ids": ["SH-2048"],
+        "max_budget_inr": 50000.0,
+        "circuit_depth_p": 1
+    })
+    assert opt_res.status_code == 200
+    opt_data = opt_res.json()
+    assert len(opt_data["plans"]) > 0
+    rec_plan = opt_data["plans"][0]
+    rec_id = rec_plan["recovery_id"]
+
+    # 3. Dispatcher approves recovery plan
+    app_res = client.post(f"/api/v1/recovery/{rec_id}/approve", json={
+        "plan_id": rec_plan["plan_id"],
+        "operator_id": "DISPATCHER-TEST",
+        "notes": "Testing compiler state synchronization"
+    })
+    assert app_res.status_code == 200
+    assert app_res.json()["status"] == "APPROVED"
+
+    # 4. Check that live shipment has status 'rerouted'
+    sh_res = client.get("/api/v1/shipments/SH-2048")
+    assert sh_res.status_code == 200
+    assert sh_res.json()["current_status"] == "rerouted"
+
+    # 5. Check that compiler state reflects the rerouted status immediately
+    state_res = client.get("/api/v1/compiler/state")
+    assert state_res.status_code == 200
+    compiler_state = state_res.json()
+    
+    # Find SH-2048 in impacted_consignments
+    matching = [c for c in compiler_state["impacted_consignments"] if c["shipment_id"] == "SH-2048"]
+    assert len(matching) > 0
+    assert matching[0]["current_status"] == "rerouted"
+    assert matching[0]["recovery_status"] == "REROUTED_COMPLETED"
+
+    # Reset compiler and shipment to baseline
+    client.post("/api/v1/compiler/reset", json={})
+
+
